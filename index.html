@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Big Red Button Institute (BRB)</title>
+  <meta name="description" content="The Big Red Button Institute (BRB) studies public button pressing through computational, ethnographic, design, and artistic research.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Manrope:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f5f0e3;
+      --ink: #202530;
+      --muted: #5f6775;
+      --red: #df2c2c;
+      --red-deep: #8f1717;
+      --steel: #8ea3bf;
+      --panel: #ffffffde;
+      --line: #c9c1b0;
+      --shadow: 0 18px 44px rgba(22, 28, 38, 0.16);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --max: 1080px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1300px 620px at 100% -15%, #b6c6dc 0%, transparent 62%),
+        radial-gradient(1100px 560px at -8% 18%, #efb9b9 0%, transparent 56%),
+        linear-gradient(180deg, #f2ecdf 0%, #f7f3ea 100%);
+      line-height: 1.55;
+    }
+
+    .shell {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 1rem auto 2.5rem;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.25rem, 2vw + 0.8rem, 2.3rem);
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.86)),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(124, 146, 169, 0.12) 0 14px,
+          rgba(124, 146, 169, 0) 14px 28px
+        );
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      right: -75px;
+      top: -75px;
+      background: radial-gradient(circle, rgba(223, 44, 44, 0.28) 0%, rgba(223, 44, 44, 0) 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      margin-bottom: 0.7rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Fraunces", Georgia, serif;
+      letter-spacing: -0.01em;
+      line-height: 1.12;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.65rem);
+      max-width: 18ch;
+    }
+
+    .subhead {
+      margin: 0.65rem 0 1.1rem;
+      font-size: clamp(1rem, 1vw + 0.85rem, 1.32rem);
+      color: var(--muted);
+      max-width: 66ch;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1.35fr 1fr;
+      margin-top: 1rem;
+    }
+
+    .hero-card,
+    .press-lab {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fffdf8;
+      padding: 1rem;
+    }
+
+    .press-lab {
+      background:
+        linear-gradient(180deg, #fffefb 0%, #fff7f7 100%);
+      display: grid;
+      align-content: start;
+      gap: 0.7rem;
+    }
+
+    .press-btn {
+      font: 700 1.05rem/1 "Manrope", sans-serif;
+      color: #fff;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.92rem 1.2rem;
+      background: radial-gradient(circle at 35% 28%, #ff6868 0%, #df2c2c 55%, #7f1010 100%);
+      box-shadow:
+        inset 0 -7px 14px rgba(68, 0, 0, 0.3),
+        0 8px 16px rgba(129, 23, 23, 0.38);
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .press-btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        inset 0 -7px 14px rgba(68, 0, 0, 0.35),
+        0 10px 18px rgba(129, 23, 23, 0.46);
+    }
+
+    .press-btn:active,
+    .press-btn.is-pressed {
+      transform: translateY(2px);
+      box-shadow:
+        inset 0 4px 9px rgba(56, 0, 0, 0.45),
+        0 4px 8px rgba(129, 23, 23, 0.26);
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: #3c4452;
+      font-size: 0.88rem;
+    }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: clamp(1rem, 1.5vw + 0.7rem, 1.5rem);
+    }
+
+    .panel h2 {
+      font-size: clamp(1.45rem, 2.1vw, 2.2rem);
+      margin-bottom: 0.72rem;
+    }
+
+    .panel p {
+      margin: 0.42rem 0;
+      max-width: 72ch;
+    }
+
+    figure {
+      margin: 1rem 0 0.3rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #fbfaf6;
+    }
+
+    figure img {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    figcaption {
+      padding: 0.65rem 0.82rem;
+      font-size: 0.89rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: #f7f4ec;
+    }
+
+    .division-grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0.75rem;
+    }
+
+    .division {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fffdf8;
+      padding: 0.95rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .division h3 {
+      font-size: 1.17rem;
+    }
+
+    .division ul {
+      margin: 0.2rem 0 0;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .callout {
+      border-left: 6px solid var(--red);
+      background: #fff4f4;
+      border-radius: 8px;
+      padding: 0.7rem 0.85rem;
+      margin-top: 0.8rem;
+    }
+
+    .board {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fcfbf8;
+      padding: 0.95rem;
+      margin-top: 0.8rem;
+    }
+
+    .footer {
+      margin-top: 1.2rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fbf6eb;
+      font-size: 0.98rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: rise 700ms ease forwards;
+    }
+
+    .reveal:nth-child(2) {
+      animation-delay: 120ms;
+    }
+
+    .reveal:nth-child(3) {
+      animation-delay: 210ms;
+    }
+
+    .reveal:nth-child(4) {
+      animation-delay: 290ms;
+    }
+
+    .reveal:nth-child(5) {
+      animation-delay: 360ms;
+    }
+
+    @keyframes rise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .division-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .shell {
+        width: min(calc(100% - 1rem), var(--max));
+        margin: 0.5rem auto 1.5rem;
+      }
+
+      .hero,
+      .panel {
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero reveal">
+      <span class="eyebrow">BRB</span>
+      <h1>The Big Red Button Institute</h1>
+      <p class="subhead">Advancing the Frontiers of Pressability Research</p>
+      <div class="hero-grid">
+        <section class="hero-card">
+          <h2>Mission Statement</h2>
+          <p>The Big Red Button Institute (BRB) is a transdisciplinary research collective dedicated to the empirical study of human-button interaction dynamics.</p>
+          <p>Working in public spaces, we deploy full-scale button installations to generate longitudinal datasets on press intervals, participation patterns, and the social life of collective curiosity.</p>
+          <p>At BRB, the press is treated as a full-spectrum event: intention meeting resistance, individual agency becoming public rhythm, and measurement becoming interpretation.</p>
+        </section>
+        <aside class="press-lab">
+          <h2>Live Demonstration</h2>
+          <p class="mono">Session Press Counter</p>
+          <button id="pressBtn" class="press-btn" type="button">Press For Science</button>
+          <p><strong id="pressCount">0</strong> verified presses in this browser session.</p>
+          <p class="mono">Data quality note: methodology pending peer review.</p>
+        </aside>
+      </div>
+    </header>
+
+    <main class="stack">
+      <section class="panel reveal">
+        <h2>Theoretical Framework</h2>
+        <p>If the world already contains such buttons - hidden in plain sight, charged with social meaning, and capable of reorganizing collective attention - then the public question is straightforward: what happens when anyone can press?</p>
+        <p>BRB approaches this as a practical and conceptual problem. What counts as a press? Which design variables alter pressing behavior? How does repeated pressing change the public atmosphere of a place?</p>
+        <figure>
+          <img src="Images/Latour.png" alt="Comic panel referencing a bright red alarm button and Bruno Latour.">
+          <figcaption>Reference image used in BRB orientation materials.</figcaption>
+        </figure>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Research Divisions</h2>
+        <div class="division-grid">
+          <article class="division">
+            <h3>I. Temporal Complexity Laboratory</h3>
+            <p>Our flagship program models inter-press intervals with tools from information theory and nonlinear dynamics.</p>
+            <ul>
+              <li><strong>Kolmogorov complexity of inter-press intervals:</strong> measuring compressibility versus apparent randomness in collective pressing sequences.</li>
+              <li><strong>Entropy dynamics:</strong> tracking shifts in press-rate distributions across hourly, weekly, and seasonal windows.</li>
+              <li><strong>Recurrence analysis:</strong> identifying phase transitions in public behavior as installations mature in place.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>II. Ethnography of Pressability</h3>
+            <p>Qualitative teams conduct interviews and participant observation on the lived experience of pressing and choosing not to press.</p>
+            <ul>
+              <li>Motivational profiles: curiosity, ritual, improvisation, group contagion.</li>
+              <li>Narrative forms: how people describe the moment before and after contact.</li>
+              <li>Spatial function: whether the button becomes a landmark, meeting point, or local folklore generator.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>III. Button Design Phenomenology</h3>
+            <p>In collaboration with designers and haptic engineers, we study how form and feel alter behavior.</p>
+            <ul>
+              <li><strong>Chromatic affordance:</strong> comparative studies on the semiotic force of red.</li>
+              <li><strong>Protrusion geometry:</strong> how height and curvature affect invitation strength.</li>
+              <li><strong>Resistance curves and click acoustics:</strong> force, sound, and satisfaction as linked variables.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>IV. Socioeconomic Impact Assessment</h3>
+            <p>BRB measures civic and commercial spillover effects around installations in partnership with municipal actors.</p>
+            <ul>
+              <li>Button-adjacent businesses and curiosity traffic patterns.</li>
+              <li>Dwell-time changes in plazas and transit nodes.</li>
+              <li>Development of the Button Economic Multiplier Index (BEMI) for policy planning.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>V. Critical Button Studies</h3>
+            <p>Our humanities unit runs systematic literature reviews across design theory, STS, media archaeology, and philosophy of action.</p>
+            <ul>
+              <li>Genealogies of emergency aesthetics and the cultural authority of redness.</li>
+              <li>Affordance theory revisited: from perceived invitation to enacted compulsion.</li>
+              <li>Comparative studies of pressability across cultural and infrastructural contexts.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>VI. Sonic Residencies Program</h3>
+            <p>We commission composers and musicians to produce one-second sonic signatures for the button press.</p>
+            <ul>
+              <li>Monthly guest works turn each press into a micro-performance.</li>
+              <li>Residents include experimental producers, voice artists, and field recordists.</li>
+              <li>Core question: if a button had a voice, who should compose it?</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout">
+          <strong>Scientific Advisory Board:</strong> Reggie Watts - musician, comedian, and theorist of nonsense-as-method.
+        </div>
+      </section>
+
+      <section class="panel reveal">
+        <h2>Participate</h2>
+        <p>BRB is currently seeking installation sites, partner institutions, resident artists, and dedicated pressers.</p>
+        <p>If you encounter a Big Red Button in your city, your contribution enters the dataset, shifts the model, and helps define the next phase of pressability research.</p>
+        <p><strong>Press, and be counted.</strong></p>
+      </section>
+    </main>
+
+    <footer class="footer reveal">
+      <p><strong>The Big Red Button Institute</strong><br>A Research Collective for Pressability Studies</p>
+      <p>Contact: <a href="mailto:inquiries@bigredbutton.institute">inquiries@bigredbutton.institute</a></p>
+      <p><em>"The question is not whether to press. The question is what pressing means."</em> - BRB Founding Charter, Article I</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var button = document.getElementById("pressBtn");
+      var countNode = document.getElementById("pressCount");
+      var key = "brb_press_count";
+
+      function readCount() {
+        var value = Number(window.localStorage.getItem(key) || "0");
+        return Number.isFinite(value) && value >= 0 ? value : 0;
+      }
+
+      function render() {
+        countNode.textContent = String(readCount());
+      }
+
+      button.addEventListener("click", function () {
+        var next = readCount() + 1;
+        window.localStorage.setItem(key, String(next));
+        render();
+        button.classList.add("is-pressed");
+        window.setTimeout(function () {
+          button.classList.remove("is-pressed");
+        }, 140);
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
