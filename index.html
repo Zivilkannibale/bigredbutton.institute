@@ -369,12 +369,15 @@
       width: 100%;
       height: 100%;
       pointer-events: auto;
-      cursor: pointer;
+      cursor: grab;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+    }
+    .pedestal-float.dragging svg {
+      cursor: grabbing;
     }
     .dome-group {
       transition: transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -834,12 +837,18 @@
     var pedestalShockwave = document.getElementById("pedestalShockwave");
     var pedestalScrollHint = document.getElementById("pedestalScrollHint");
     var pedestalSvg = pedestal ? pedestal.querySelector("svg") : null;
-    var pedestalScrollTargets = [];
-    var pedestalScrollIdx = 0;
     var pedestalActive = false;
     var pedestalDownAt = 0;
     var pedestalPointerId = null;
     var pedestalLastTouchStart = 0;
+    var pedestalTouchId = null;
+    var pedestalDragging = false;
+    var pedestalDragStartX = 0;
+    var pedestalDragStartY = 0;
+    var pedestalOriginX = 0;
+    var pedestalOriginY = 0;
+    var pedestalDragThreshold = 10;
+    var pedestalPinned = false;
     var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var pedestalState = {
       baseX: 78,
@@ -917,8 +926,7 @@
     window.addEventListener("resize",function(){
       vizReady=false;
       setTimeout(initCanvases,100);
-      rebuildPedestalTargets();
-      updatePedestalAnchor();
+      updatePedestalAnchor(false);
       if (reducedMotion) animatePedestal();
     });
 
@@ -1010,7 +1018,8 @@
 
     function drawAllViz(){if(!vizReady)return;drawWave();drawIntervals();drawEntropy();drawBurst();requestAnimationFrame(drawAllViz);}
 
-    function updatePedestalAnchor() {
+    function updatePedestalAnchor(force) {
+      if (pedestalPinned && !force) return;
       if (window.innerWidth <= 650) {
         pedestalState.baseX = 76;
         pedestalState.baseY = 72;
@@ -1023,19 +1032,27 @@
       }
     }
 
-    function rebuildPedestalTargets() {
-      var panels = document.querySelectorAll("main .panel");
-      var targets = [labPanel];
-      if (panels.length > 0) targets.push(panels[0]);
-      var methods = document.querySelector(".methods-wrap");
-      if (methods) targets.push(methods);
-      if (panels.length > 1) targets.push(panels[panels.length - 1]);
-      var footer = document.querySelector(".footer");
-      if (footer) targets.push(footer);
-      targets.push(document.body);
-      pedestalScrollTargets = targets.filter(function (node, idx, arr) {
-        return !!node && arr.indexOf(node) === idx;
-      });
+    function loadPedestalAnchor() {
+      try {
+        var raw = window.localStorage.getItem("brb_pedestal_anchor");
+        if (!raw) return;
+        var parsed = JSON.parse(raw);
+        var bx = Number(parsed.baseX);
+        var by = Number(parsed.baseY);
+        if (!Number.isFinite(bx) || !Number.isFinite(by)) return;
+        pedestalState.baseX = Math.max(2, Math.min(98, bx));
+        pedestalState.baseY = Math.max(2, Math.min(98, by));
+        pedestalPinned = true;
+      } catch (_) {}
+    }
+
+    function savePedestalAnchor() {
+      try {
+        window.localStorage.setItem("brb_pedestal_anchor", JSON.stringify({
+          baseX: pedestalState.baseX,
+          baseY: pedestalState.baseY
+        }));
+      } catch (_) {}
     }
 
     function placePedestal(px, py, rot) {
@@ -1048,7 +1065,11 @@
 
     function animatePedestal() {
       if (!pedestal) return;
-      updatePedestalAnchor();
+      updatePedestalAnchor(false);
+      if (pedestalDragging) {
+        requestAnimationFrame(animatePedestal);
+        return;
+      }
       var s = pedestalState;
       var vw = window.innerWidth;
       var vh = window.innerHeight;
@@ -1071,12 +1092,18 @@
       s.driftPhase3 += 0.006;
       s.driftPhase4 += 0.0035;
 
-      var driftX = Math.sin(s.driftPhase1) * 18 + Math.sin(s.driftPhase2 * 0.7) * 10;
-      var driftY = Math.cos(s.driftPhase3) * 14 + Math.sin(s.driftPhase4 * 1.3) * 8;
-      var rot = Math.sin(s.driftPhase1 * 0.6) * 4 + Math.sin(s.driftPhase2 * 0.4) * 2.5;
+      var driftX = pedestalPinned
+        ? Math.sin(s.driftPhase1) * 4 + Math.sin(s.driftPhase2 * 0.7) * 2
+        : Math.sin(s.driftPhase1) * 18 + Math.sin(s.driftPhase2 * 0.7) * 10;
+      var driftY = pedestalPinned
+        ? Math.cos(s.driftPhase3) * 3 + Math.sin(s.driftPhase4 * 1.3) * 2
+        : Math.cos(s.driftPhase3) * 14 + Math.sin(s.driftPhase4 * 1.3) * 8;
+      var rot = pedestalPinned
+        ? Math.sin(s.driftPhase1 * 0.6) * 1.2 + Math.sin(s.driftPhase2 * 0.4) * 0.8
+        : Math.sin(s.driftPhase1 * 0.6) * 4 + Math.sin(s.driftPhase2 * 0.4) * 2.5;
 
       s.shiftTimer += 16;
-      if (s.shiftTimer > s.nextShift) {
+      if (!pedestalPinned && s.shiftTimer > s.nextShift) {
         s.shiftTimer = 0;
         s.nextShift = 4000 + Math.random() * 7000;
         s.shiftTargetX = (Math.random() - 0.5) * 120;
@@ -1122,15 +1149,23 @@
       }
     }
 
-    function advancePedestalScroll() {
-      if (pedestalScrollTargets.length === 0) return;
-      var target = pedestalScrollTargets[pedestalScrollIdx % pedestalScrollTargets.length];
-      if (target === document.body) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+    function scrollToRandomDifferentPart() {
+      var maxScroll = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      ) - window.innerHeight;
+      if (maxScroll <= 4) return;
+      var current = window.scrollY || window.pageYOffset || 0;
+      var minDelta = Math.max(220, Math.round(window.innerHeight * 0.45));
+      var next = current;
+      for (var tries = 0; tries < 12; tries++) {
+        next = Math.random() * maxScroll;
+        if (Math.abs(next - current) >= minDelta) break;
       }
-      pedestalScrollIdx++;
+      if (Math.abs(next - current) < minDelta) {
+        next = (current + minDelta + Math.random() * minDelta) % maxScroll;
+      }
+      window.scrollTo({ top: next, behavior: "smooth" });
     }
 
     function runPedestalEffects() {
@@ -1161,7 +1196,7 @@
         setTimeout(function () { pedestalScrollHint.classList.remove("show"); }, 520);
       }
 
-      setTimeout(advancePedestalScroll, 250);
+      setTimeout(scrollToRandomDifferentPart, 250);
     }
 
     function beginPedestalPress() {
@@ -1169,6 +1204,56 @@
       pedestalActive = true;
       pedestalDownAt = Date.now();
       dome.classList.add("pushed");
+    }
+
+    function beginPedestalGesture(clientX, clientY) {
+      pedestalDragStartX = clientX;
+      pedestalDragStartY = clientY;
+      pedestalOriginX = pedestalState.x;
+      pedestalOriginY = pedestalState.y;
+      pedestalDragging = false;
+      beginPedestalPress();
+    }
+
+    function movePedestalGesture(clientX, clientY) {
+      if (!pedestalActive) return;
+      var dx = clientX - pedestalDragStartX;
+      var dy = clientY - pedestalDragStartY;
+      if (!pedestalDragging && (Math.abs(dx) > pedestalDragThreshold || Math.abs(dy) > pedestalDragThreshold)) {
+        pedestalDragging = true;
+        if (dome) dome.classList.remove("pushed");
+        if (pedestal) pedestal.classList.add("dragging");
+      }
+      if (!pedestalDragging || !pedestal) return;
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+      var minX = 8;
+      var minY = 8;
+      var maxX = Math.max(minX, vw - pw - 8);
+      var maxY = Math.max(minY, vh - ph - 8);
+      var px = Math.max(minX, Math.min(maxX, pedestalOriginX + dx));
+      var py = Math.max(minY, Math.min(maxY, pedestalOriginY + dy));
+      placePedestal(px, py, 0);
+    }
+
+    function dropPedestalAnchor() {
+      if (!pedestal) return;
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+      var maxX = Math.max(1, vw - pw);
+      var maxY = Math.max(1, vh - ph);
+      pedestalState.baseX = Math.max(2, Math.min(98, (pedestalState.x / maxX) * 100));
+      pedestalState.baseY = Math.max(2, Math.min(98, (pedestalState.y / maxY) * 100));
+      pedestalState.shiftCurrentX = 0;
+      pedestalState.shiftCurrentY = 0;
+      pedestalState.shiftTargetX = 0;
+      pedestalState.shiftTargetY = 0;
+      pedestalPinned = true;
+      savePedestalAnchor();
     }
 
     function endPedestalPress(cancelled) {
@@ -1183,6 +1268,18 @@
       } else {
         triggerExternalPress(holdMs);
       }
+    }
+
+    function endPedestalGesture(cancelled) {
+      if (!pedestalActive) return;
+      if (pedestalDragging) {
+        if (pedestal) pedestal.classList.remove("dragging");
+        endPedestalPress(true);
+        if (!cancelled) dropPedestalAnchor();
+        pedestalDragging = false;
+        return;
+      }
+      endPedestalPress(cancelled);
     }
 
     function computeEntropy(arr){
@@ -1275,8 +1372,8 @@
     window.BRB = window.BRB || {};
     window.BRB.triggerPress = triggerExternalPress;
 
-    rebuildPedestalTargets();
-    updatePedestalAnchor();
+    loadPedestalAnchor();
+    updatePedestalAnchor(false);
     animatePedestal();
 
     if (pedestalSvg) {
@@ -1288,39 +1385,63 @@
           if (pedestalSvg.setPointerCapture) {
             try { pedestalSvg.setPointerCapture(e.pointerId); } catch (_) {}
           }
-          beginPedestalPress();
+          beginPedestalGesture(e.clientX, e.clientY);
+        });
+        pedestalSvg.addEventListener("pointermove", function (e) {
+          if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
+          if (!pedestalActive) return;
+          e.preventDefault();
+          movePedestalGesture(e.clientX, e.clientY);
         });
         pedestalSvg.addEventListener("pointerup", function (e) {
           if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
-          endPedestalPress(false);
+          endPedestalGesture(false);
           pedestalPointerId = null;
         });
         pedestalSvg.addEventListener("pointercancel", function (e) {
           if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
-          endPedestalPress(true);
+          endPedestalGesture(true);
           pedestalPointerId = null;
         });
         pedestalSvg.addEventListener("lostpointercapture", function () {
           pedestalPointerId = null;
-          endPedestalPress(true);
+          endPedestalGesture(true);
         });
       } else {
         pedestalSvg.addEventListener("touchstart", function (e) {
           pedestalLastTouchStart = Date.now();
           e.preventDefault();
-          beginPedestalPress();
+          if (!e.changedTouches || e.changedTouches.length === 0) return;
+          var touch = e.changedTouches[0];
+          pedestalTouchId = touch.identifier;
+          beginPedestalGesture(touch.clientX, touch.clientY);
+        }, { passive: false });
+        pedestalSvg.addEventListener("touchmove", function (e) {
+          if (!pedestalActive || !e.touches || e.touches.length === 0) return;
+          e.preventDefault();
+          var activeTouch = null;
+          for (var ti = 0; ti < e.touches.length; ti++) {
+            if (pedestalTouchId === null || e.touches[ti].identifier === pedestalTouchId) {
+              activeTouch = e.touches[ti];
+              break;
+            }
+          }
+          if (!activeTouch) return;
+          movePedestalGesture(activeTouch.clientX, activeTouch.clientY);
         }, { passive: false });
         pedestalSvg.addEventListener("touchend", function (e) {
           e.preventDefault();
-          endPedestalPress(false);
+          endPedestalGesture(false);
+          pedestalTouchId = null;
         }, { passive: false });
         pedestalSvg.addEventListener("touchcancel", function () {
-          endPedestalPress(true);
+          endPedestalGesture(true);
+          pedestalTouchId = null;
         });
         pedestalSvg.addEventListener("click", function () {
           if (Date.now() - pedestalLastTouchStart < 700) return;
-          beginPedestalPress();
-          endPedestalPress(false);
+          beginPedestalGesture(0, 0);
+          endPedestalGesture(false);
         });
       }
 
@@ -1334,11 +1455,11 @@
       pedestalSvg.addEventListener("keyup", function (e) {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          endPedestalPress(false);
+          endPedestalGesture(false);
         }
       });
       pedestalSvg.addEventListener("blur", function () {
-        endPedestalPress(true);
+        endPedestalGesture(true);
       });
 
       if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
