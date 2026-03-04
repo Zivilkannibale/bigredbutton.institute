@@ -243,6 +243,51 @@
       gap: 0.35rem;
     }
 
+    .methods-wrap {
+      margin-top: 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff8ec;
+      padding: 0.95rem;
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .methods-wrap h3 {
+      font-size: 1.22rem;
+    }
+
+    .methods-wrap p {
+      margin: 0;
+    }
+
+    .methods-grid {
+      display: grid;
+      gap: 0.7rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .method {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #fffdf8;
+      padding: 0.8rem;
+    }
+
+    .method h4 {
+      margin: 0 0 0.45rem;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.02rem;
+      line-height: 1.2;
+    }
+
+    .method ul {
+      margin: 0;
+      padding-left: 1.02rem;
+      display: grid;
+      gap: 0.3rem;
+    }
+
     .callout {
       border-left: 6px solid var(--red);
       background: #fff4f4;
@@ -299,7 +344,8 @@
 
     @media (max-width: 980px) {
       .hero-grid,
-      .division-grid {
+      .division-grid,
+      .methods-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -409,6 +455,52 @@
             </ul>
           </article>
         </div>
+        <section class="methods-wrap" aria-label="Methodological framework">
+          <h3>Methodological Framework</h3>
+          <p>Our analysis pipeline adapts complexity measures from computational neuroscience and consciousness research to button-press time series.</p>
+          <div class="methods-grid">
+            <article class="method">
+              <h4>Entropy and Algorithmic Complexity</h4>
+              <ul>
+                <li><strong>Sample entropy / approximate entropy:</strong> quantifies unpredictability in inter-press intervals.</li>
+                <li><strong>Lempel-Ziv complexity:</strong> tests how compressible collective press sequences are over time.</li>
+                <li><strong>Permutation entropy:</strong> tracks ordinal pattern structure rather than raw magnitude.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Fractal and Scale-Free Dynamics</h4>
+              <ul>
+                <li><strong>DFA (alpha exponent):</strong> estimates long-range temporal correlations and memory effects.</li>
+                <li><strong>Hurst exponent:</strong> distinguishes persistent trends from anti-persistent reversals.</li>
+                <li><strong>Multifractal DFA:</strong> captures heterogeneity in scaling across fluctuation sizes.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Dynamical Systems and State Transitions</h4>
+              <ul>
+                <li><strong>Recurrence quantification analysis:</strong> characterizes determinism, laminarity, and regime shifts.</li>
+                <li><strong>Lyapunov exponents:</strong> tests sensitivity to initial conditions in crowd-level behavior.</li>
+                <li><strong>Correlation dimension:</strong> estimates the effective dimensionality of the generating process.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Criticality Signatures</h4>
+              <ul>
+                <li><strong>Power spectral density slope:</strong> tests for 1/f-like structure in press dynamics.</li>
+                <li><strong>Avalanche analysis:</strong> evaluates burst sizes and durations for scale-invariant behavior.</li>
+                <li><strong>Branching parameter:</strong> estimates whether one press statistically recruits subsequent presses.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Networked Multi-Button Systems</h4>
+              <ul>
+                <li><strong>Transfer entropy:</strong> measures directed information flow between button locations.</li>
+                <li><strong>Integrated-information proxies:</strong> tests whether distributed button streams act as a coupled whole.</li>
+              </ul>
+            </article>
+          </div>
+          <p>If neural activity at peak complexity often sits near criticality, BRB asks the corresponding civic question: does the crowd?</p>
+        </section>
         <div class="callout">
           <strong>Scientific Advisory Board:</strong> Reggie Watts - musician, comedian, and theorist of nonsense-as-method.
         </div>
