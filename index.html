@@ -174,6 +174,8 @@
       font: 700 1.05rem/1 "Manrope", sans-serif;
       color: #fff; border: 0; border-radius: 999px;
       padding: 1rem 1.8rem;
+      min-height: 56px;
+      min-width: 200px;
       background: radial-gradient(circle at 35% 28%, #ff6868 0%, #df2c2c 55%, #7f1010 100%);
       box-shadow:
         inset 0 -7px 14px rgba(68,0,0,0.3),
@@ -181,6 +183,10 @@
       cursor: pointer;
       transition: transform 120ms ease, box-shadow 300ms ease;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
     .press-btn:hover {
       transform: translateY(-2px) scale(1.03);
@@ -356,6 +362,14 @@
       .press-note { order: 4; width: 100%; }
       .division-grid, .methods-grid { grid-template-columns: 1fr; }
       .hero-latour { max-width: 300px; justify-self: end; transform: none; }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .press-btn:hover {
+        transform: none;
+        box-shadow:
+          inset 0 -7px 14px rgba(68,0,0,0.3),
+          0 8px 16px rgba(129,23,23,0.38);
+      }
     }
     @media (max-width: 650px) {
       .shell { width: min(calc(100% - 1rem), var(--max)); margin: 0.5rem auto 1.5rem; }
@@ -763,7 +777,7 @@
     }
 
     // â”€â”€ PRESS â”€â”€
-    btn.addEventListener("click",function(){
+    function handlePress(){
       var now=Date.now();count++;pressTimestamps.push(now);
       if(pressTimestamps.length>1)intervals.push(now-pressTimestamps[pressTimestamps.length-2]);
       countEl.textContent=count;
@@ -780,6 +794,33 @@
       burstBins[binIdx]+=1;
       for(var i=0;i<entropyParticles.length;i++){entropyParticles[i].vx+=(Math.random()-0.5)*6;entropyParticles[i].vy+=(Math.random()-0.5)*6;}
       updateStats();
+    }
+
+    var lastTouchStart=0;
+
+    if("PointerEvent" in window){
+      btn.addEventListener("pointerdown",function(e){
+        if(e.pointerType==="mouse" && e.button!==0)return;
+        e.preventDefault();
+        handlePress();
+      });
+    } else {
+      btn.addEventListener("touchstart",function(e){
+        lastTouchStart=Date.now();
+        e.preventDefault();
+        handlePress();
+      },{passive:false});
+      btn.addEventListener("click",function(){
+        if(Date.now()-lastTouchStart<700)return;
+        handlePress();
+      });
+    }
+
+    btn.addEventListener("keydown",function(e){
+      if(e.key==="Enter" || e.key===" "){
+        e.preventDefault();
+        handlePress();
+      }
     });
 
     setInterval(function(){
