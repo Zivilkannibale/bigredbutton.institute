@@ -65,6 +65,7 @@
   var person1 = document.getElementById("person1");
   var person2 = document.getElementById("person2");
   var person3 = document.getElementById("person3");
+  var person4 = document.getElementById("person4");
 
   var ambientC = document.getElementById("ambientCanvas");
   var ambientCtx = ambientC && ambientC.getContext("2d");
@@ -76,6 +77,10 @@
   var walkPhase = 0;
   var curiosityTimer = null;
   var fieldStatusTimer = null;
+  var curiosityHomeX = 560;
+  var curiosityTargetX = 512;
+  var reggieHomeX = 1035;
+  var reggieTargetX = 466;
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -722,34 +727,40 @@
   }
 
   function animateCuriosity() {
-    if (!person2) return;
+    if (!person2 && !person4) return;
     if (curiosityTimer) clearTimeout(curiosityTimer);
     curiosityTimer = setTimeout(function () {
       if (!isDocked) return;
       var startedAt = performance.now();
       function step(now) {
-        if (!isDocked || !person2) return;
-        var eased = smoothstep(clamp((now - startedAt) / 2200, 0, 1));
-        person2.setAttribute("transform", "translate(" + (560 + (512 - 560) * eased) + ",332)");
-        if (eased < 1) requestAnimationFrame(step);
+        if (!isDocked) return;
+        var curiosityEased = smoothstep(clamp((now - startedAt) / 2200, 0, 1));
+        var reggieEased = smoothstep(clamp((now - startedAt - 420) / 2400, 0, 1));
+        if (person2) person2.setAttribute("transform", "translate(" + (curiosityHomeX + (curiosityTargetX - curiosityHomeX) * curiosityEased) + ",332)");
+        if (person4) person4.setAttribute("transform", "translate(" + (reggieHomeX + (reggieTargetX - reggieHomeX) * reggieEased) + ",332)");
+        if (curiosityEased < 1 || reggieEased < 1) requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
     }, 600);
   }
 
   function resetPeople() {
-    if (!person2) return;
+    if (!person2 && !person4) return;
     if (curiosityTimer) {
       clearTimeout(curiosityTimer);
       curiosityTimer = null;
     }
-    var current = person2.getAttribute("transform");
-    var match = current && current.match(/translate\(([\d.]+)/);
-    var startX = match ? parseFloat(match[1]) : 560;
+    var current2 = person2 && person2.getAttribute("transform");
+    var match2 = current2 && current2.match(/translate\(([\d.]+)/);
+    var person2StartX = match2 ? parseFloat(match2[1]) : curiosityHomeX;
+    var current4 = person4 && person4.getAttribute("transform");
+    var match4 = current4 && current4.match(/translate\(([\d.]+)/);
+    var person4StartX = match4 ? parseFloat(match4[1]) : reggieHomeX;
     var startedAt = performance.now();
     function step(now) {
       var eased = smoothstep(clamp((now - startedAt) / 800, 0, 1));
-      person2.setAttribute("transform", "translate(" + (startX + (560 - startX) * eased) + ",332)");
+      if (person2) person2.setAttribute("transform", "translate(" + (person2StartX + (curiosityHomeX - person2StartX) * eased) + ",332)");
+      if (person4) person4.setAttribute("transform", "translate(" + (person4StartX + (reggieHomeX - person4StartX) * eased) + ",332)");
       if (eased < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -759,7 +770,8 @@
     walkPhase += 0.3;
     if (person1) person1.setAttribute("transform", "translate(" + ((((walkPhase * 0.8) % 1060) - 50)) + ",332)");
     if (person3) person3.setAttribute("transform", "translate(" + (1010 - ((walkPhase * 0.5) % 1060)) + ",332)");
-    if (person2 && !isDocked) person2.setAttribute("transform", "translate(560,332)");
+    if (person2 && !isDocked) person2.setAttribute("transform", "translate(" + curiosityHomeX + ",332)");
+    if (person4 && !isDocked) person4.setAttribute("transform", "translate(" + reggieHomeX + ",332)");
     requestAnimationFrame(walkPeople);
   }
 
