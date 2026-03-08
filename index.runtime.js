@@ -90,7 +90,7 @@
   ];
   var reggieQuoteIndex = -1;
   var reggieQuoteTimer = null;
-  var reggieQuoteHideTimer = null;
+  var reggieArrived = false;
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -749,6 +749,10 @@
         var reggieEased = smoothstep(clamp((now - startedAt - 420) / 2400, 0, 1));
         if (person2) person2.setAttribute("transform", "translate(" + (curiosityHomeX + (curiosityTargetX - curiosityHomeX) * curiosityEased) + ",332)");
         if (person4) person4.setAttribute("transform", "translate(" + (reggieHomeX + (reggieTargetX - reggieHomeX) * reggieEased) + ",332)");
+        if (reggieEased >= 1 && !reggieArrived) {
+          reggieArrived = true;
+          showReggieQuoteNow();
+        }
         if (curiosityEased < 1 || reggieEased < 1) requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
@@ -836,7 +840,7 @@
   function startReggieQuotes() {
     if (!person4Quote || !reggieQuotes.length) return;
     stopReggieQuotes();
-    queueReggieQuote(600);
+    reggieArrived = false;
   }
 
   function stopReggieQuotes() {
@@ -844,11 +848,18 @@
       clearTimeout(reggieQuoteTimer);
       reggieQuoteTimer = null;
     }
-    if (reggieQuoteHideTimer) {
-      clearTimeout(reggieQuoteHideTimer);
-      reggieQuoteHideTimer = null;
-    }
+    reggieArrived = false;
     setReggieBubbleVisible(false);
+  }
+
+  function showReggieQuoteNow() {
+    if (!person4Quote || !reggieQuotes.length || !isDocked || !reggieArrived) return;
+    if (reggieQuoteTimer) {
+      clearTimeout(reggieQuoteTimer);
+      reggieQuoteTimer = null;
+    }
+    setReggieQuote();
+    setReggieBubbleVisible(true);
   }
 
   function queueReggieQuote(delay) {
@@ -856,34 +867,19 @@
     if (reggieQuoteTimer) clearTimeout(reggieQuoteTimer);
     reggieQuoteTimer = setTimeout(function () {
       reggieQuoteTimer = null;
-      if (!isDocked) return;
-      if (!isReggieNearButton()) {
-        queueReggieQuote(240);
-        return;
-      }
-      setReggieQuote();
-      setReggieBubbleVisible(true);
-      if (reggieQuoteHideTimer) clearTimeout(reggieQuoteHideTimer);
-      reggieQuoteHideTimer = setTimeout(function () {
-        reggieQuoteHideTimer = null;
-        setReggieBubbleVisible(false);
-        queueReggieQuote(2600 + Math.random() * 2600);
-      }, 3200 + Math.random() * 1400);
+      if (!isDocked || !reggieArrived) return;
+      showReggieQuoteNow();
     }, delay);
   }
 
   function interruptReggieQuote() {
-    if (!isDocked) return;
+    if (!isDocked || !reggieArrived) return;
     if (reggieQuoteTimer) {
       clearTimeout(reggieQuoteTimer);
       reggieQuoteTimer = null;
     }
-    if (reggieQuoteHideTimer) {
-      clearTimeout(reggieQuoteHideTimer);
-      reggieQuoteHideTimer = null;
-    }
     setReggieBubbleVisible(false);
-    queueReggieQuote(2400 + Math.random() * 2200);
+    queueReggieQuote(60000);
   }
 
   function walkPeople() {
