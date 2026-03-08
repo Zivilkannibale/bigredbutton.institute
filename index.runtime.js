@@ -712,8 +712,8 @@
     var slot = crowdSlots[crowdPeople.length];
     var style = crowdStyles[crowdPeople.length % crowdStyles.length];
     var node = createCrowdPersonNode(style);
-    var startX = slot.x < 500 ? -50 - Math.random() * 60 : 1010 + Math.random() * 60;
-    var startY = 332 + (Math.random() - 0.5) * 12;
+    var startX = slot.x < 500 ? 28 + Math.random() * 36 : 896 - Math.random() * 36;
+    var startY = 338 + (Math.random() - 0.5) * 10;
     var scale = style.scale + ((crowdPeople.length % 3) - 1) * 0.03;
     sceneSvg.appendChild(node);
     crowdPeople.push({
@@ -722,7 +722,7 @@
       y: startY,
       targetX: slot.x,
       targetY: slot.y,
-      speed: 0.35 + Math.random() * 0.18,
+      speed: 1.05 + Math.random() * 0.45,
       phase: Math.random() * Math.PI * 2,
       scale: clamp(scale, 0.84, 1.04)
     });
