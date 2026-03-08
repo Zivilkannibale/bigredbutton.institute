@@ -66,6 +66,7 @@
   var person2 = document.getElementById("person2");
   var person3 = document.getElementById("person3");
   var person4 = document.getElementById("person4");
+  var person4Bubble = document.getElementById("person4Bubble");
   var person4Quote = document.getElementById("person4Quote");
 
   var ambientC = document.getElementById("ambientCanvas");
@@ -89,6 +90,7 @@
   ];
   var reggieQuoteIndex = -1;
   var reggieQuoteTimer = null;
+  var reggieQuoteHideTimer = null;
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -776,6 +778,22 @@
     requestAnimationFrame(step);
   }
 
+  function getPersonX(person, fallback) {
+    if (!person) return fallback;
+    var current = person.getAttribute("transform");
+    var match = current && current.match(/translate\(([\d.]+)/);
+    return match ? parseFloat(match[1]) : fallback;
+  }
+
+  function isReggieNearButton() {
+    return getPersonX(person4, reggieHomeX) <= reggieTargetX + 28;
+  }
+
+  function setReggieBubbleVisible(visible) {
+    if (!person4Bubble) return;
+    person4Bubble.style.opacity = visible ? "1" : "0";
+  }
+
   function setReggieQuote() {
     if (!person4Quote || !reggieQuotes.length) return;
     var nextIndex = Math.floor(Math.random() * reggieQuotes.length);
@@ -786,15 +804,55 @@
 
   function startReggieQuotes() {
     if (!person4Quote || !reggieQuotes.length) return;
-    setReggieQuote();
-    if (reggieQuoteTimer) clearInterval(reggieQuoteTimer);
-    reggieQuoteTimer = setInterval(setReggieQuote, 5200);
+    stopReggieQuotes();
+    queueReggieQuote(600);
   }
 
   function stopReggieQuotes() {
-    if (!reggieQuoteTimer) return;
-    clearInterval(reggieQuoteTimer);
-    reggieQuoteTimer = null;
+    if (reggieQuoteTimer) {
+      clearTimeout(reggieQuoteTimer);
+      reggieQuoteTimer = null;
+    }
+    if (reggieQuoteHideTimer) {
+      clearTimeout(reggieQuoteHideTimer);
+      reggieQuoteHideTimer = null;
+    }
+    setReggieBubbleVisible(false);
+  }
+
+  function queueReggieQuote(delay) {
+    if (!person4Quote || !reggieQuotes.length) return;
+    if (reggieQuoteTimer) clearTimeout(reggieQuoteTimer);
+    reggieQuoteTimer = setTimeout(function () {
+      reggieQuoteTimer = null;
+      if (!isDocked) return;
+      if (!isReggieNearButton()) {
+        queueReggieQuote(240);
+        return;
+      }
+      setReggieQuote();
+      setReggieBubbleVisible(true);
+      if (reggieQuoteHideTimer) clearTimeout(reggieQuoteHideTimer);
+      reggieQuoteHideTimer = setTimeout(function () {
+        reggieQuoteHideTimer = null;
+        setReggieBubbleVisible(false);
+        queueReggieQuote(2600 + Math.random() * 2600);
+      }, 3200 + Math.random() * 1400);
+    }, delay);
+  }
+
+  function interruptReggieQuote() {
+    if (!isDocked) return;
+    if (reggieQuoteTimer) {
+      clearTimeout(reggieQuoteTimer);
+      reggieQuoteTimer = null;
+    }
+    if (reggieQuoteHideTimer) {
+      clearTimeout(reggieQuoteHideTimer);
+      reggieQuoteHideTimer = null;
+    }
+    setReggieBubbleVisible(false);
+    queueReggieQuote(2400 + Math.random() * 2200);
   }
 
   function walkPeople() {
@@ -940,6 +998,7 @@
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
     if (source === "pedestal" && isDocked && sceneStatus) {
+      interruptReggieQuote();
       fieldPressCount++;
       sceneStatus.textContent = "PRESS #" + fieldPressCount + " RECORDED - FIELD DATA LOGGED";
       sceneStatus.classList.add("show");
