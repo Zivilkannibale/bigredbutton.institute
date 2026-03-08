@@ -805,7 +805,7 @@
     var words = String(text || "").split(/\s+/);
     var lines = [];
     var currentLine = "";
-    var maxChars = 28;
+    var maxChars = 24;
     for (var i = 0; i < words.length; i++) {
       var candidate = currentLine ? currentLine + " " + words[i] : words[i];
       if (currentLine && candidate.length > maxChars) {
@@ -816,14 +816,14 @@
       }
     }
     if (currentLine) lines.push(currentLine);
-    while (lines.length > 4) {
+    while (lines.length > 5) {
       lines[lines.length - 2] += " " + lines[lines.length - 1];
       lines.pop();
     }
     for (var j = 0; j < lines.length; j++) {
       var tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
       tspan.setAttribute("x", "36");
-      tspan.setAttribute("dy", j === 0 ? "0" : "11");
+      tspan.setAttribute("dy", j === 0 ? "0" : "10");
       tspan.textContent = lines[j];
       person4Quote.appendChild(tspan);
     }
