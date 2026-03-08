@@ -66,6 +66,7 @@
   var person2 = document.getElementById("person2");
   var person3 = document.getElementById("person3");
   var person4 = document.getElementById("person4");
+  var person4Quote = document.getElementById("person4Quote");
 
   var ambientC = document.getElementById("ambientCanvas");
   var ambientCtx = ambientC && ambientC.getContext("2d");
@@ -81,6 +82,13 @@
   var curiosityTargetX = 512;
   var reggieHomeX = 1035;
   var reggieTargetX = 466;
+  var reggieQuotes = [
+    "When you feel emotionally ready, gently but decisively interface with the large chromatic circle of destiny in front of you.",
+    "Locate the red probability disc, apply finger pressure, and allow the universe to update itself.",
+    "Just go ahead and press the big, red existential confirmation button. See what your timeline does."
+  ];
+  var reggieQuoteIndex = -1;
+  var reggieQuoteTimer = null;
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -731,6 +739,7 @@
     if (curiosityTimer) clearTimeout(curiosityTimer);
     curiosityTimer = setTimeout(function () {
       if (!isDocked) return;
+      startReggieQuotes();
       var startedAt = performance.now();
       function step(now) {
         if (!isDocked) return;
@@ -750,6 +759,7 @@
       clearTimeout(curiosityTimer);
       curiosityTimer = null;
     }
+    stopReggieQuotes();
     var current2 = person2 && person2.getAttribute("transform");
     var match2 = current2 && current2.match(/translate\(([\d.]+)/);
     var person2StartX = match2 ? parseFloat(match2[1]) : curiosityHomeX;
@@ -764,6 +774,27 @@
       if (eased < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+  }
+
+  function setReggieQuote() {
+    if (!person4Quote || !reggieQuotes.length) return;
+    var nextIndex = Math.floor(Math.random() * reggieQuotes.length);
+    if (reggieQuotes.length > 1 && nextIndex === reggieQuoteIndex) nextIndex = (nextIndex + 1) % reggieQuotes.length;
+    reggieQuoteIndex = nextIndex;
+    person4Quote.textContent = reggieQuotes[nextIndex];
+  }
+
+  function startReggieQuotes() {
+    if (!person4Quote || !reggieQuotes.length) return;
+    setReggieQuote();
+    if (reggieQuoteTimer) clearInterval(reggieQuoteTimer);
+    reggieQuoteTimer = setInterval(setReggieQuote, 5200);
+  }
+
+  function stopReggieQuotes() {
+    if (!reggieQuoteTimer) return;
+    clearInterval(reggieQuoteTimer);
+    reggieQuoteTimer = null;
   }
 
   function walkPeople() {
