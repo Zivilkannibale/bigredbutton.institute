@@ -58,6 +58,7 @@
   var pedestalScrollHint = document.getElementById("pedestalScrollHint");
   var pedestalSvg = pedestal && pedestal.querySelector("svg");
   var sceneWrap = document.getElementById("sceneWrap");
+  var sceneSvg = sceneWrap && sceneWrap.querySelector("svg.street-svg");
   var sceneStatus = document.getElementById("sceneStatus");
   var fieldCaption = document.getElementById("fieldCaption");
   var miniDash = document.getElementById("miniDash");
@@ -91,6 +92,34 @@
   var reggieQuoteIndex = -1;
   var reggieQuoteTimer = null;
   var reggieArrived = false;
+  var redWordSpans = [];
+  var crowdPeople = [];
+  var crowdSlots = [
+    { x: 392, y: 336 },
+    { x: 608, y: 336 },
+    { x: 432, y: 316 },
+    { x: 568, y: 316 },
+    { x: 356, y: 348 },
+    { x: 644, y: 348 },
+    { x: 500, y: 302 },
+    { x: 388, y: 308 },
+    { x: 612, y: 308 },
+    { x: 332, y: 330 },
+    { x: 668, y: 330 },
+    { x: 430, y: 360 },
+    { x: 570, y: 360 },
+    { x: 500, y: 286 },
+    { x: 360, y: 316 },
+    { x: 640, y: 316 }
+  ];
+  var crowdStyles = [
+    { skin: "#d8c0a0", shirt: "#4a6a8a", limbs: "#3a4a5a", hair: "#5a4030", hairRx: "4", hairRy: "2.5", hairCx: "-1", hairCy: "-25", scale: 0.96 },
+    { skin: "#d4b090", shirt: "#c04040", limbs: "#4a4a6a", hair: "#3a2a1a", hairRx: "5", hairRy: "3", hairCx: "1", hairCy: "-27", scale: 1, bag: "#2a2a2a" },
+    { skin: "#c0a888", shirt: "#5a5a7a", limbs: "#4a4a5a", hair: "#2a2a3a", hairRx: "5", hairRy: "3", hairCx: "0", hairCy: "-26", scale: 0.94 },
+    { skin: "#d0b898", shirt: "#6a8a5a", limbs: "#4a4a5a", hair: "#5d4b36", hairRx: "4.5", hairRy: "2.5", hairCx: "0", hairCy: "-25", scale: 0.92 },
+    { skin: "#d8c0a0", shirt: "#8a5a6a", limbs: "#5a4a5a", hair: "#6a4632", hairRx: "4", hairRy: "2.3", hairCx: "0", hairCy: "-25", scale: 0.9 },
+    { skin: "#c8b090", shirt: "#5a6a8a", limbs: "#3a4a5a", hair: "#4a3424", hairRx: "4.5", hairRy: "2.5", hairCx: "0", hairCy: "-26", scale: 0.93 }
+  ];
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -135,6 +164,57 @@
       el.classList.remove(className);
       timers[name] = null;
     }, ms);
+  }
+
+  function shouldWrapRedText(parent) {
+    if (!parent || !parent.tagName) return false;
+    if (parent.closest && parent.closest(".red-word")) return false;
+    return ["SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA", "SVG", "CANVAS"].indexOf(parent.tagName) === -1;
+  }
+
+  function collectRedWords() {
+    if (!document.body || redWordSpans.length || !window.NodeFilter) return;
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (node) {
+        if (!node || !node.nodeValue || !/\bred\b/i.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+        return shouldWrapRedText(node.parentNode) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    for (var i = 0; i < textNodes.length; i++) {
+      var textNode = textNodes[i];
+      var text = textNode.nodeValue;
+      var parent = textNode.parentNode;
+      if (!parent) continue;
+      var fragment = document.createDocumentFragment();
+      var regex = /\bred\b/gi;
+      var lastIndex = 0;
+      var match;
+      while ((match = regex.exec(text))) {
+        if (match.index > lastIndex) fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        var span = document.createElement("span");
+        span.className = "red-word";
+        span.textContent = match[0];
+        fragment.appendChild(span);
+        redWordSpans.push(span);
+        lastIndex = match.index + match[0].length;
+      }
+      if (lastIndex < text.length) fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+      parent.replaceChild(fragment, textNode);
+    }
+  }
+
+  function pulseRedWords() {
+    if (!redWordSpans.length) return;
+    for (var i = 0; i < redWordSpans.length; i++) redWordSpans[i].classList.remove("is-pulsing");
+    if (redWordSpans[0]) void redWordSpans[0].offsetWidth;
+    for (var j = 0; j < redWordSpans.length; j++) redWordSpans[j].classList.add("is-pulsing");
+    clearNamedTimer("redWords");
+    timers.redWords = setTimeout(function () {
+      for (var k = 0; k < redWordSpans.length; k++) redWordSpans[k].classList.remove("is-pulsing");
+      timers.redWords = null;
+    }, 1100);
   }
 
   function trimData() {
@@ -591,6 +671,85 @@
     return clamp((vh * 0.9 - rect.top) / (vh * 0.9 - vh * 0.3), 0, 1);
   }
 
+  function createSceneNode(tagName, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    for (var key in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, key)) node.setAttribute(key, attrs[key]);
+    }
+    return node;
+  }
+
+  function createCrowdPersonNode(style) {
+    var group = createSceneNode("g", { "pointer-events": "none" });
+    group.appendChild(createSceneNode("circle", { cx: "0", cy: "-24", r: "6", fill: style.skin }));
+    group.appendChild(createSceneNode("ellipse", {
+      cx: style.hairCx,
+      cy: style.hairCy,
+      rx: style.hairRx,
+      ry: style.hairRy,
+      fill: style.hair,
+      opacity: ".6"
+    }));
+    group.appendChild(createSceneNode("rect", { x: "-5", y: "-18", width: "10", height: "16", rx: "2.5", fill: style.shirt }));
+    group.appendChild(createSceneNode("line", { x1: "-3", y1: "-2", x2: "-5", y2: "10", stroke: style.limbs, "stroke-width": "3", "stroke-linecap": "round" }));
+    group.appendChild(createSceneNode("line", { x1: "3", y1: "-2", x2: "5", y2: "10", stroke: style.limbs, "stroke-width": "3", "stroke-linecap": "round" }));
+    group.appendChild(createSceneNode("line", { x1: "-5", y1: "-14", x2: "-8", y2: "-4", stroke: style.shirt, "stroke-width": "2.5", "stroke-linecap": "round" }));
+    group.appendChild(createSceneNode("line", { x1: "5", y1: "-14", x2: "8", y2: "-4", stroke: style.shirt, "stroke-width": "2.5", "stroke-linecap": "round" }));
+    if (style.bag) group.appendChild(createSceneNode("rect", { x: "4", y: "-12", width: "5", height: "8", rx: ".5", fill: style.bag }));
+    return group;
+  }
+
+  function resetCrowdPeople() {
+    while (crowdPeople.length) {
+      var crowdPerson = crowdPeople.pop();
+      if (crowdPerson.node && crowdPerson.node.parentNode) crowdPerson.node.parentNode.removeChild(crowdPerson.node);
+    }
+  }
+
+  function spawnCrowdPerson() {
+    if (!sceneSvg || !isDocked) return;
+    if (crowdPeople.length >= crowdSlots.length) return;
+    var slot = crowdSlots[crowdPeople.length];
+    var style = crowdStyles[crowdPeople.length % crowdStyles.length];
+    var node = createCrowdPersonNode(style);
+    var startX = slot.x < 500 ? -50 - Math.random() * 60 : 1010 + Math.random() * 60;
+    var startY = 332 + (Math.random() - 0.5) * 12;
+    var scale = style.scale + ((crowdPeople.length % 3) - 1) * 0.03;
+    sceneSvg.appendChild(node);
+    crowdPeople.push({
+      node: node,
+      x: startX,
+      y: startY,
+      targetX: slot.x,
+      targetY: slot.y,
+      speed: 0.35 + Math.random() * 0.18,
+      phase: Math.random() * Math.PI * 2,
+      scale: clamp(scale, 0.84, 1.04)
+    });
+  }
+
+  function updateCrowdPeople() {
+    for (var i = 0; i < crowdPeople.length; i++) {
+      var crowdPerson = crowdPeople[i];
+      var dx = crowdPerson.targetX - crowdPerson.x;
+      var dy = crowdPerson.targetY - crowdPerson.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 0.8) {
+        var step = Math.min(crowdPerson.speed, dist);
+        crowdPerson.x += dx / dist * step;
+        crowdPerson.y += dy / dist * step;
+        crowdPerson.phase += 0.25;
+      } else {
+        crowdPerson.phase += 0.04;
+      }
+      var bob = dist > 0.8 ? Math.abs(Math.sin(crowdPerson.phase)) * 0.8 : Math.sin(crowdPerson.phase) * 0.35;
+      crowdPerson.node.setAttribute(
+        "transform",
+        "translate(" + crowdPerson.x.toFixed(1) + "," + (crowdPerson.y + bob).toFixed(1) + ") scale(" + crowdPerson.scale.toFixed(2) + ")"
+      );
+    }
+  }
+
   function resetSceneStatus() {
     if (!sceneStatus) return;
     if (isDocked) {
@@ -766,6 +925,7 @@
       curiosityTimer = null;
     }
     stopReggieQuotes();
+    resetCrowdPeople();
     var current2 = person2 && person2.getAttribute("transform");
     var match2 = current2 && current2.match(/translate\(([\d.]+)/);
     var person2StartX = match2 ? parseFloat(match2[1]) : curiosityHomeX;
@@ -888,6 +1048,7 @@
     if (person3) person3.setAttribute("transform", "translate(" + (1010 - ((walkPhase * 0.5) % 1060)) + ",332)");
     if (person2 && !isDocked) person2.setAttribute("transform", "translate(" + curiosityHomeX + ",332)");
     if (person4 && !isDocked) person4.setAttribute("transform", "translate(" + reggieHomeX + ",332)");
+    updateCrowdPeople();
     requestAnimationFrame(walkPeople);
   }
 
@@ -1018,12 +1179,14 @@
     transient("pressGlow", pressCol, "glow", 400, false);
     transient("labPulse", labPanel, "pulse", 500, false);
     transient("flash", flash, "flash", 120, true);
+    pulseRedWords();
     var origin = source === "pedestal" ? getPedestalCenter() : getButtonCenter();
     spawnParticles(origin.x, origin.y, source === "pedestal" ? 10 : 14);
     injectWaveFromHold(holdMs);
     addBurstSample(now);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
+    if (isDocked) spawnCrowdPerson();
     if (source === "pedestal" && isDocked) {
       interruptReggieQuote();
     }
@@ -1164,6 +1327,7 @@
   window.BRB = window.BRB || {};
   window.BRB.triggerPress = triggerExternalPress;
 
+  collectRedWords();
   initAmbient();
   resizeAmbient();
   resizeCanvases();

@@ -51,7 +51,7 @@
       margin: 1rem auto 2.5rem;
     }
 
-    /* â”€â”€ HERO â”€â”€ */
+    /* HERO */
     .hero {
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
@@ -111,7 +111,7 @@
     .hero-mission { margin-top: 0.8rem; max-width: 72ch; }
     .hero-mission p { margin: 0.3rem 0; font-size: 0.95rem; }
 
-    /* â”€â”€ COMBINED LAB PANEL â”€â”€ */
+    /* COMBINED LAB PANEL */
     .lab-panel {
       margin-top: 1rem;
       border: 1px solid rgba(60,50,40,0.25);
@@ -239,7 +239,7 @@
       font-size: 0.65rem; color: #4a5568; text-align: center;
     }
 
-    /* Right: viz 2Ã—2 */
+    /* Right: viz 2x2 */
     .viz-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -410,7 +410,7 @@
       border-radius: 4px;
     }
 
-    /* â”€â”€ CONTENT â”€â”€ */
+    /* CONTENT */
     .mono {
       font-family: "IBM Plex Mono", monospace;
       color: #3c4452; font-size: 0.88rem;
@@ -471,7 +471,7 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* â”€â”€ ANIMATIONS â”€â”€ */
+    /* ANIMATIONS */
     .reveal {
       opacity: 0; transform: translateY(14px);
       animation: rise 700ms ease forwards;
@@ -490,6 +490,16 @@
       transition: opacity 100ms ease;
     }
     .screen-flash.flash { opacity: 1; transition: opacity 0ms; }
+    .red-word {
+      color: inherit;
+      transition: color 160ms ease, text-shadow 220ms ease;
+    }
+    .red-word.is-pulsing {
+      color: #ff4444;
+      text-shadow:
+        0 0 10px rgba(223,44,44,0.42),
+        0 0 18px rgba(223,44,44,0.24);
+    }
 
     /* Floating pedestal control */
     .pedestal-float {
@@ -793,7 +803,7 @@
       </div>
     </header>
 
-    <!-- â”€â”€ COMBINED PRESS + VIZ â”€â”€ -->
+    <!-- COMBINED PRESS + VIZ -->
     <section class="lab-panel reveal" id="labPanel">
       <div class="lab-layout">
         <div class="press-column" id="pressColumn">
@@ -950,7 +960,7 @@
       <section class="panel reveal">
         <h2>Theoretical Framework</h2>
         <p>Following the Latour comic panel above, BRB treats the red button as both object and provocation: a device that converts collective thought into measurable action.</p>
-        <p>If the world already contains such buttons â€” hidden in plain sight, charged with social meaning, and capable of reorganizing collective attention â€” then the public question is straightforward: what happens when anyone can press?</p>
+        <p>If the world already contains such buttons &mdash; hidden in plain sight, charged with social meaning, and capable of reorganizing collective attention &mdash; then the public question is straightforward: what happens when anyone can press?</p>
         <p>BRB approaches this as a practical and conceptual problem. What counts as a press? Which design variables alter pressing behavior? How does repeated pressing change the public atmosphere of a place?</p>
       </section>
 
@@ -1059,7 +1069,7 @@
           <p>If neural activity at peak complexity often sits near criticality, BRB asks the corresponding civic question: does the crowd?</p>
         </section>
         <div class="callout">
-          <strong>Scientific Advisory Board:</strong> Reggie Watts â€” musician, comedian, and theorist of nonsense-as-method.
+          <strong>Scientific Advisory Board:</strong> Reggie Watts &mdash; musician, comedian, and theorist of nonsense-as-method.
         </div>
       </section>
 
@@ -1081,7 +1091,7 @@
     <footer class="footer reveal">
       <p><strong>The Big Red Button Institute</strong><br>A Research Collective for Pressability Studies</p>
       <p>Contact: <a href="mailto:inquiries@bigredbutton.institute">inquiries@bigredbutton.institute</a></p>
-      <p><em>"The question is not whether to press. The question is what pressing means."</em> â€” BRB Founding Charter, Article I</p>
+      <p><em>"The question is not whether to press. The question is what pressing means."</em> &mdash; BRB Founding Charter, Article I</p>
     </footer>
   </div>
 
@@ -1144,7 +1154,7 @@
       nextShift: 4000 + Math.random() * 7000
     };
 
-    // â”€â”€ AMBIENT â”€â”€
+    // AMBIENT
     var ambientC = document.getElementById("ambientCanvas");
     var ambientCtx = ambientC.getContext("2d");
     var floaters = [];
@@ -1180,7 +1190,7 @@
       }
     }
 
-    // â”€â”€ VIZ â”€â”€
+    // VIZ
     var waveC=document.getElementById("waveCanvas"), waveCtx=waveC.getContext("2d");
     var intervalC=document.getElementById("intervalCanvas"), intervalCtx=intervalC.getContext("2d");
     var entropyC=document.getElementById("entropyCanvas"), entropyCtx=entropyC.getContext("2d");
@@ -1617,7 +1627,7 @@
       var b=computeBurst();if(b>maxBurst)maxBurst=b;statBurst.textContent=maxBurst;
     }
 
-    // â”€â”€ PRESS â”€â”€
+    // PRESS
     function injectWaveFromHold(holdMs){
       var clamped=Math.max(40,Math.min(holdMs,1600));
       var holdNorm=(clamped-40)/1560;
