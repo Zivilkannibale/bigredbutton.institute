@@ -4,7 +4,7 @@ This is the single canonical instruction for future Codex agents working on the 
 
 ## Mission
 
-Produce the most complete truthful paper package possible for the Big Red Button Institute inside `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/VR-study/Paper`.
+Produce the most complete truthful paper package possible for the Big Red Button Institute inside `VR-study/Paper` in the current cloned repository.
 
 The job is not just to draft prose. The job is to carry the paper from source gathering to manuscript delivery:
 
@@ -26,18 +26,29 @@ The job is not just to draft prose. The job is to carry the paper from source ga
 - If data are missing, produce the most complete truthful manuscript scaffold possible and clearly mark what remains unresolved.
 - When the task is complete, commit the work and push the repository unless the user explicitly says not to.
 
+## Portability Rules
+
+This instruction must be portable across teammates and machines.
+
+- Interpret all repo paths relative to the repository root.
+- Do not assume the repository lives in any specific home directory.
+- Do not assume Windows unless the current environment clearly is Windows.
+- Do not assume `py -3` exists; use the platform-appropriate Python launcher if you need a direct script fallback.
+- Prefer the built-in `skill-installer` skill over hardcoded local installer paths.
+- Only push if the current user has git write access and has not explicitly asked you not to push.
+
 ## Canonical Repo Inputs
 
 Use these repo files as first-order grounding:
 
-- `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/index.html`
-- `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/VR-study/Paper/bigredbutton_placement.tex`
-- `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/VR-study/Paper/bigredbutton_placement.bib`
+- `index.html`
+- `VR-study/Paper/bigredbutton_placement.tex`
+- `VR-study/Paper/bigredbutton_placement.bib`
 
 Use these instruction files as secondary context only if more detail is needed:
 
-- `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/instructions/brb-paper-handoff.md`
-- `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/instructions/brb-paper-handoff.txt`
+- `instructions/brb-paper-handoff.md`
+- `instructions/brb-paper-handoff.txt`
 
 ## Paper Grounding
 
@@ -109,23 +120,54 @@ Minimum required skills:
 - `latex-scaffold`
 - `latex-compile-qa`
 
-Installer script on this machine:
+Preferred install method:
 
-`C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py`
+- Use the built-in `skill-installer` skill to install missing skills into the current Codex user's skills library.
 
-Install `paper-review-pipeline` if missing:
+Install source for `paper-review-pipeline`:
 
-```powershell
-py -3 "C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo yishitys/academic-report-generator-skill --path . --name paper-review-pipeline --dest "C:/Users/cogpsy-vrlab/.codex/skills"
-```
+- GitHub repo: `yishitys/academic-report-generator-skill`
+- install as skill name: `paper-review-pipeline`
 
-Install the BRB writing subset from `WILLOSCAR/research-units-pipeline-skills` if missing:
+Install source for the BRB writing subset:
 
-```powershell
-py -3 "C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo WILLOSCAR/research-units-pipeline-skills --dest "C:/Users/cogpsy-vrlab/.codex/skills" --path .codex/skills/research-pipeline-runner .codex/skills/pipeline-router .codex/skills/arxiv-search .codex/skills/dedupe-rank .codex/skills/paper-notes .codex/skills/claims-extractor .codex/skills/survey-seed-harvest .codex/skills/taxonomy-builder .codex/skills/outline-builder .codex/skills/section-briefs .codex/skills/subsection-briefs .codex/skills/writer-context-pack .codex/skills/evidence-binder .codex/skills/prose-writer .codex/skills/synthesis-writer .codex/skills/citation-verifier .codex/skills/citation-diversifier .codex/skills/citation-injector .codex/skills/draft-polisher .codex/skills/global-reviewer .codex/skills/latex-scaffold .codex/skills/latex-compile-qa
-```
+- GitHub repo: `WILLOSCAR/research-units-pipeline-skills`
+- required skill paths:
+  - `.codex/skills/research-pipeline-runner`
+  - `.codex/skills/pipeline-router`
+  - `.codex/skills/arxiv-search`
+  - `.codex/skills/dedupe-rank`
+  - `.codex/skills/paper-notes`
+  - `.codex/skills/claims-extractor`
+  - `.codex/skills/survey-seed-harvest`
+  - `.codex/skills/taxonomy-builder`
+  - `.codex/skills/outline-builder`
+  - `.codex/skills/section-briefs`
+  - `.codex/skills/subsection-briefs`
+  - `.codex/skills/writer-context-pack`
+  - `.codex/skills/evidence-binder`
+  - `.codex/skills/prose-writer`
+  - `.codex/skills/synthesis-writer`
+  - `.codex/skills/citation-verifier`
+  - `.codex/skills/citation-diversifier`
+  - `.codex/skills/citation-injector`
+  - `.codex/skills/draft-polisher`
+  - `.codex/skills/global-reviewer`
+  - `.codex/skills/latex-scaffold`
+  - `.codex/skills/latex-compile-qa`
+
+Fallback only if the `skill-installer` skill cannot be used:
+
+- resolve the installer script relative to the current Codex home, typically `$CODEX_HOME/skills/.system/skill-installer/scripts/install-skill-from-github.py`
+- run it with the platform-appropriate Python launcher
+- install into the current user's Codex skills directory, not a hardcoded teammate-specific path
 
 If skills are newly installed, restart Codex before continuing.
+
+Portability note:
+
+- On this original machine, these skills were already installed as of March 13, 2026.
+- On a teammate machine, verify presence first rather than assuming they exist.
 
 ## End-to-End Workflow
 
@@ -182,7 +224,7 @@ Execute the following steps in order.
 14. If a TeX toolchain is available, compile-check the manuscript.
     - if compilation fails, fix what is possible
     - if TeX tools are missing, leave compile-ready files and state that limitation clearly
-15. Finish by reviewing the diff, committing the work, and pushing the repository.
+15. Finish by reviewing the diff, committing the work, and pushing the repository if remote write access is available and the user has not said not to push.
 
 ## Required Outputs
 
@@ -220,4 +262,4 @@ If the user later wants this entire workflow executed, the user can simply say:
 
 ## Final Rule
 
-When finished, commit the work and push the repository to its remote unless the user explicitly says not to push.
+When finished, commit the work and push the repository to its remote unless the user explicitly says not to push or the current machine lacks git write access.

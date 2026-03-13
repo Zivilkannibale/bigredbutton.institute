@@ -2,7 +2,7 @@
 
 This document is a self-contained handoff for a future Codex agent. Do not ask the user to restate the project unless new preferences have changed.
 
-Canonical execution instruction: `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/instructions/BRB_Paper_WritingPlan.md`
+Canonical execution instruction: `instructions/BRB_Paper_WritingPlan.md`
 
 Use that file for end-to-end execution. This file remains supporting context and archival detail.
 
@@ -21,7 +21,7 @@ This paper should read like a serious HCI paper that knows exactly how absurd it
 
 ## Repo Grounding
 
-The site copy in `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/index.html` is the current theme map for the paper. It is not the final paper prose. Treat it as the best current inventory of the project's concepts, divisions, tone cues, and methodological aspirations.
+The site copy in `index.html` is the current theme map for the paper. It is not the final paper prose. Treat it as the best current inventory of the project's concepts, divisions, tone cues, and methodological aspirations.
 
 The six anchor themes already present in `index.html` are:
 
@@ -46,7 +46,7 @@ The methods framing in `index.html` should inform interpretation throughout the 
 - criticality signatures
 - networked and multilevel coupling
 
-The strongest current empirical rationale for placement, reach, and salience is in `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/VR-study/Paper/bigredbutton_placement.tex`.
+The strongest current empirical rationale for placement, reach, and salience is in `VR-study/Paper/bigredbutton_placement.tex`.
 
 Important placement details already grounded there:
 
@@ -229,21 +229,12 @@ Short note:
 
 Use the built-in global installer if the machine does not already have the required skills:
 
-Installer script on this machine:
+Preferred install method:
 
-`C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py`
-
-Install `paper-review-pipeline` from `yishitys/academic-report-generator-skill`:
-
-```powershell
-py -3 "C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo yishitys/academic-report-generator-skill --path . --name paper-review-pipeline --dest "C:/Users/cogpsy-vrlab/.codex/skills"
-```
-
-Install the focused research-writing subset from `WILLOSCAR/research-units-pipeline-skills`:
-
-```powershell
-py -3 "C:/Users/cogpsy-vrlab/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo WILLOSCAR/research-units-pipeline-skills --dest "C:/Users/cogpsy-vrlab/.codex/skills" --path .codex/skills/research-pipeline-runner .codex/skills/pipeline-router .codex/skills/arxiv-search .codex/skills/dedupe-rank .codex/skills/paper-notes .codex/skills/claims-extractor .codex/skills/survey-seed-harvest .codex/skills/taxonomy-builder .codex/skills/outline-builder .codex/skills/section-briefs .codex/skills/subsection-briefs .codex/skills/writer-context-pack .codex/skills/evidence-binder .codex/skills/prose-writer .codex/skills/synthesis-writer .codex/skills/citation-verifier .codex/skills/citation-diversifier .codex/skills/citation-injector .codex/skills/draft-polisher .codex/skills/global-reviewer .codex/skills/latex-scaffold .codex/skills/latex-compile-qa
-```
+- Use the built-in `skill-installer` skill.
+- Install `paper-review-pipeline` from `yishitys/academic-report-generator-skill`.
+- Install the focused writing subset from `WILLOSCAR/research-units-pipeline-skills`.
+- If direct script use is necessary, resolve the installer relative to the current Codex home rather than using a teammate-specific absolute path.
 
 Important notes:
 
