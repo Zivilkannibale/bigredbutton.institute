@@ -2,6 +2,10 @@
 
 This document is a self-contained handoff for a future Codex agent. Do not ask the user to restate the project unless new preferences have changed.
 
+Canonical execution instruction: `C:/Users/cogpsy-vrlab/Documents/GitHub/bigredbutton.institute/instructions/BRB_Paper_WritingPlan.md`
+
+Use that file for end-to-end execution. This file remains supporting context and archival detail.
+
 ## Mission
 
 Write the introduction and discussion for a hybrid HCI/STS/humanities paper on red-button pressability.
