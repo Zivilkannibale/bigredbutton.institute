@@ -1153,13 +1153,6 @@
     }
     spawnPedestalSparkles(center.x, center.y, isDocked ? 8 : 14);
     spawnParticles(center.x, center.y, 10);
-    if (pedestalScrollHint) {
-      var label = pedestalScrollHint.querySelector("span");
-      if (label) label.textContent = isDocked ? "field logged" : "telemetry live";
-      pedestalScrollHint.style.left = (center.x - 36) + "px";
-      pedestalScrollHint.style.top = (center.y + 48) + "px";
-      transient("pedHint", pedestalScrollHint, "show", 520, false);
-    }
   }
 
   function getButtonCenter() {
