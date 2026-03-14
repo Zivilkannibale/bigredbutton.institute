@@ -1154,9 +1154,11 @@ body.visual-workover .hero::before {
   content: "";
   display: block;
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 11px;
-  background: linear-gradient(90deg, #050608 0 58%, #d61d23 58% 85%, #9cb5d1 85% 100%);
+  top: 0;
+  left: clamp(8.4rem, 13vw, 10.8rem);
+  width: clamp(15rem, 34vw, 22.5rem);
+  height: 9px;
+  background: linear-gradient(90deg, #050608 0 34%, #d61d23 34% 74%, #9cb5d1 74% 100%);
 }
 
 body.visual-workover .dome-group image {
