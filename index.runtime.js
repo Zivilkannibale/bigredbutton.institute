@@ -1322,7 +1322,7 @@
       return;
     }
     var elapsed = Date.now() - pedestalDownAt;
-    if (elapsed >= 90) {
+    if (elapsed >= 48) {
       finalizePedestal(false);
       return;
     }
@@ -1330,7 +1330,7 @@
     pedestalReleaseTimer = setTimeout(function () {
       pedestalReleaseTimer = null;
       finalizePedestal(false);
-    }, 90 - elapsed);
+    }, 48 - elapsed);
   }
 
   window.BRB = window.BRB || {};
