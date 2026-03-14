@@ -744,18 +744,20 @@
   <canvas id="ambientCanvas"></canvas>
   <div class="screen-flash" id="screenFlash"></div>
   <div class="shockwave" id="pedestalShockwave"></div>
-  <div class="pedestal-float" id="pedestalFloat" aria-label="Floating button that jumps to visualizations">
-    <button class="pedestal-float__button" id="pedestalButton" type="button" aria-label="Jump to visualizations">
-      <img
-        class="pedestal-float__model"
-        id="pedestalFrame"
-        src="Images/poly-button-press-00.png"
-        alt=""
-        width="420"
-        height="475"
-        decoding="async"
-        fetchpriority="high"
-      >
+  <div class="pedestal-float" id="pedestalFloat" aria-label="Floating field button">
+    <button class="pedestal-float__button" id="pedestalButton" type="button" aria-label="Press the floating field button">
+      <span class="pedestal-float__stage" aria-hidden="true">
+        <img
+          class="pedestal-float__model"
+          id="pedestalFrame"
+          src="Images/poly-button-press-00.png"
+          alt=""
+          width="420"
+          height="475"
+          decoding="async"
+          fetchpriority="high"
+        >
+      </span>
     </button>
   </div>
 
@@ -779,62 +781,6 @@
         </figure>
       </div>
     </header>
-
-    <!-- COMBINED PRESS + VIZ -->
-    <section class="lab-panel reveal" id="labPanel">
-      <div class="lab-layout">
-        <div class="press-column" id="pressColumn">
-          <h2>Live Lab</h2>
-          <div class="counter-display">
-            <div class="counter-number" id="pressCount">0</div>
-            <div class="counter-label">verified presses</div>
-          </div>
-          <div class="press-btn-wrap">
-            <div class="ripple-ring" id="ripple1"></div>
-            <div class="ripple-ring" id="ripple2"></div>
-            <div class="ripple-ring" id="ripple3"></div>
-            <button id="pressBtn" class="press-btn" type="button">Press For Science</button>
-          </div>
-          <div class="press-mini-stats">
-            <div class="mini-stat">
-              <div class="mini-stat-value red" id="statRate">0.0</div>
-              <div class="mini-stat-label">Press/min</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-value" id="statEntropy">&mdash;</div>
-              <div class="mini-stat-label">Entropy</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-value" id="statAvgInterval">&mdash;</div>
-              <div class="mini-stat-label">Avg ms</div>
-            </div>
-            <div class="mini-stat">
-              <div class="mini-stat-value" id="statBurst">0</div>
-              <div class="mini-stat-label">Max Burst</div>
-            </div>
-          </div>
-          <p class="press-note">Rapid taps welcome. The roaming field unit mirrors the same telemetry.</p>
-        </div>
-        <div class="viz-column" id="visualizations" aria-label="Visualizations">
-          <div class="viz-card">
-            <h3>Temporal Waveform</h3>
-            <canvas id="waveCanvas"></canvas>
-          </div>
-          <div class="viz-card">
-            <h3>Inter-Press Intervals</h3>
-            <canvas id="intervalCanvas"></canvas>
-          </div>
-          <div class="viz-card">
-            <h3>Entropy Field</h3>
-            <canvas id="entropyCanvas"></canvas>
-          </div>
-          <div class="viz-card">
-            <h3>Press Burst Map</h3>
-            <canvas id="burstCanvas"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="field-section reveal" id="fieldSection">
       <div class="field-header">
@@ -927,19 +873,21 @@
       <p class="field-caption" id="fieldCaption">Scroll this section into view to deploy the field unit and observe crowd spillover.</p>
       <div class="mini-dashboard" id="miniDash">
         <div class="mini-dash-header">
-          <h3>Field Telemetry</h3>
-          <div class="mini-dash-stats">
+          <div class="mini-dash-readout">
+            <h3>Field Telemetry</h3>
+            <div class="mini-dash-count" id="pressCount">0</div>
+            <div class="mini-dash-count-label">verified presses</div>
+          </div>
+          <div class="mini-dash-stats" aria-label="Field telemetry summary">
             <div class="md-stat"><div class="md-stat-val red" id="mdRate">0.0</div><div class="md-stat-lbl">Press/min</div></div>
             <div class="md-stat"><div class="md-stat-val" id="mdEntropy">&mdash;</div><div class="md-stat-lbl">Entropy</div></div>
             <div class="md-stat"><div class="md-stat-val" id="mdAvg">&mdash;</div><div class="md-stat-lbl">Avg ms</div></div>
-            <div class="md-stat"><div class="md-stat-val" id="mdBurst">0</div><div class="md-stat-lbl">Burst</div></div>
+            <div class="md-stat"><div class="md-stat-val" id="mdBurst">0</div><div class="md-stat-lbl">Max burst</div></div>
           </div>
         </div>
         <div class="mini-viz-row">
-          <div class="mini-viz-card"><h4>Waveform</h4><canvas id="mWave"></canvas></div>
-          <div class="mini-viz-card"><h4>Intervals</h4><canvas id="mInterval"></canvas></div>
-          <div class="mini-viz-card"><h4>Entropy</h4><canvas id="mEntropy"></canvas></div>
-          <div class="mini-viz-card"><h4>Bursts</h4><canvas id="mBurst"></canvas></div>
+          <div class="mini-viz-card mini-viz-card--wave"><h4>Temporal waveform</h4><canvas id="mWave"></canvas></div>
+          <div class="mini-viz-card mini-viz-card--entropy"><h4>Entropy field</h4><canvas id="mEntropy"></canvas></div>
         </div>
       </div>
     </section>

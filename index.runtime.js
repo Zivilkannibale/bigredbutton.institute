@@ -12,7 +12,6 @@
   var sessionStart = Date.now();
   var maxBurst = 0;
   var fieldPressCount = 0;
-  var wavePhase = 0;
   var entropyVal = 0;
   var burstWindowSec = 30;
   var vizReady = false;
@@ -141,6 +140,9 @@
   var pedestalAnimRaf = null;
   var pedestalFrameIndex = 0;
   var pedestalPressPeakFrame = 0;
+  var pedestalAspectRatio = 140 / 320;
+  var pedestalMotionValue = 0;
+  var lastWaveSampleAt = 0;
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -176,6 +178,16 @@
   function setPedestalFrame(index) {
     if (!pedestalFrame || !pedestalFrames.length) return;
     var nextIndex = clamp(Math.round(index), 0, pedestalFrames.length - 1);
+    var lastIndex = pedestalFrames.length - 1;
+    var normalizedMotion = 0;
+    if (pedestalPressPeakFrame > 0 && lastIndex > 0) {
+      if (nextIndex <= pedestalPressPeakFrame) {
+        normalizedMotion = nextIndex / pedestalPressPeakFrame;
+      } else {
+        normalizedMotion = (lastIndex - nextIndex) / Math.max(1, lastIndex - pedestalPressPeakFrame);
+      }
+    }
+    pedestalMotionValue = smoothstep(clamp(normalizedMotion, 0, 1));
     if (pedestalFrameIndex === nextIndex && pedestalFrame.getAttribute("src") === pedestalFrames[nextIndex]) return;
     pedestalFrameIndex = nextIndex;
     pedestalFrame.setAttribute("src", pedestalFrames[nextIndex]);
@@ -216,6 +228,17 @@
       pedestalAnimRaf = requestAnimationFrame(tick);
     }
     pedestalAnimRaf = requestAnimationFrame(tick);
+  }
+
+  function getPedestalFloatSize() {
+    var height;
+    if (window.innerWidth <= 650) height = 184;
+    else if (window.innerWidth <= 980) height = 288;
+    else height = 320;
+    return {
+      width: Math.round(height * pedestalAspectRatio),
+      height: height
+    };
   }
 
   function transient(name, el, className, ms, replay) {
@@ -422,28 +445,16 @@
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     ctx.stroke();
-    if (waveData.length < 2) {
-      ctx.beginPath();
-      ctx.strokeStyle = "rgba(223,44,44,0.2)";
-      ctx.lineWidth = 1.5;
-      for (var x = 0; x < width; x++) {
-        var y = height / 2 + Math.sin(x * 0.03 + wavePhase) * 6;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      wavePhase += 0.02;
-      return;
-    }
     ctx.beginPath();
     var gradient = ctx.createLinearGradient(0, 0, width, 0);
     gradient.addColorStop(0, "rgba(223,44,44,0.15)");
     gradient.addColorStop(1, "rgba(223,44,44,0.9)");
     ctx.strokeStyle = gradient;
     ctx.lineWidth = 2;
-    var points = waveData.slice(-80);
+    var points = waveData.slice(-96);
+    while (points.length < 96) points.unshift(0);
     for (var i = 0; i < points.length; i++) {
-      var px = (i / Math.max(1, 79)) * width;
+      var px = (i / Math.max(1, points.length - 1)) * width;
       var py = height / 2 - points[i] * (height * 0.4);
       if (i === 0) ctx.moveTo(px, py);
       else ctx.lineTo(px, py);
@@ -624,11 +635,11 @@
 
   function updateFloatAnchor() {
     if (window.innerWidth <= 650) {
-      floatState.baseX = 78;
-      floatState.baseY = 72;
+      floatState.baseX = 84;
+      floatState.baseY = 84;
     } else if (window.innerWidth <= 980) {
-      floatState.baseX = 86;
-      floatState.baseY = 56;
+      floatState.baseX = 84;
+      floatState.baseY = 60;
     } else {
       floatState.baseX = 88;
       floatState.baseY = 32;
@@ -642,13 +653,14 @@
 
   function placePedestalFixed(x, y, rot, width, height) {
     if (!pedestal) return;
+    var size = getPedestalFloatSize();
     ensureFloatingHost();
     pedestal.classList.remove("docked");
     pedestal.style.position = "fixed";
     pedestal.style.left = "0";
     pedestal.style.top = "0";
-    pedestal.style.width = (width || 140) + "px";
-    pedestal.style.height = (height || 320) + "px";
+    pedestal.style.width = (width || size.width) + "px";
+    pedestal.style.height = (height || size.height) + "px";
     pedestal.style.transform = "translate(" + x + "px, " + y + "px) rotate(" + rot + "deg)";
     floatState.x = x;
     floatState.y = y;
@@ -659,8 +671,10 @@
     updateFloatAnchor();
     var vw = window.innerWidth;
     var vh = window.innerHeight;
-    var maxX = Math.max(8, vw - 148);
-    var maxY = Math.max(8, vh - 328);
+    var size = getPedestalFloatSize();
+    var maxX = Math.max(8, vw - size.width - 8);
+    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.36 : size.height;
+    var maxY = Math.max(8, vh - visibleFloatHeight - 8);
     if (reducedMotion) {
       floatState.x = clamp((floatState.baseX / 100) * vw, 8, maxX);
       floatState.y = clamp((floatState.baseY / 100) * vh, 8, maxY);
@@ -671,15 +685,16 @@
     floatState.driftPhase2 += 0.011;
     floatState.driftPhase3 += 0.006;
     floatState.driftPhase4 += 0.0035;
-    var driftX = Math.sin(floatState.driftPhase1) * 18 + Math.sin(floatState.driftPhase2 * 0.7) * 10;
-    var driftY = Math.cos(floatState.driftPhase3) * 14 + Math.sin(floatState.driftPhase4 * 1.3) * 8;
-    floatState.rot = Math.sin(floatState.driftPhase1 * 0.6) * 4 + Math.sin(floatState.driftPhase2 * 0.4) * 2.5;
+    var driftScale = window.innerWidth <= 650 ? 0.55 : window.innerWidth <= 980 ? 0.78 : 1;
+    var driftX = (Math.sin(floatState.driftPhase1) * 18 + Math.sin(floatState.driftPhase2 * 0.7) * 10) * driftScale;
+    var driftY = (Math.cos(floatState.driftPhase3) * 14 + Math.sin(floatState.driftPhase4 * 1.3) * 8) * driftScale;
+    floatState.rot = (Math.sin(floatState.driftPhase1 * 0.6) * 4 + Math.sin(floatState.driftPhase2 * 0.4) * 2.5) * driftScale;
     floatState.shiftTimer += 16;
     if (floatState.shiftTimer > floatState.nextShift) {
       floatState.shiftTimer = 0;
       floatState.nextShift = 4000 + Math.random() * 7000;
-      floatState.shiftTargetX = (Math.random() - 0.5) * 120;
-      floatState.shiftTargetY = (Math.random() - 0.5) * 80;
+      floatState.shiftTargetX = (Math.random() - 0.5) * 120 * driftScale;
+      floatState.shiftTargetY = (Math.random() - 0.5) * 80 * driftScale;
     }
     floatState.shiftCurrentX += (floatState.shiftTargetX - floatState.shiftCurrentX) * 0.008;
     floatState.shiftCurrentY += (floatState.shiftTargetY - floatState.shiftCurrentY) * 0.008;
@@ -705,7 +720,7 @@
     var map = getSceneMapping();
     if (!map) return null;
     var height = 34 * map.scale;
-    var width = height * (140 / 320);
+    var width = height * pedestalAspectRatio;
     return {
       x: map.rect.left + map.offX + 500 * map.scale - width / 2,
       y: map.rect.top + map.offY + 362 * map.scale - height,
@@ -718,7 +733,7 @@
     var map = getSceneMapping();
     if (!map) return null;
     var height = 34 * map.scale;
-    var width = height * (140 / 320);
+    var width = height * pedestalAspectRatio;
     return {
       left: map.offX + 500 * map.scale - width / 2,
       top: map.offY + 362 * map.scale - height,
@@ -840,6 +855,7 @@
   function applyDockProgress(progress) {
     if (!pedestal || !sceneWrap || isDocked || isUndocking) return;
     currentDockProgress = progress;
+    var size = getPedestalFloatSize();
     if (progress > 0 && progress < 1 && !capturedFloatPos) {
       capturedFloatPos = { x: floatState.x, y: floatState.y, rot: floatState.rot };
     }
@@ -852,7 +868,7 @@
       }
       if (!fieldStatusTimer) resetSceneStatus();
       pedestal.style.filter = "";
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
+      placePedestalFixed(floatState.x, floatState.y, floatState.rot, size.width, size.height);
       return;
     }
     ensureFloatingHost();
@@ -864,8 +880,8 @@
     if (!dock) return;
     var t = smoothstep(progress);
     var src = capturedFloatPos || { x: floatState.x, y: floatState.y, rot: floatState.rot };
-    pedestal.style.width = (140 + (dock.width - 140) * t) + "px";
-    pedestal.style.height = (320 + (dock.height - 320) * t) + "px";
+    pedestal.style.width = (size.width + (dock.width - size.width) * t) + "px";
+    pedestal.style.height = (size.height + (dock.height - size.height) * t) + "px";
     pedestal.style.transform = "translate(" + (src.x + (dock.x - src.x) * t) + "px, " + (src.y + (dock.y - src.y) * t) + "px) rotate(" + (src.rot * (1 - t)) + "deg)";
     pedestal.style.filter = "drop-shadow(0 " + (20 * (1 - t) + 3 * t) + "px " + (40 * (1 - t) + 6 * t) + "px rgba(22,28,38,.25))";
     if (landingSpot) {
@@ -937,7 +953,8 @@
     if (reducedMotion) {
       pedestal.classList.remove("undocking");
       pedestal.style.filter = "";
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
+      var reducedSize = getPedestalFloatSize();
+      placePedestalFixed(floatState.x, floatState.y, floatState.rot, reducedSize.width, reducedSize.height);
       isUndocking = false;
       capturedFloatPos = null;
       if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
@@ -947,8 +964,9 @@
     }
     pedestal.classList.add("undocking");
     void pedestal.offsetWidth;
-    pedestal.style.width = "140px";
-    pedestal.style.height = "320px";
+    var size = getPedestalFloatSize();
+    pedestal.style.width = size.width + "px";
+    pedestal.style.height = size.height + "px";
     pedestal.style.filter = "";
     pedestal.style.transform = "translate(" + floatState.x + "px, " + floatState.y + "px) rotate(" + floatState.rot + "deg)";
     setTimeout(function () {
@@ -1128,6 +1146,12 @@
   }
 
   function renderPedestalLoop() {
+    var now = performance.now();
+    if (!lastWaveSampleAt || now - lastWaveSampleAt >= 32) {
+      waveData.push(pedestalMotionValue);
+      trimData();
+      lastWaveSampleAt = now;
+    }
     tickFloatState();
     currentDockProgress = getScrollProgress();
     if (isDocked) {
@@ -1145,7 +1169,10 @@
       }
     } else if (!isUndocking) {
       applyDockProgress(currentDockProgress);
-      if (currentDockProgress <= 0 && pedestal) placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
+      if (currentDockProgress <= 0 && pedestal) {
+        var size = getPedestalFloatSize();
+        placePedestalFixed(floatState.x, floatState.y, floatState.rot, size.width, size.height);
+      }
     }
     requestAnimationFrame(renderPedestalLoop);
   }
@@ -1250,7 +1277,6 @@
     pulseRedWords();
     var origin = source === "pedestal" ? getPedestalCenter() : getButtonCenter();
     spawnParticles(origin.x, origin.y, source === "pedestal" ? 10 : 14);
-    injectWaveFromHold(holdMs);
     addBurstSample(now);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
@@ -1536,13 +1562,6 @@
       }
     });
   }
-
-  setInterval(function () {
-    if (!waveData.length) return;
-    waveData.push(waveData[waveData.length - 1] * 0.85);
-    if (waveData.length > 160) waveData.splice(0, waveData.length - 160);
-    if (Math.abs(waveData[waveData.length - 1]) < 0.01) waveData.push(0);
-  }, 60);
 
   setInterval(updateStats, 1000);
 })();
