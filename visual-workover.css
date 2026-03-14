@@ -398,6 +398,17 @@ body.visual-workover .mini-dash-stats {
   gap: 0.5rem;
 }
 
+body.visual-workover .mini-dash-actions {
+  margin: 0 0 0.64rem;
+}
+
+body.visual-workover .mini-dash-press-btn {
+  width: 100%;
+  min-width: 0;
+  padding: 0.88rem 1rem;
+  box-shadow: 4px 4px 0 rgba(244, 240, 230, 0.1);
+}
+
 body.visual-workover .md-stat {
   display: grid;
   align-content: start;
@@ -1424,6 +1435,10 @@ body.visual-workover .hero::before {
     gap: 0.42rem 0.6rem;
   }
 
+  body.visual-workover .mini-dash-actions {
+    margin-bottom: 0.56rem;
+  }
+
   body.visual-workover .md-stat {
     text-align: left;
   }
@@ -1813,6 +1828,11 @@ body.visual-workover .publications-panel p {
   body.visual-workover .mini-dash-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.42rem 0.6rem;
+  }
+
+  body.visual-workover .mini-dash-press-btn {
+    padding: 0.8rem 0.88rem;
+    font-size: 0.94rem;
   }
 
   body.visual-workover .md-stat {
