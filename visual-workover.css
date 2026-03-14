@@ -1188,3 +1188,28 @@ body.visual-workover .dome-group.rebound image {
     animation: none;
   }
 }
+
+body.visual-workover .hero-top {
+  --comic-shell-gap: clamp(0.72rem, 0.9vw, 0.9rem);
+  --hero-column-gap: clamp(0.85rem, 1vw, 1.05rem);
+  grid-template-columns: minmax(300px, 0.68fr) minmax(0, 1.32fr);
+  gap: var(--hero-column-gap);
+  align-items: start;
+}
+
+body.visual-workover .hero-latour {
+  width: 100%;
+  max-width: none;
+  justify-self: stretch;
+  align-self: start;
+  padding: var(--comic-shell-gap);
+}
+
+body.visual-workover .hero-latour img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: 50% 50%;
+}
