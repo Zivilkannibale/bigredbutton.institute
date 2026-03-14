@@ -1155,10 +1155,10 @@ body.visual-workover .hero::before {
   display: block;
   position: absolute;
   top: 0;
-  left: clamp(8.4rem, 13vw, 10.8rem);
-  width: clamp(15rem, 34vw, 22.5rem);
-  height: 9px;
-  background: linear-gradient(90deg, #050608 0 34%, #d61d23 34% 74%, #9cb5d1 74% 100%);
+  left: 0;
+  width: clamp(13.5rem, 29vw, 20.5rem);
+  height: 8px;
+  background: linear-gradient(90deg, #050608 0 36%, #d61d23 36% 75%, #9cb5d1 75% 100%);
 }
 
 body.visual-workover .dome-group image {
@@ -1192,9 +1192,9 @@ body.visual-workover .dome-group.rebound image {
 }
 
 body.visual-workover .hero-top {
-  --comic-shell-gap: clamp(0.72rem, 0.9vw, 0.9rem);
-  --hero-column-gap: clamp(0.85rem, 1vw, 1.05rem);
-  grid-template-columns: minmax(300px, 0.68fr) minmax(0, 1.32fr);
+  --comic-shell-gap: clamp(0.58rem, 0.72vw, 0.72rem);
+  --hero-column-gap: clamp(0.8rem, 0.9vw, 0.95rem);
+  grid-template-columns: minmax(320px, 0.76fr) minmax(0, 1.24fr);
   gap: var(--hero-column-gap);
   align-items: start;
 }
@@ -1227,6 +1227,11 @@ body.visual-workover .hero-latour__page .hero-latour__slice {
   position: static;
   z-index: auto;
   border: 0;
+}
+
+body.visual-workover .hero-latour__page .hero-latour__slice--top,
+body.visual-workover .hero-latour__page .hero-latour__slice--bottom {
+  border: 2px solid var(--ink);
 }
 
 body.visual-workover .hero-latour__page .hero-latour__slice--quote {
