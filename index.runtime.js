@@ -722,7 +722,7 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      x: map.rect.left + map.offX + 500 * map.scale - width / 2,
+      x: map.rect.left + map.offX + 498 * map.scale - width / 2,
       y: map.rect.top + map.offY + 362 * map.scale - height,
       width: width,
       height: height
@@ -735,7 +735,7 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      left: map.offX + 500 * map.scale - width / 2,
+      left: map.offX + 498 * map.scale - width / 2,
       top: map.offY + 362 * map.scale - height,
       width: width,
       height: height
@@ -1058,7 +1058,7 @@
     var words = String(text || "").split(/\s+/);
     var lines = [];
     var currentLine = "";
-    var maxChars = 24;
+    var maxChars = window.innerWidth <= 650 ? 18 : 20;
     for (var i = 0; i < words.length; i++) {
       var candidate = currentLine ? currentLine + " " + words[i] : words[i];
       if (currentLine && candidate.length > maxChars) {
@@ -1069,13 +1069,13 @@
       }
     }
     if (currentLine) lines.push(currentLine);
-    while (lines.length > 5) {
+    while (lines.length > 8) {
       lines[lines.length - 2] += " " + lines[lines.length - 1];
       lines.pop();
     }
     for (var j = 0; j < lines.length; j++) {
       var tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-      tspan.setAttribute("x", "36");
+      tspan.setAttribute("x", "38");
       tspan.setAttribute("dy", j === 0 ? "0" : "10");
       tspan.textContent = lines[j];
       person4Quote.appendChild(tspan);

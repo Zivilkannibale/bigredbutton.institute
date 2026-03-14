@@ -810,6 +810,11 @@ body.visual-workover .stack > .panel {
   box-sizing: border-box;
 }
 
+body.visual-workover .participate-panel,
+body.visual-workover .publications-panel {
+  min-height: 20rem;
+}
+
 body.visual-workover .study-demo-panel,
 body.visual-workover .theory-panel,
 body.visual-workover .divisions-panel {
@@ -1197,7 +1202,11 @@ body.visual-workover .pedestal-float::before {
 }
 
 body.visual-workover .pedestal-float.docked::before {
-  opacity: 0.22;
+  top: -18px;
+  width: 104px;
+  height: 104px;
+  box-shadow: 0 0 0 14px rgba(214, 29, 35, 0.06);
+  opacity: 0.26;
 }
 
 body.visual-workover .pedestal-float__button {
