@@ -151,9 +151,7 @@ body.visual-workover .footer::before {
 
 body.visual-workover .hero {
   padding: clamp(1.15rem, 1.4vw + 0.8rem, 2rem);
-  background:
-    linear-gradient(180deg, rgba(248, 245, 237, 0.98), rgba(240, 235, 225, 0.98)),
-    repeating-linear-gradient(0deg, rgba(17, 17, 17, 0) 0 28px, rgba(17, 17, 17, 0.06) 28px 29px);
+  background: linear-gradient(180deg, rgba(248, 245, 237, 0.98), rgba(240, 235, 225, 0.98));
 }
 
 body.visual-workover .hero::after {
@@ -899,7 +897,7 @@ body.visual-workover .pedestal-float svg {
 }
 
 body.visual-workover .dome-group {
-  transform-origin: 70px 110px;
+  transform-origin: 70px 88px;
 }
 
 body.visual-workover .pedestal-float.docked {

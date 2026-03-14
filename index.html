@@ -781,36 +781,6 @@
   <div class="pedestal-float" id="pedestalFloat" aria-label="Floating button that jumps to visualizations">
     <svg viewBox="0 0 140 320" xmlns="http://www.w3.org/2000/svg" role="button" tabindex="0" aria-label="Jump to visualizations">
       <defs>
-        <linearGradient id="plateTopGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#182028"></stop>
-          <stop offset="100%" stop-color="#0a0f15"></stop>
-        </linearGradient>
-        <linearGradient id="plateSideGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#141b22"></stop>
-          <stop offset="100%" stop-color="#070b11"></stop>
-        </linearGradient>
-        <linearGradient id="stemGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#121820"></stop>
-          <stop offset="55%" stop-color="#05090f"></stop>
-          <stop offset="100%" stop-color="#1c2732"></stop>
-        </linearGradient>
-        <linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1b2530"></stop>
-          <stop offset="100%" stop-color="#06090e"></stop>
-        </linearGradient>
-        <linearGradient id="buttonBodyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ff3e44"></stop>
-          <stop offset="48%" stop-color="#d1121b"></stop>
-          <stop offset="100%" stop-color="#7d0d12"></stop>
-        </linearGradient>
-        <linearGradient id="buttonTopGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#8a161c"></stop>
-          <stop offset="100%" stop-color="#631015"></stop>
-        </linearGradient>
-        <radialGradient id="buttonGloss" cx="38%" cy="24%" r="50%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.78"></stop>
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
-        </radialGradient>
         <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#df2c2c" stop-opacity="0.24"></stop>
           <stop offset="100%" stop-color="#df2c2c" stop-opacity="0"></stop>
@@ -825,31 +795,12 @@
         <animate attributeName="opacity" values="0.88;1;0.88" dur="3s" repeatCount="indefinite"></animate>
       </ellipse>
 
-      <ellipse cx="70" cy="304" rx="48" ry="9" fill="#081018" fill-opacity="0.26"></ellipse>
-      <path d="M28 272 L112 272 L120 300 L20 300 Z" fill="url(#baseGrad)" stroke="#05080d" stroke-width="1.4"></path>
-      <path d="M48 176 L92 176 L86 272 L54 272 Z" fill="url(#stemGrad)" stroke="#05080d" stroke-width="1.4"></path>
-      <path d="M22 124 L118 124 L110 148 L30 148 Z" fill="url(#plateTopGrad)" stroke="#05080d" stroke-width="1.4"></path>
-      <path d="M30 148 L110 148 L100 180 L40 180 Z" fill="url(#plateSideGrad)" stroke="#05080d" stroke-width="1.4"></path>
-      <path d="M22 124 L70 118 L118 124 L110 148 L30 148 Z" fill="#1f2a35" fill-opacity="0.42"></path>
-      <path d="M30 148 L40 180 L52 176 L48 176 L22 124 Z" fill="#24313d" fill-opacity="0.22"></path>
-      <text x="70" y="167" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="7" fill="#d61d23" letter-spacing="0.18em" font-weight="700">PRESS</text>
-      <text x="70" y="178" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="4.5" fill="#8998aa" letter-spacing="0.14em">FOR BRB</text>
+      <ellipse cx="70" cy="304" rx="44" ry="10" fill="#081018" fill-opacity="0.24"></ellipse>
+      <!-- Derived from Poly Pizza "Big Red Button" by Charlie: https://poly.pizza/m/lTyNXwkDgX -->
+      <image href="Images/poly-button-base.png" x="8" y="28" width="124" height="264" preserveAspectRatio="none"></image>
 
       <g class="dome-group" id="domeGroup" clip-path="url(#domeClip)">
-        <ellipse cx="70" cy="118" rx="36" ry="10" fill="#47060b" fill-opacity="0.42"></ellipse>
-        <path d="M44 100 L96 100 L106 108 L98 122 L42 122 L34 108 Z" fill="#7e0e12" stroke="#5b0a0d" stroke-width="1.2"></path>
-        <path d="M48 58 L92 58 L103 66 L108 84 L103 101 L92 110 L48 110 L37 101 L32 84 L37 66 Z" fill="url(#buttonBodyGrad)" stroke="#5b0a0d" stroke-width="1.4"></path>
-        <path d="M52 46 L88 46 L101 52 L105 65 L96 73 L44 73 L35 65 L39 52 Z" fill="url(#buttonTopGrad)" stroke="#6e0c10" stroke-width="1.2"></path>
-        <path d="M48 58 L70 55 L92 58 L103 66 L97 74 L43 74 L37 66 Z" fill="#ff6565" fill-opacity="0.22"></path>
-        <path d="M37 66 L43 74 L43 108 L37 101 L32 84 Z" fill="#7f0d12" fill-opacity="0.65"></path>
-        <path d="M103 66 L97 74 L97 108 L103 101 L108 84 Z" fill="#a11a20" fill-opacity="0.58"></path>
-        <ellipse cx="59" cy="58" rx="17" ry="10" fill="url(#buttonGloss)" opacity="0.9"></ellipse>
-        <path d="M40 104 L100 104" fill="none" stroke="#ff8f8f" stroke-opacity="0.2" stroke-width="1.1"></path>
-        <circle cx="53" cy="54" r="3.6" fill="#ffffff" fill-opacity="0.48">
-          <animate attributeName="r" values="4;5;4" dur="2.5s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" values="0.48;0.7;0.48" dur="2.5s" repeatCount="indefinite"></animate>
-        </circle>
-        <circle cx="50" cy="51" r="1.7" fill="#ffffff" fill-opacity="0.72"></circle>
+        <image href="Images/poly-button-cap.png" x="8" y="28" width="124" height="264" preserveAspectRatio="none"></image>
       </g>
     </svg>
   </div>
