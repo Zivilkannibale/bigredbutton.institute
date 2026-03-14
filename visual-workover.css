@@ -1055,7 +1055,10 @@ body.visual-workover .hero-latour::after {
 body.visual-workover .hero-latour img {
   position: relative;
   z-index: 1;
-  object-position: 50% 24%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: 50% 50%;
 }
 
 body.visual-workover .lab-panel {
