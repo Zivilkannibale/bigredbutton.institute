@@ -745,29 +745,18 @@
   <div class="screen-flash" id="screenFlash"></div>
   <div class="shockwave" id="pedestalShockwave"></div>
   <div class="pedestal-float" id="pedestalFloat" aria-label="Floating button that jumps to visualizations">
-    <svg viewBox="0 0 140 320" xmlns="http://www.w3.org/2000/svg" role="button" tabindex="0" aria-label="Jump to visualizations">
-      <defs>
-        <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#df2c2c" stop-opacity="0.24"></stop>
-          <stop offset="100%" stop-color="#df2c2c" stop-opacity="0"></stop>
-        </radialGradient>
-        <clipPath id="domeClip">
-          <rect x="0" y="0" width="140" height="320"></rect>
-        </clipPath>
-      </defs>
-
-      <ellipse cx="70" cy="74" rx="48" ry="34" fill="url(#ambientGlow)" opacity="0.88">
-        <animate attributeName="rx" values="48;54;48" dur="3s" repeatCount="indefinite"></animate>
-        <animate attributeName="opacity" values="0.88;1;0.88" dur="3s" repeatCount="indefinite"></animate>
-      </ellipse>
-
-      <ellipse cx="70" cy="304" rx="44" ry="10" fill="#081018" fill-opacity="0.24"></ellipse>
-      <!-- Front-facing split render derived from Poly Pizza "Big Red Button" by Charlie: https://poly.pizza/m/lTyNXwkDgX -->
-      <g class="dome-group" id="domeGroup" clip-path="url(#domeClip)">
-        <image href="Images/poly-button-cap-front.png" x="4" y="14" width="132" height="292" preserveAspectRatio="xMidYMid slice"></image>
-      </g>
-      <image href="Images/poly-button-base-front.png" x="4" y="14" width="132" height="292" preserveAspectRatio="xMidYMid slice"></image>
-    </svg>
+    <button class="pedestal-float__button" id="pedestalButton" type="button" aria-label="Jump to visualizations">
+      <img
+        class="pedestal-float__model"
+        id="pedestalFrame"
+        src="Images/poly-button-press-00.png"
+        alt=""
+        width="420"
+        height="475"
+        decoding="async"
+        fetchpriority="high"
+      >
+    </button>
   </div>
 
   <div class="shell">
