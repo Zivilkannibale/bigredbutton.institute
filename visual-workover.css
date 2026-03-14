@@ -1154,3 +1154,43 @@ body.visual-workover .scroll-hint {
     border-right: 0;
   }
 }
+
+body.visual-workover::before,
+body.visual-workover .hero::before,
+body.visual-workover .panel::before,
+body.visual-workover .footer::before,
+body.visual-workover .field-section::before {
+  display: none;
+}
+
+body.visual-workover .hero {
+  padding-top: 1.35rem;
+}
+
+body.visual-workover .dome-group image {
+  transform-box: fill-box;
+  transform-origin: center 26%;
+  will-change: transform;
+  animation: pedestal-model-idle 3.2s ease-in-out infinite;
+}
+
+body.visual-workover .dome-group.pushed image,
+body.visual-workover .dome-group.rebound image {
+  animation-play-state: paused;
+}
+
+@keyframes pedestal-model-idle {
+  0%, 100% {
+    transform: translateY(0) rotate(-0.32deg) scale(1);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(0.28deg) scale(1.014);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.visual-workover .dome-group image {
+    animation: none;
+  }
+}
