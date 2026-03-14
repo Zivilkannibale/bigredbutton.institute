@@ -81,6 +81,8 @@
   var fieldStatusTimer = null;
   var curiosityHomeX = 560;
   var curiosityTargetX = 512;
+  var dockTargetX = 498;
+  var dockTargetY = 356;
   var reggieHomeX = 1035;
   var reggieTargetX = 466;
   var reggieQuotes = [
@@ -722,8 +724,8 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      x: map.rect.left + map.offX + 498 * map.scale - width / 2,
-      y: map.rect.top + map.offY + 362 * map.scale - height,
+      x: map.rect.left + map.offX + dockTargetX * map.scale - width / 2,
+      y: map.rect.top + map.offY + dockTargetY * map.scale - height,
       width: width,
       height: height
     };
@@ -735,8 +737,8 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      left: map.offX + 498 * map.scale - width / 2,
-      top: map.offY + 362 * map.scale - height,
+      left: map.offX + dockTargetX * map.scale - width / 2,
+      top: map.offY + dockTargetY * map.scale - height,
       width: width,
       height: height
     };
@@ -1058,10 +1060,22 @@
     var words = String(text || "").split(/\s+/);
     var lines = [];
     var currentLine = "";
-    var maxChars = window.innerWidth <= 650 ? 18 : 20;
+    var lineX = window.innerWidth <= 650 ? "39" : "40";
+    var lineStep = window.innerWidth <= 650 ? "12" : "13";
+    var maxLineWidth = window.innerWidth <= 650 ? 172 : 206;
+    var maxLines = window.innerWidth <= 650 ? 6 : 5;
+    var measure = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    measure.setAttribute("x", lineX);
+    person4Quote.appendChild(measure);
+
+    function fits(textLine) {
+      measure.textContent = textLine;
+      return measure.getComputedTextLength() <= maxLineWidth;
+    }
+
     for (var i = 0; i < words.length; i++) {
       var candidate = currentLine ? currentLine + " " + words[i] : words[i];
-      if (currentLine && candidate.length > maxChars) {
+      if (currentLine && !fits(candidate)) {
         lines.push(currentLine);
         currentLine = words[i];
       } else {
@@ -1069,14 +1083,15 @@
       }
     }
     if (currentLine) lines.push(currentLine);
-    while (lines.length > 8) {
+    while (lines.length > maxLines) {
       lines[lines.length - 2] += " " + lines[lines.length - 1];
       lines.pop();
     }
+    person4Quote.removeChild(measure);
     for (var j = 0; j < lines.length; j++) {
       var tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-      tspan.setAttribute("x", "38");
-      tspan.setAttribute("dy", j === 0 ? "0" : "10");
+      tspan.setAttribute("x", lineX);
+      tspan.setAttribute("dy", j === 0 ? "0" : lineStep);
       tspan.textContent = lines[j];
       person4Quote.appendChild(tspan);
     }
