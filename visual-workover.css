@@ -1055,6 +1055,7 @@ body.visual-workover .hero-latour::after {
 body.visual-workover .hero-latour img {
   position: relative;
   z-index: 1;
+  object-position: 50% 24%;
 }
 
 body.visual-workover .lab-panel {
@@ -1143,7 +1144,16 @@ body.visual-workover .scroll-hint {
 }
 
 body.visual-workover .hero {
-  padding-top: 1.35rem;
+  padding-top: 1.6rem;
+}
+
+body.visual-workover .hero::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 11px;
+  background: linear-gradient(90deg, #050608 0 58%, #d61d23 58% 85%, #9cb5d1 85% 100%);
 }
 
 body.visual-workover .dome-group image {
@@ -1154,13 +1164,10 @@ body.visual-workover .dome-group image {
   transition: filter 90ms ease;
 }
 
-body.visual-workover .dome-group.pushed image {
-  animation: pedestal-model-press 86ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  filter: saturate(1.05) brightness(0.98);
-}
-
+body.visual-workover .dome-group.pushed image,
 body.visual-workover .dome-group.rebound image {
-  animation: pedestal-model-rebound 150ms cubic-bezier(0.34, 1.28, 0.64, 1) forwards;
+  animation-play-state: paused;
+  filter: saturate(1.05) brightness(0.98);
 }
 
 @keyframes pedestal-model-idle {
@@ -1170,34 +1177,6 @@ body.visual-workover .dome-group.rebound image {
 
   50% {
     transform: translateY(-4px) rotate(0.28deg) scale(1.014);
-  }
-}
-
-@keyframes pedestal-model-press {
-  0% {
-    transform: translateY(0) rotate(-0.32deg) scale(1);
-  }
-
-  72% {
-    transform: translateY(14px) scaleX(0.988) scaleY(0.94);
-  }
-
-  100% {
-    transform: translateY(12px) scaleX(0.99) scaleY(0.945);
-  }
-}
-
-@keyframes pedestal-model-rebound {
-  0% {
-    transform: translateY(12px) scaleX(0.99) scaleY(0.945);
-  }
-
-  55% {
-    transform: translateY(1px) scaleX(1.004) scaleY(1.008);
-  }
-
-  100% {
-    transform: translateY(0) rotate(-0.32deg) scale(1);
   }
 }
 

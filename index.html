@@ -641,7 +641,7 @@
       transform-origin: 70px 84px;
     }
     .dome-group.pushed {
-      transform: translateY(8px) scale(0.99);
+      transform: translateY(11px) scaleY(0.965);
       animation: domePress 86ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .dome-group.rebound {
@@ -649,12 +649,12 @@
     }
     @keyframes domePress {
       0% { transform: translateY(0) scale(1); }
-      72% { transform: translateY(10px) scale(0.988); }
-      100% { transform: translateY(8px) scale(0.99); }
+      72% { transform: translateY(13px) scaleY(0.955); }
+      100% { transform: translateY(11px) scaleY(0.965); }
     }
     @keyframes domeRebound {
-      0% { transform: translateY(8px) scale(0.99); }
-      55% { transform: translateY(-1px) scale(1.005); }
+      0% { transform: translateY(11px) scaleY(0.965); }
+      55% { transform: translateY(-1px) scaleY(1.01); }
       100% { transform: translateY(0) scale(1); }
     }
     .shockwave {
@@ -738,7 +738,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="visual-workover.css?v=20260314e">
+  <link rel="stylesheet" href="visual-workover.css?v=20260314f">
 </head>
 <body class="visual-workover">
   <canvas id="ambientCanvas"></canvas>
@@ -762,10 +762,11 @@
       </ellipse>
 
       <ellipse cx="70" cy="304" rx="44" ry="10" fill="#081018" fill-opacity="0.24"></ellipse>
-      <!-- Front render derived from Poly Pizza "Big Red Button" by Charlie: https://poly.pizza/m/lTyNXwkDgX -->
+      <!-- Front-facing split render derived from Poly Pizza "Big Red Button" by Charlie: https://poly.pizza/m/lTyNXwkDgX -->
       <g class="dome-group" id="domeGroup" clip-path="url(#domeClip)">
-        <image href="Images/poly-button-front.png" x="4" y="14" width="132" height="292" preserveAspectRatio="xMidYMid slice"></image>
+        <image href="Images/poly-button-cap-front.png" x="4" y="14" width="132" height="292" preserveAspectRatio="xMidYMid slice"></image>
       </g>
+      <image href="Images/poly-button-base-front.png" x="4" y="14" width="132" height="292" preserveAspectRatio="xMidYMid slice"></image>
     </svg>
   </div>
 
