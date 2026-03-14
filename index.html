@@ -781,100 +781,76 @@
   <div class="pedestal-float" id="pedestalFloat" aria-label="Floating button that jumps to visualizations">
     <svg viewBox="0 0 140 320" xmlns="http://www.w3.org/2000/svg" role="button" tabindex="0" aria-label="Jump to visualizations">
       <defs>
-        <radialGradient id="domeGrad" cx="42%" cy="32%" r="58%" fx="38%" fy="28%">
-          <stop offset="0%" stop-color="#ff8a8a"></stop>
-          <stop offset="28%" stop-color="#ff5252"></stop>
-          <stop offset="58%" stop-color="#df2c2c"></stop>
-          <stop offset="85%" stop-color="#a01515"></stop>
-          <stop offset="100%" stop-color="#6b0a0a"></stop>
-        </radialGradient>
-        <radialGradient id="domeHighlight" cx="38%" cy="25%" r="35%">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.7)"></stop>
-          <stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
-        </radialGradient>
-        <linearGradient id="pedestalGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#c4b8a0"></stop>
-          <stop offset="18%" stop-color="#e8ddc6"></stop>
-          <stop offset="40%" stop-color="#f5eedd"></stop>
-          <stop offset="60%" stop-color="#f7f0e0"></stop>
-          <stop offset="82%" stop-color="#e0d5be"></stop>
-          <stop offset="100%" stop-color="#b8ab94"></stop>
+        <linearGradient id="plateTopGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#182028"></stop>
+          <stop offset="100%" stop-color="#0a0f15"></stop>
         </linearGradient>
-        <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#8a7d6a"></stop>
-          <stop offset="20%" stop-color="#c9bc9f"></stop>
-          <stop offset="45%" stop-color="#e8dcc0"></stop>
-          <stop offset="55%" stop-color="#e8dcc0"></stop>
-          <stop offset="80%" stop-color="#c0b395"></stop>
-          <stop offset="100%" stop-color="#7d7262"></stop>
+        <linearGradient id="plateSideGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#141b22"></stop>
+          <stop offset="100%" stop-color="#070b11"></stop>
+        </linearGradient>
+        <linearGradient id="stemGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#121820"></stop>
+          <stop offset="55%" stop-color="#05090f"></stop>
+          <stop offset="100%" stop-color="#1c2732"></stop>
         </linearGradient>
         <linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#d4c9b2"></stop>
-          <stop offset="100%" stop-color="#a89b84"></stop>
+          <stop offset="0%" stop-color="#1b2530"></stop>
+          <stop offset="100%" stop-color="#06090e"></stop>
         </linearGradient>
-        <radialGradient id="domeShadow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="rgba(80,20,20,0.35)"></stop>
-          <stop offset="100%" stop-color="rgba(80,20,20,0)"></stop>
+        <linearGradient id="buttonBodyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff3e44"></stop>
+          <stop offset="48%" stop-color="#d1121b"></stop>
+          <stop offset="100%" stop-color="#7d0d12"></stop>
+        </linearGradient>
+        <linearGradient id="buttonTopGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#8a161c"></stop>
+          <stop offset="100%" stop-color="#631015"></stop>
+        </linearGradient>
+        <radialGradient id="buttonGloss" cx="38%" cy="24%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.78"></stop>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
         </radialGradient>
         <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="rgba(223,44,44,0.18)"></stop>
-          <stop offset="100%" stop-color="rgba(223,44,44,0)"></stop>
+          <stop offset="0%" stop-color="#df2c2c" stop-opacity="0.24"></stop>
+          <stop offset="100%" stop-color="#df2c2c" stop-opacity="0"></stop>
         </radialGradient>
-        <pattern id="decoLines" x="0" y="0" width="140" height="16" patternUnits="userSpaceOnUse">
-          <line x1="50" y1="0" x2="50" y2="16" stroke="rgba(160,140,110,0.2)" stroke-width="0.5"></line>
-          <line x1="70" y1="0" x2="70" y2="16" stroke="rgba(160,140,110,0.15)" stroke-width="0.5"></line>
-          <line x1="90" y1="0" x2="90" y2="16" stroke="rgba(160,140,110,0.2)" stroke-width="0.5"></line>
-        </pattern>
         <clipPath id="domeClip">
           <rect x="0" y="0" width="140" height="320"></rect>
         </clipPath>
       </defs>
 
-      <ellipse cx="70" cy="55" rx="55" ry="45" fill="url(#ambientGlow)" opacity="0.7">
-        <animate attributeName="rx" values="55;60;55" dur="3s" repeatCount="indefinite"></animate>
-        <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"></animate>
+      <ellipse cx="70" cy="74" rx="48" ry="34" fill="url(#ambientGlow)" opacity="0.88">
+        <animate attributeName="rx" values="48;54;48" dur="3s" repeatCount="indefinite"></animate>
+        <animate attributeName="opacity" values="0.88;1;0.88" dur="3s" repeatCount="indefinite"></animate>
       </ellipse>
 
-      <ellipse cx="70" cy="310" rx="58" ry="8" fill="rgba(60,40,20,0.15)"></ellipse>
-      <path d="M12,295 L128,295 L122,310 Q70,316 18,310 Z" fill="url(#baseGrad)" stroke="#a89b84" stroke-width="0.5"></path>
-      <ellipse cx="70" cy="295" rx="58" ry="9" fill="#ddd2bb" stroke="#b8ab94" stroke-width="0.5"></ellipse>
-      <ellipse cx="70" cy="295" rx="42" ry="6" fill="none" stroke="rgba(143,130,105,0.35)" stroke-width="0.8"></ellipse>
-
-      <rect x="30" y="282" width="80" height="13" rx="2" fill="url(#ringGrad)" stroke="#9e9280" stroke-width="0.4"></rect>
-      <ellipse cx="70" cy="282" rx="40" ry="5" fill="#ddd2bb" stroke="#b8ab94" stroke-width="0.4"></ellipse>
-
-      <path d="M38,282 L38,130 Q38,125 43,122 L97,122 Q102,125 102,130 L102,282" fill="url(#pedestalGrad)" stroke="#b8ab94" stroke-width="0.5"></path>
-      <path d="M38,282 L38,130 Q38,125 43,122 L97,122 Q102,125 102,130 L102,282" fill="url(#decoLines)"></path>
-      <line x1="55" y1="135" x2="55" y2="275" stroke="rgba(140,125,100,0.18)" stroke-width="1.2"></line>
-      <line x1="70" y1="130" x2="70" y2="278" stroke="rgba(140,125,100,0.12)" stroke-width="1"></line>
-      <line x1="85" y1="135" x2="85" y2="275" stroke="rgba(140,125,100,0.18)" stroke-width="1.2"></line>
-      <rect x="34" y="200" width="72" height="8" rx="1.5" fill="url(#ringGrad)" stroke="#9e9280" stroke-width="0.3" opacity="0.7"></rect>
-      <rect x="34" y="165" width="72" height="5" rx="1" fill="url(#ringGrad)" stroke="#9e9280" stroke-width="0.3" opacity="0.5"></rect>
-
-      <rect x="32" y="116" width="76" height="12" rx="3" fill="url(#ringGrad)" stroke="#9e9280" stroke-width="0.5"></rect>
-      <ellipse cx="70" cy="116" rx="38" ry="6" fill="#e0d5be" stroke="#b8ab94" stroke-width="0.5"></ellipse>
-      <circle cx="70" cy="116" r="2.5" fill="none" stroke="rgba(143,130,105,0.3)" stroke-width="0.6"></circle>
-      <circle cx="70" cy="116" r="6" fill="none" stroke="rgba(143,130,105,0.2)" stroke-width="0.4"></circle>
-
-      <path d="M28,110 Q28,100 36,96 L104,96 Q112,100 112,110 L112,116 L28,116 Z" fill="#c4b8a0" stroke="#a89b84" stroke-width="0.5"></path>
-      <path d="M32,110 Q32,102 38,99 L102,99 Q108,102 108,110" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.8"></path>
-      <ellipse cx="70" cy="98" rx="36" ry="6" fill="url(#domeShadow)"></ellipse>
+      <ellipse cx="70" cy="304" rx="48" ry="9" fill="#081018" fill-opacity="0.26"></ellipse>
+      <path d="M28 272 L112 272 L120 300 L20 300 Z" fill="url(#baseGrad)" stroke="#05080d" stroke-width="1.4"></path>
+      <path d="M48 176 L92 176 L86 272 L54 272 Z" fill="url(#stemGrad)" stroke="#05080d" stroke-width="1.4"></path>
+      <path d="M22 124 L118 124 L110 148 L30 148 Z" fill="url(#plateTopGrad)" stroke="#05080d" stroke-width="1.4"></path>
+      <path d="M30 148 L110 148 L100 180 L40 180 Z" fill="url(#plateSideGrad)" stroke="#05080d" stroke-width="1.4"></path>
+      <path d="M22 124 L70 118 L118 124 L110 148 L30 148 Z" fill="#1f2a35" fill-opacity="0.42"></path>
+      <path d="M30 148 L40 180 L52 176 L48 176 L22 124 Z" fill="#24313d" fill-opacity="0.22"></path>
+      <text x="70" y="167" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="7" fill="#d61d23" letter-spacing="0.18em" font-weight="700">PRESS</text>
+      <text x="70" y="178" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="4.5" fill="#8998aa" letter-spacing="0.14em">FOR BRB</text>
 
       <g class="dome-group" id="domeGroup" clip-path="url(#domeClip)">
-        <ellipse cx="70" cy="72" rx="42" ry="38" fill="url(#domeGrad)"></ellipse>
-        <ellipse cx="70" cy="95" rx="42" ry="8" fill="#8b1818" opacity="0.6"></ellipse>
-        <ellipse cx="70" cy="93" rx="40" ry="6" fill="#a01515" opacity="0.4"></ellipse>
-        <ellipse cx="58" cy="55" rx="22" ry="18" fill="url(#domeHighlight)" opacity="0.85"></ellipse>
-        <path d="M35,80 Q70,100 105,80" fill="none" stroke="rgba(255,180,180,0.25)" stroke-width="1.2"></path>
-        <circle cx="55" cy="48" r="4" fill="rgba(255,255,255,0.5)">
+        <ellipse cx="70" cy="118" rx="36" ry="10" fill="#47060b" fill-opacity="0.42"></ellipse>
+        <path d="M44 100 L96 100 L106 108 L98 122 L42 122 L34 108 Z" fill="#7e0e12" stroke="#5b0a0d" stroke-width="1.2"></path>
+        <path d="M48 58 L92 58 L103 66 L108 84 L103 101 L92 110 L48 110 L37 101 L32 84 L37 66 Z" fill="url(#buttonBodyGrad)" stroke="#5b0a0d" stroke-width="1.4"></path>
+        <path d="M52 46 L88 46 L101 52 L105 65 L96 73 L44 73 L35 65 L39 52 Z" fill="url(#buttonTopGrad)" stroke="#6e0c10" stroke-width="1.2"></path>
+        <path d="M48 58 L70 55 L92 58 L103 66 L97 74 L43 74 L37 66 Z" fill="#ff6565" fill-opacity="0.22"></path>
+        <path d="M37 66 L43 74 L43 108 L37 101 L32 84 Z" fill="#7f0d12" fill-opacity="0.65"></path>
+        <path d="M103 66 L97 74 L97 108 L103 101 L108 84 Z" fill="#a11a20" fill-opacity="0.58"></path>
+        <ellipse cx="59" cy="58" rx="17" ry="10" fill="url(#buttonGloss)" opacity="0.9"></ellipse>
+        <path d="M40 104 L100 104" fill="none" stroke="#ff8f8f" stroke-opacity="0.2" stroke-width="1.1"></path>
+        <circle cx="53" cy="54" r="3.6" fill="#ffffff" fill-opacity="0.48">
           <animate attributeName="r" values="4;5;4" dur="2.5s" repeatCount="indefinite"></animate>
-          <animate attributeName="opacity" values="0.5;0.7;0.5" dur="2.5s" repeatCount="indefinite"></animate>
+          <animate attributeName="opacity" values="0.48;0.7;0.48" dur="2.5s" repeatCount="indefinite"></animate>
         </circle>
-        <circle cx="52" cy="45" r="1.8" fill="rgba(255,255,255,0.7)"></circle>
+        <circle cx="50" cy="51" r="1.7" fill="#ffffff" fill-opacity="0.72"></circle>
       </g>
-
-      <text x="70" y="250" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="6.5" fill="rgba(100,88,70,0.5)" letter-spacing="0.15em" font-weight="600">PRESS</text>
-      <text x="70" y="260" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="5" fill="rgba(100,88,70,0.35)" letter-spacing="0.1em">FOR SCIENCE</text>
     </svg>
   </div>
 

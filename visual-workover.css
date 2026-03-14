@@ -50,14 +50,6 @@ body.visual-workover::after {
     linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0));
 }
 
-body.visual-workover #ambientCanvas,
-body.visual-workover .screen-flash,
-body.visual-workover .shockwave,
-body.visual-workover .scroll-hint,
-body.visual-workover .pedestal-float {
-  display: none;
-}
-
 body.visual-workover .shell {
   width: min(calc(100% - 2rem), var(--max));
   margin: 2.1rem auto 2.5rem;
@@ -165,15 +157,7 @@ body.visual-workover .hero {
 }
 
 body.visual-workover .hero::after {
-  right: -24px;
-  top: -20px;
-  width: 180px;
-  height: 180px;
-  border-radius: 0;
-  background:
-    linear-gradient(135deg, rgba(156, 181, 209, 0.52), rgba(156, 181, 209, 0)),
-    repeating-linear-gradient(90deg, rgba(17, 17, 17, 0.18) 0 2px, rgba(17, 17, 17, 0) 2px 10px);
-  opacity: 0.85;
+  display: none;
 }
 
 body.visual-workover .hero-top {
@@ -677,18 +661,6 @@ body.visual-workover .hero-latour {
     linear-gradient(180deg, rgba(216, 226, 237, 0.96), rgba(206, 217, 228, 0.96));
 }
 
-body.visual-workover .hero-latour::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 22%;
-  height: 42%;
-  background:
-    repeating-linear-gradient(90deg, rgba(17, 17, 17, 0.1) 0 2px, transparent 2px 10px);
-  pointer-events: none;
-}
-
 body.visual-workover .hero-latour img {
   border: 2px solid var(--ink);
 }
@@ -922,6 +894,14 @@ body.visual-workover .pedestal-float {
           drop-shadow(0 0 18px rgba(214, 29, 35, 0.12));
 }
 
+body.visual-workover .pedestal-float svg {
+  cursor: pointer;
+}
+
+body.visual-workover .dome-group {
+  transform-origin: 70px 110px;
+}
+
 body.visual-workover .pedestal-float.docked {
   filter: drop-shadow(0 2px 4px rgba(17, 17, 17, 0.24));
 }
@@ -970,7 +950,6 @@ body.visual-workover .study-demo-panel .eyebrow {
 }
 
 body.visual-workover::after,
-body.visual-workover .hero-latour::before,
 body.visual-workover .panel h2::after {
   display: none;
 }

@@ -558,13 +558,13 @@
 
   function updateFloatAnchor() {
     if (window.innerWidth <= 650) {
-      floatState.baseX = 76;
+      floatState.baseX = 78;
       floatState.baseY = 72;
     } else if (window.innerWidth <= 980) {
-      floatState.baseX = 80;
+      floatState.baseX = 86;
       floatState.baseY = 56;
     } else {
-      floatState.baseX = 78;
+      floatState.baseX = 88;
       floatState.baseY = 32;
     }
   }
