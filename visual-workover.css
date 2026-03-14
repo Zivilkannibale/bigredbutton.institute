@@ -813,6 +813,43 @@ body.visual-workover .stack > .panel {
 body.visual-workover .participate-panel,
 body.visual-workover .publications-panel {
   min-height: 20rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+body.visual-workover .participate-panel .panel-body,
+body.visual-workover .publications-panel .panel-body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  gap: 1.15rem;
+}
+
+body.visual-workover .participate-panel .panel-body p,
+body.visual-workover .publications-panel .panel-body p {
+  margin: 0;
+  max-width: none;
+}
+
+body.visual-workover .participate-panel .panel-body p:last-child,
+body.visual-workover .publications-panel .panel-body p:last-child {
+  align-self: start;
+}
+
+@media (min-width: 1101px) {
+  body.visual-workover .participate-panel h2,
+  body.visual-workover .publications-panel h2 {
+    display: flex;
+    align-items: flex-end;
+    height: 72px;
+    min-height: 0;
+    white-space: nowrap;
+  }
+
+  body.visual-workover .participate-panel h2::after,
+  body.visual-workover .publications-panel h2::after {
+    display: none;
+  }
 }
 
 body.visual-workover .study-demo-panel,
