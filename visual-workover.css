@@ -1499,13 +1499,22 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
     margin: 1.22rem auto 2.2rem;
   }
 
+  body.visual-workover .stack {
+    max-width: 1108px;
+    margin-inline: auto;
+  }
+
   body.visual-workover .hero,
   body.visual-workover .lab-panel,
   body.visual-workover .field-section,
-  body.visual-workover .panel,
   body.visual-workover .footer {
     max-width: 1108px;
     margin-inline: auto;
+  }
+
+  body.visual-workover .stack > .panel {
+    max-width: none;
+    margin-inline: 0;
   }
 
   body.visual-workover .hero {
@@ -1592,13 +1601,22 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
     margin: 0.95rem auto 1.95rem;
   }
 
+  body.visual-workover .stack {
+    max-width: 1068px;
+    margin-inline: auto;
+  }
+
   body.visual-workover .hero,
   body.visual-workover .lab-panel,
   body.visual-workover .field-section,
-  body.visual-workover .panel,
   body.visual-workover .footer {
     max-width: 1068px;
     margin-inline: auto;
+  }
+
+  body.visual-workover .stack > .panel {
+    max-width: none;
+    margin-inline: 0;
   }
 
   body.visual-workover .hero {
