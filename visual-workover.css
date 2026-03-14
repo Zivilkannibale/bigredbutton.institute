@@ -1207,11 +1207,28 @@ body.visual-workover .hero-latour {
   padding: var(--comic-shell-gap);
 }
 
-body.visual-workover .hero-latour img {
+body.visual-workover .hero-latour__page {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--comic-shell-gap);
+  padding: var(--comic-shell-gap);
+  border: 2px solid var(--ink);
+  background: #fbf7ef;
+}
+
+body.visual-workover .hero-latour__page .hero-latour__slice {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: auto;
   object-fit: contain;
   object-position: 50% 50%;
+  position: static;
+  z-index: auto;
+  border: 0;
+}
+
+body.visual-workover .hero-latour__page .hero-latour__slice--quote {
+  margin-block: calc(var(--comic-shell-gap) * 0.18);
 }
