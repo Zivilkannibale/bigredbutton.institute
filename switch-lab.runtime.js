@@ -148,6 +148,15 @@
     return defaultTelemetry();
   }
 
+  function readLiveWaveform() {
+    if (window.BRB && typeof window.BRB.getLiveWaveform === "function") {
+      return window.BRB.getLiveWaveform().map(function (value) {
+        return Number(value) || 0;
+      }).slice(-96);
+    }
+    return state.telemetry.waveform.slice(-96);
+  }
+
   function currentSelectedItem() {
     return state.selectedId ? state.catalogById[state.selectedId] || null : null;
   }
@@ -296,10 +305,11 @@
             "</div>" +
           "</div>" +
           '<div class="switch-lab-telemetry__entropy">' +
-            '<div class="switch-lab-card__label">Entropy</div>' +
-            '<div class="switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</div>" +
+            '<div class="switch-lab-telemetry__entropy-head">' +
+              '<div class="switch-lab-card__label">Entropy</div>' +
+              '<div class="switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</div>" +
+            "</div>" +
             '<div class="switch-lab-telemetry__entropy-field">' +
-              '<div class="switch-lab-card__label">Entropy field</div>' +
               '<canvas id="switchLabTelemetryEntropyField" aria-label="BRB entropy field"></canvas>' +
             "</div>" +
           "</div>" +
@@ -468,10 +478,11 @@
 
   function initEntropyParticles(width, height) {
     telemetryEntropyParticles.length = 0;
+    var inset = 6;
     for (var i = 0; i < 40; i++) {
       telemetryEntropyParticles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
+        x: inset + Math.random() * Math.max(1, width - inset * 2),
+        y: inset + Math.random() * Math.max(1, height - inset * 2),
         vx: 0,
         vy: 0,
         r: Math.random() * 1.6 + 0.8
@@ -488,54 +499,36 @@
     var width = metrics.width;
     var height = metrics.height;
     if (!width || !height) return;
-    var points = state.telemetry.waveform.slice(-96);
-    var i;
+    var points = readLiveWaveform();
     while (points.length < 96) points.unshift(0);
     ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.strokeStyle = "rgba(255,255,255,0.04)";
     ctx.lineWidth = 1;
-    var gx;
-    var gy;
-    for (gy = 18; gy < height; gy += 18) {
+    for (var gy = 20; gy < height; gy += 20) {
       ctx.beginPath();
       ctx.moveTo(0, gy);
       ctx.lineTo(width, gy);
       ctx.stroke();
     }
-    for (gx = 18; gx < width; gx += 24) {
-      ctx.beginPath();
-      ctx.moveTo(gx, 0);
-      ctx.lineTo(gx, height);
-      ctx.stroke();
-    }
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
     ctx.beginPath();
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     ctx.stroke();
+    ctx.beginPath();
     var gradient = ctx.createLinearGradient(0, 0, width, 0);
-    gradient.addColorStop(0, "rgba(255,120,120,0.18)");
-    gradient.addColorStop(0.45, "rgba(255,92,92,0.5)");
-    gradient.addColorStop(1, "rgba(255,76,76,0.98)");
+    gradient.addColorStop(0, "rgba(223,44,44,0.15)");
+    gradient.addColorStop(1, "rgba(223,44,44,0.9)");
     ctx.strokeStyle = gradient;
-    ctx.lineWidth = 2.2;
+    ctx.lineWidth = 2;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-    var coords = [];
-    for (i = 0; i < points.length; i++) {
-      coords.push({
-        x: (i / Math.max(1, points.length - 1)) * width,
-        y: height / 2 - points[i] * (height * 0.38)
-      });
+    for (var i = 0; i < points.length; i++) {
+      var px = (i / Math.max(1, points.length - 1)) * width;
+      var py = height / 2 - points[i] * (height * 0.4);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
     }
-    traceSmoothLine(ctx, coords);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(0, height / 2);
-    ctx.lineTo(width, height / 2);
-    ctx.strokeStyle = "rgba(255,84,84,0.16)";
-    ctx.lineWidth = 4;
     ctx.stroke();
   }
 
@@ -556,20 +549,11 @@
     ctx.clearRect(0, 0, width, height);
     var entropyValue = state.telemetry.entropy == null ? 0 : Number(state.telemetry.entropy) || 0;
     var chaos = Math.min(entropyValue / 3, 1);
-    ctx.strokeStyle = "rgba(255,255,255,0.04)";
-    ctx.lineWidth = 1;
-    for (var gy = 18; gy < height; gy += 18) {
-      ctx.beginPath();
-      ctx.moveTo(0, gy);
-      ctx.lineTo(width, gy);
-      ctx.stroke();
-    }
-    for (var gx = 18; gx < width; gx += 22) {
-      ctx.beginPath();
-      ctx.moveTo(gx, 0);
-      ctx.lineTo(gx, height);
-      ctx.stroke();
-    }
+    var inset = 6;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(inset, inset, Math.max(1, width - inset * 2), Math.max(1, height - inset * 2));
+    ctx.clip();
     for (var i = 0; i < telemetryEntropyParticles.length; i++) {
       var p = telemetryEntropyParticles[i];
       p.vx += (Math.random() - 0.5) * chaos * 1.4;
@@ -580,8 +564,8 @@
       p.vy += (height / 2 - p.y) * 0.001;
       p.x += p.vx;
       p.y += p.vy;
-      p.x = clampNumber(p.x, 0, width);
-      p.y = clampNumber(p.y, 0, height);
+      p.x = clampNumber(p.x, inset + p.r, width - inset - p.r);
+      p.y = clampNumber(p.y, inset + p.r, height - inset - p.r);
       for (var j = i + 1; j < telemetryEntropyParticles.length; j++) {
         var q = telemetryEntropyParticles[j];
         var dx = q.x - p.x;
@@ -602,6 +586,7 @@
       ctx.fillStyle = "rgba(255,92,74," + (0.22 + chaos * 0.46) + ")";
       ctx.fill();
     }
+    ctx.restore();
   }
 
   function drawCurvePlaceholder(ctx, width, height, message) {

@@ -1776,6 +1776,7 @@
   window.BRB.setSwitchProfile = setActiveSwitchProfile;
   window.BRB.clearSwitchProfile = function () { return setActiveSwitchProfile(null); };
   window.BRB.getEffectivePressMs = getEffectiveHoldMs;
+  window.BRB.getLiveWaveform = function () { return waveData.slice(-96); };
   window.BRB.getTelemetrySnapshot = getTelemetrySnapshot;
   window.BRB.activeSwitchProfile = activeSwitchProfile;
   window.BRB.telemetry = getTelemetrySnapshot();
