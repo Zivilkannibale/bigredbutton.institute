@@ -286,11 +286,43 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   box-shadow: var(--shadow);
   aspect-ratio: 960 / 500;
   max-height: 560px;
+  isolation: isolate;
 }
 .scene-wrap svg.street-svg {
   display: block;
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 1;
+}
+.scene-airships {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+.scene-airship {
+  position: absolute;
+  opacity: 0.98;
+  filter: drop-shadow(0 14px 22px rgba(49, 60, 77, 0.22));
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  will-change: left, top, width, height, transform;
+}
+.scene-airship__model {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: transparent;
+  pointer-events: none;
+  --poster-color: transparent;
+  --progress-bar-height: 0px;
+  --progress-bar-color: transparent;
+  --interaction-prompt-display: none;
+}
+.scene-airship__model::part(default-progress-bar) {
+  display: none;
 }
 .scene-status {
   display: none;
@@ -309,6 +341,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   opacity: 0;
   transition: opacity 500ms ease;
   pointer-events: none;
+  z-index: 4;
 }
 .scene-status.show { opacity: 1; }
 .field-caption {
