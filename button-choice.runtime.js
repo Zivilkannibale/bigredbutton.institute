@@ -7,6 +7,9 @@
   var meta = document.getElementById(META_ID);
   var labDeck = document.getElementById(LAB_DECK_ID);
   if (!root || !meta) return;
+  var telemetryVisualRaf = null;
+  var telemetryWaveRange = 1.2;
+  var telemetryWaveBaseline = 0.58;
 
   var state = {
     catalog: [],
@@ -75,6 +78,10 @@
   function formatEntropy(value) {
     if (value == null) return "--";
     return Number(value).toFixed(2);
+  }
+
+  function clampNumber(value, min, max) {
+    return Math.min(max, Math.max(min, value));
   }
 
   function sourceSortRank(bundle) {
@@ -388,6 +395,7 @@
     var width = setup.width;
     var height = setup.height;
     var waveform = readWaveform();
+    while (waveform.length < 96) waveform.unshift(0);
     var paddingX = 10;
     var paddingY = 12;
     var chartWidth = width - paddingX * 2;
@@ -417,7 +425,7 @@
       return;
     }
 
-    var maxAbs = 0.4;
+    var maxAbs = 0;
     var maxPositive = 0.22;
     var maxNegative = 0.18;
     for (i = 0; i < waveform.length; i++) {
@@ -426,16 +434,20 @@
       if (sample >= 0) maxPositive = Math.max(maxPositive, sample);
       else maxNegative = Math.max(maxNegative, Math.abs(sample));
     }
-    var baseline = Math.max(0.56, Math.min(0.66, maxPositive / Math.max(0.4, maxPositive + maxNegative)));
-    var amplitudeScale = Math.max(maxAbs * 2.15, (maxPositive + maxNegative) * 1.18);
+    var targetRange = clampNumber(maxAbs * 1.16, 0.8, 2.5);
+    telemetryWaveRange += (targetRange - telemetryWaveRange) * 0.08;
+    var scaleRange = Math.max(0.8, telemetryWaveRange);
+    var targetBaseline = clampNumber(maxPositive / Math.max(0.4, maxPositive + maxNegative), 0.56, 0.66);
+    telemetryWaveBaseline += (targetBaseline - telemetryWaveBaseline) * 0.08;
+    var baselineY = paddingY + chartHeight * telemetryWaveBaseline;
+    var amplitudeHeight = chartHeight * 0.38;
 
     ctx.beginPath();
     for (i = 0; i < waveform.length; i++) {
       var value = Number(waveform[i]) || 0;
       var x = paddingX + (i / Math.max(1, waveform.length - 1)) * chartWidth;
-      var yNorm = baseline - value / amplitudeScale;
-      yNorm = Math.max(0.08, Math.min(0.92, yNorm));
-      var yPos = paddingY + yNorm * chartHeight;
+      var yPos = baselineY - (value / scaleRange) * amplitudeHeight;
+      yPos = clampNumber(yPos, paddingY + chartHeight * 0.08, paddingY + chartHeight * 0.92);
       if (i === 0) ctx.moveTo(x, yPos);
       else ctx.lineTo(x, yPos);
     }
@@ -444,6 +456,16 @@
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
     ctx.stroke();
+  }
+
+  function drawTelemetryVisuals() {
+    drawWaveform();
+    telemetryVisualRaf = window.requestAnimationFrame(drawTelemetryVisuals);
+  }
+
+  function ensureTelemetryVisualLoop() {
+    if (telemetryVisualRaf !== null) return;
+    telemetryVisualRaf = window.requestAnimationFrame(drawTelemetryVisuals);
   }
 
   function afterDeckReveal(scrollIntoView) {
@@ -515,6 +537,7 @@
     syncSummaryDom();
     syncTelemetryDom();
     drawWaveform();
+    ensureTelemetryVisualLoop();
     updateMeta();
   }
 
@@ -539,7 +562,6 @@
   window.addEventListener("brb:telemetry-update", function (event) {
     state.telemetry = normalizeTelemetry(event && event.detail);
     syncTelemetryDom();
-    drawWaveform();
   });
 
   window.addEventListener("brb:sound-profile-change", function () {
