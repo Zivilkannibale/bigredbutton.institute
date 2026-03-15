@@ -1,0 +1,183 @@
+{
+  "generatedAt": "2026-03-15T18:10:00Z",
+  "states": [
+    {
+      "id": "recommended",
+      "label": "recommended analogue",
+      "description": "Closest local analogue for the current BRB switch selection."
+    },
+    {
+      "id": "compatible",
+      "label": "compatible alternative",
+      "description": "A usable manual choice with partial overlap in feel."
+    },
+    {
+      "id": "distant",
+      "label": "source available but no close match",
+      "description": "Local source exists, but the current switch profile does not align closely."
+    },
+    {
+      "id": "none",
+      "label": "no recommendation",
+      "description": "No honest local recommendation is available for the current switch selection."
+    }
+  ],
+  "heuristics": {
+    "recommended_threshold": 0.79,
+    "compatible_threshold": 0.55,
+    "source_threshold": 0.3,
+    "weights": {
+      "family": 0.4,
+      "clickiness": 0.28,
+      "thock": 0.2,
+      "attack": 0.12
+    },
+    "silent_penalty": 0.24,
+    "disclaimer": "Analogue-only heuristic derived from BRB switch family, silent flag, and soundProfile.attack/clickiness/thock. Nothing here is presented as a scientifically exact acoustic match."
+  },
+  "profiles": {
+    "mechvibes-v1-cherrymx-blue-abs": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.28,
+        "linear": 0.08
+      },
+      "clickiness_range": [0.75, 1],
+      "thock_range": [0.12, 0.42],
+      "attack_values": ["sharp", "firm"],
+      "summary": "Bright click-jacket analogue with low thock and clear top-out."
+    },
+    "mechvibes-v1-cherrymx-brown-abs": {
+      "family_targets": {
+        "clicky": 0.26,
+        "tactile": 1,
+        "linear": 0.24
+      },
+      "clickiness_range": [0.25, 0.58],
+      "thock_range": [0.28, 0.55],
+      "attack_values": ["firm"],
+      "summary": "Moderate tactile analogue with a restrained top-out."
+    },
+    "mechvibes-v1-cherrymx-red-pbt": {
+      "family_targets": {
+        "clicky": 0.08,
+        "tactile": 0.28,
+        "linear": 1
+      },
+      "clickiness_range": [0.08, 0.24],
+      "thock_range": [0.22, 0.46],
+      "attack_values": ["firm"],
+      "summary": "Lighter linear analogue with more brightness than body."
+    },
+    "mechvibes-v1-cherrymx-black-pbt": {
+      "family_targets": {
+        "clicky": 0.05,
+        "tactile": 0.24,
+        "linear": 1
+      },
+      "clickiness_range": [0.06, 0.18],
+      "thock_range": [0.38, 0.7],
+      "attack_values": ["muted", "firm"],
+      "summary": "Heavier linear analogue with a subdued top-end."
+    },
+    "mechvibes-v1-topre-purple-hybrid-pbt": {
+      "family_targets": {
+        "clicky": 0.08,
+        "tactile": 1,
+        "linear": 0.42
+      },
+      "clickiness_range": [0.1, 0.3],
+      "thock_range": [0.45, 0.8],
+      "attack_values": ["muted", "firm"],
+      "summary": "Rounded tactile analogue with deeper body and quieter top-out."
+    },
+    "mechvibes-v1-eg-oreo": {
+      "family_targets": {
+        "clicky": 0.4,
+        "tactile": 1,
+        "linear": 0.18
+      },
+      "clickiness_range": [0.35, 0.65],
+      "thock_range": [0.32, 0.58],
+      "attack_values": ["firm", "sharp"],
+      "summary": "Sharper tactile analogue for more vocal tactile profiles."
+    },
+    "mechvibes-v2-mxblue-travel": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.34,
+        "linear": 0.08
+      },
+      "clickiness_range": [0.8, 1],
+      "thock_range": [0.12, 0.45],
+      "attack_values": ["sharp", "firm"],
+      "summary": "Full-travel click analogue with explicit press variation."
+    },
+    "mechvibes-v2-mxbrown-travel": {
+      "family_targets": {
+        "clicky": 0.2,
+        "tactile": 1,
+        "linear": 0.28
+      },
+      "clickiness_range": [0.2, 0.48],
+      "thock_range": [0.32, 0.62],
+      "attack_values": ["firm"],
+      "summary": "Balanced tactile full-travel analogue."
+    },
+    "mechvibes-v2-mxblack-travel": {
+      "family_targets": {
+        "clicky": 0.04,
+        "tactile": 0.22,
+        "linear": 1
+      },
+      "clickiness_range": [0.05, 0.15],
+      "thock_range": [0.5, 0.85],
+      "attack_values": ["muted", "firm"],
+      "summary": "Heavy linear full-travel analogue with more low-end body."
+    },
+    "mechvibes-v2-cream-travel": {
+      "family_targets": {
+        "clicky": 0.05,
+        "tactile": 0.38,
+        "linear": 1
+      },
+      "clickiness_range": [0.06, 0.18],
+      "thock_range": [0.58, 0.92],
+      "attack_values": ["muted", "firm"],
+      "summary": "Deep linear analogue that also works as a muted tactile fallback."
+    },
+    "mechvibes-v2-holy-pandas": {
+      "family_targets": {
+        "clicky": 0.32,
+        "tactile": 1,
+        "linear": 0.12
+      },
+      "clickiness_range": [0.32, 0.55],
+      "thock_range": [0.5, 0.82],
+      "attack_values": ["firm"],
+      "summary": "Dense tactile analogue with strong body and limited sparkle."
+    },
+    "mechvibes-v2-turquoise": {
+      "family_targets": {
+        "clicky": 0.72,
+        "tactile": 1,
+        "linear": 0.12
+      },
+      "clickiness_range": [0.45, 0.78],
+      "thock_range": [0.4, 0.72],
+      "attack_values": ["sharp", "firm"],
+      "summary": "Hybrid analogue for sharp tactile or click-adjacent profiles."
+    },
+    "bucklespring-gpl-canonical-31": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.45,
+        "linear": 0.02
+      },
+      "clickiness_range": [0.9, 1],
+      "thock_range": [0.1, 0.35],
+      "attack_values": ["sharp"],
+      "summary": "Buckling-spring archetype with extreme click emphasis."
+    }
+  }
+}

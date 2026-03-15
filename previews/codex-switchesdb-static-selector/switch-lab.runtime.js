@@ -28,6 +28,7 @@
     error: null,
     telemetry: defaultTelemetry()
   };
+  var lastSelectionBroadcastId = null;
   var telemetryEntropyParticles = [];
   var telemetryEntropyChaos = 0;
   var telemetryWaveRange = 1.2;
@@ -171,6 +172,32 @@
     return window.BRB && typeof window.BRB.getSwitchProfile === "function"
       ? window.BRB.getSwitchProfile()
       : null;
+  }
+
+  function getSwitchLabSelectionPayload() {
+    var item = currentSelectedItem();
+    var profile = currentSelectedProfile();
+    if (!item) return null;
+    return {
+      id: item.id,
+      item: item,
+      profile: profile,
+      appliedId: state.appliedId,
+      isApplied: item.id === state.appliedId
+    };
+  }
+
+  function broadcastSelectionChange(force) {
+    var payload = getSwitchLabSelectionPayload();
+    var nextId = payload ? payload.id : null;
+    if (!force && nextId === lastSelectionBroadcastId) return;
+    lastSelectionBroadcastId = nextId;
+    if (window.BRB) window.BRB.switchLabSelection = payload;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:switch-lab-selection-change", {
+        detail: payload
+      }));
+    }
   }
 
   function ensureProfilesLoaded() {
@@ -828,12 +855,14 @@
       root.setAttribute("data-state", "error");
       root.innerHTML = '<p class="switch-lab-error">' + escapeHtml(state.error) + "</p>";
       updateMeta();
+      broadcastSelectionChange(true);
       return;
     }
     if (!state.catalog.length || !state.profilesById) {
       root.setAttribute("data-state", "loading");
       root.innerHTML = '<p class="switch-lab-loading">Loading switch profiles from the local BRB sync cache.</p>';
       updateMeta();
+      broadcastSelectionChange(true);
       return;
     }
     syncAppliedIdFromRuntime();
@@ -844,6 +873,7 @@
     bindEvents();
     ensureTelemetryVisualLoop();
     window.requestAnimationFrame(syncSupplementalPanels);
+    broadcastSelectionChange(false);
   }
 
   function applyProfileById(id, options) {
@@ -961,6 +991,10 @@
     syncSupplementalPanels();
     ensureTelemetryVisualLoop();
   });
+
+  window.BRB = window.BRB || {};
+  window.BRB.getSwitchLabSelection = getSwitchLabSelectionPayload;
+  window.BRB.switchLabSelection = getSwitchLabSelectionPayload();
 
   state.telemetry = readTelemetrySnapshot();
   ensureTelemetryVisualLoop();
