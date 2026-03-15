@@ -26,3 +26,8 @@ It preserves the upstream licensing materials as published and does not add any 
 - Upstream commit: b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb
 - Upstream describe/tag: v2.3.6-11-gb7cb633
 - Package version field: v2.3.5
+
+## Current Sound Lab coverage
+
+The BRB Sound Lab currently exposes all 18 vendored Mechvibes packs from this bundle.
+Further Mechvibes expansion therefore means vendoring additional upstream packs or a different upstream source, not unlocking hidden packs already present in this directory.

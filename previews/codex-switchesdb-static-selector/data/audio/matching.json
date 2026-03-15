@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-15T17:09:40.869Z",
+  "generatedAt": "2026-03-15T17:29:18.021Z",
   "states": [
     {
       "id": "recommended",
@@ -407,6 +407,260 @@
         "firm"
       ],
       "summary": "Deep linear analogue built from the local NK Cream WAV mapping."
+    },
+    "bucklespring-gpl-esc-01": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-backspace-0e": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-tab-0f": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-enter-1c": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-grave-29": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-left-shift-2a": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-right-shift-36": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-space-39": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-caps-3a": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-cluster-47": {
+      "family_targets": {
+        "clicky": 0.92,
+        "tactile": 0.44,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.82,
+        1
+      ],
+      "thock_range": [
+        0.1,
+        0.4
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed by upstream keycode rather than a guessed semantic label."
+    },
+    "bucklespring-gpl-cluster-4c": {
+      "family_targets": {
+        "clicky": 0.92,
+        "tactile": 0.44,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.82,
+        1
+      ],
+      "thock_range": [
+        0.1,
+        0.4
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed by upstream keycode rather than a guessed semantic label."
+    },
+    "bucklespring-gpl-iso-56": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-kp-enter-60": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
     }
   }
 }

@@ -1,6 +1,44 @@
 {
-  "generatedAt": "2026-03-15T17:09:40.868Z",
+  "generatedAt": "2026-03-15T17:29:18.020Z",
   "items": [
+    {
+      "id": "bucklespring-gpl-backspace-0e",
+      "name": "Bucklespring Backspace Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x0e (Backspace)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/0e-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/0e-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "backspace"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x0e (Backspace), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "0e"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/0e-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/0e-0.wav"
+        ]
+      }
+    },
     {
       "id": "bucklespring-gpl-canonical-31",
       "name": "Bucklespring Canonical Pair",
@@ -35,6 +73,464 @@
         ],
         "release_variants": [
           "data/audio/bucklespring-gpl/wav/31-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-caps-3a",
+      "name": "Bucklespring Caps Lock Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x3a (Caps Lock)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/3a-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/3a-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "caps-lock"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x3a (Caps Lock), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "3a"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/3a-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/3a-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-enter-1c",
+      "name": "Bucklespring Enter Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x1c (Enter)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/1c-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/1c-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "enter"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x1c (Enter), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "1c"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/1c-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/1c-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-esc-01",
+      "name": "Bucklespring Esc Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x01 (Esc)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/01-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/01-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "esc"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x01 (Esc), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "01"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/01-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/01-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-grave-29",
+      "name": "Bucklespring Grave Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x29 (Grave)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/29-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/29-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "grave"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x29 (Grave), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "29"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/29-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/29-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-iso-56",
+      "name": "Bucklespring ISO Extra Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x56 (ISO extra)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/56-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/56-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "iso-extra"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x56 (ISO extra), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "56"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/56-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/56-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-kp-enter-60",
+      "name": "Bucklespring Keypad Enter Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x60 (Keypad Enter)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/60-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/60-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "keypad-enter"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x60 (Keypad Enter), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "60"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/60-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/60-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-left-shift-2a",
+      "name": "Bucklespring Left Shift Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x2a (Left Shift)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/2a-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/2a-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "left-shift"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x2a (Left Shift), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "2a"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/2a-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/2a-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-cluster-47",
+      "name": "Bucklespring Pair 0x47",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x47",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/47-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/47-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "keycode-47",
+        "curated"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x47, surfaced by keycode rather than guessed semantics.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "47"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/47-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/47-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-cluster-4c",
+      "name": "Bucklespring Pair 0x4c",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x4c",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/4c-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/4c-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "keycode-4c",
+        "curated"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x4c, surfaced by keycode rather than guessed semantics.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "4c"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/4c-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/4c-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-right-shift-36",
+      "name": "Bucklespring Right Shift Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x36 (Right Shift)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/36-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/36-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "right-shift"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x36 (Right Shift), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "36"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/36-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/36-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-space-39",
+      "name": "Bucklespring Space Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x39 (Space)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/39-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/39-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "space"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x39 (Space), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "39"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/39-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/39-0.wav"
+        ]
+      }
+    },
+    {
+      "id": "bucklespring-gpl-tab-0f",
+      "name": "Bucklespring Tab Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring sample 0x0f (Tab)",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/0f-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/0f-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp",
+        "tab"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping for upstream keycode 0x0f (Tab), kept separate inside the GPL bundle.",
+      "adapter": {
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "0f"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/0f-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/0f-0.wav"
         ]
       }
     },
@@ -679,7 +1175,7 @@
       "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
       "summary": "Representative single-button mapping built from the vendored NK Cream per-key WAV pack.",
       "adapter": {
-        "type": "mechvibes-v2-press-release-pack",
+        "type": "mechvibes-file-map-pack",
         "config_path": "data/audio/mechvibes-mit/packs/nk-cream/config.json",
         "press_variants": [
           "data/audio/mechvibes-mit/packs/nk-cream/space.wav",
