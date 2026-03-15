@@ -98,7 +98,7 @@ body.visual-workover .sound-lab-detail {
 
 body.visual-workover .sound-lab-controls {
   display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
   gap: 0.7rem;
   align-content: start;
   padding: 0.78rem;
@@ -215,6 +215,10 @@ body.visual-workover .sound-lab-item:focus-visible {
 body.visual-workover .sound-lab-item.is-selected {
   background: #fff4f2;
   border-color: var(--ink);
+}
+
+body.visual-workover .sound-lab-item.is-favorite:not(.is-selected):not(.is-applied) {
+  border-color: rgba(214, 29, 35, 0.34);
 }
 
 body.visual-workover .sound-lab-item.is-applied {
