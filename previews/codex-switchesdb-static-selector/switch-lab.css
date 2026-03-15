@@ -1,19 +1,21 @@
 body.visual-workover .switch-lab-panel {
   grid-column: 1 / -1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
 }
 
 body.visual-workover .switch-lab-panel__head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
-  gap: 0.95rem 1.15rem;
+  gap: 0.7rem 0.95rem;
   align-items: end;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
 }
 
 body.visual-workover .switch-lab-panel__copy {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.38rem;
   max-width: 54rem;
 }
 
@@ -27,28 +29,30 @@ body.visual-workover .switch-lab-panel__kicker {
 body.visual-workover .switch-lab-panel__title {
   margin: 0;
   max-width: 15ch;
-  font-size: clamp(1.9rem, 2.65vw, 2.85rem);
+  font-size: clamp(1.72rem, 2.3vw, 2.48rem);
   line-height: 0.92;
 }
 
 body.visual-workover .switch-lab-panel__lede {
   margin: 0;
   max-width: 58ch;
+  font-size: 0.94rem;
+  line-height: 1.42;
 }
 
 body.visual-workover .switch-lab-panel__meta {
   width: 100%;
-  max-width: 18rem;
+  max-width: 16.5rem;
   justify-self: end;
   align-self: end;
   margin: 0;
-  padding: 0.72rem 0 0.72rem 0.95rem;
+  padding: 0.56rem 0 0.56rem 0.82rem;
   border-left: 4px solid rgba(214, 29, 35, 0.78);
   background: linear-gradient(90deg, rgba(214, 29, 35, 0.07), rgba(214, 29, 35, 0));
   color: #675f55;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  line-height: 1.55;
+  font-size: 0.74rem;
+  line-height: 1.45;
   letter-spacing: 0.05em;
 }
 
@@ -69,15 +73,18 @@ body.visual-workover .switch-lab-error {
 body.visual-workover .switch-lab-root,
 body.visual-workover .switch-lab-app,
 body.visual-workover .switch-lab-controls,
-body.visual-workover .switch-lab-detail {
+body.visual-workover .switch-lab-detail,
+body.visual-workover .switch-lab-detail__lower,
+body.visual-workover .switch-lab-curve,
+body.visual-workover .switch-lab-telemetry {
   min-height: 0;
 }
 
 body.visual-workover .switch-lab-app {
   display: grid;
-  grid-template-columns: minmax(20rem, 22.5rem) minmax(0, 1fr);
-  gap: 0.9rem;
-  align-items: start;
+  grid-template-columns: minmax(19rem, 21.5rem) minmax(0, 1fr);
+  gap: 0.78rem;
+  align-items: stretch;
 }
 
 body.visual-workover .switch-lab-controls,
@@ -90,10 +97,10 @@ body.visual-workover .switch-lab-detail {
 
 body.visual-workover .switch-lab-controls {
   display: grid;
-  grid-template-rows: auto auto auto auto 1fr;
-  gap: 0.8rem;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+  gap: 0.7rem;
   align-content: start;
-  padding: 0.9rem;
+  padding: 0.78rem;
 }
 
 body.visual-workover .switch-lab-field {
@@ -111,12 +118,12 @@ body.visual-workover .switch-lab-label {
 
 body.visual-workover .switch-lab-search {
   width: 100%;
-  min-height: 48px;
+  min-height: 44px;
   border: 2px solid var(--ink);
   background: #ffffff;
   color: var(--ink);
-  padding: 0.74rem 0.84rem;
-  font: 600 0.94rem/1.2 "IBM Plex Sans", sans-serif;
+  padding: 0.66rem 0.76rem;
+  font: 600 0.9rem/1.2 "IBM Plex Sans", sans-serif;
 }
 
 body.visual-workover .switch-lab-search::placeholder {
@@ -140,12 +147,12 @@ body.visual-workover .switch-lab-filter-row {
 }
 
 body.visual-workover .switch-lab-chip {
-  min-height: 38px;
-  padding: 0.5rem 0.72rem;
+  min-height: 36px;
+  padding: 0.46rem 0.66rem;
   border: 2px solid rgba(17, 17, 17, 0.18);
   background: #f3ede2;
   color: var(--ink);
-  font: 700 0.76rem/1 "IBM Plex Mono", monospace;
+  font: 700 0.72rem/1 "IBM Plex Mono", monospace;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
@@ -173,22 +180,24 @@ body.visual-workover .switch-lab-chip.is-active {
 body.visual-workover .switch-lab-results-meta {
   color: #72695d;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   letter-spacing: 0.05em;
 }
 
 body.visual-workover .switch-lab-list {
   display: grid;
-  gap: 0.45rem;
+  align-content: start;
+  grid-auto-rows: max-content;
+  gap: 0.38rem;
   min-height: 0;
-  max-height: clamp(22rem, 45vh, 30rem);
+  max-height: clamp(18rem, 37vh, 23rem);
   overflow: auto;
   padding-right: 0.12rem;
 }
 
 body.visual-workover .switch-lab-item {
   width: 100%;
-  padding: 0.72rem 0.78rem;
+  padding: 0.64rem 0.72rem;
   border: 2px solid rgba(17, 17, 17, 0.14);
   background: #ffffff;
   color: var(--ink);
@@ -226,8 +235,8 @@ body.visual-workover .switch-lab-item.is-selected.is-applied {
 
 body.visual-workover .switch-lab-item__title {
   display: block;
-  margin: 0 0 0.24rem;
-  font: 700 0.98rem/1.14 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  margin: 0 0 0.2rem;
+  font: 700 0.92rem/1.12 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.03em;
 }
 
@@ -237,21 +246,21 @@ body.visual-workover .switch-lab-item__meta {
   gap: 0.3rem 0.65rem;
   color: #766d61;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.72rem;
+  font-size: 0.69rem;
   letter-spacing: 0.04em;
 }
 
 body.visual-workover .switch-lab-detail {
   display: grid;
   grid-template-rows: auto auto auto;
-  gap: 0.65rem;
+  gap: 0.54rem;
   align-content: start;
-  padding: 0.78rem;
+  padding: 0.72rem;
 }
 
 body.visual-workover .switch-lab-detail__primary {
   display: grid;
-  gap: 0.58rem;
+  gap: 0.5rem;
   align-content: start;
 }
 
@@ -259,7 +268,7 @@ body.visual-workover .switch-lab-detail__lower {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
-  gap: 0.62rem;
+  gap: 0.54rem;
   align-content: start;
   min-height: 0;
 }
@@ -276,8 +285,8 @@ body.visual-workover .switch-lab-card__eyebrow {
 
 body.visual-workover .switch-lab-detail h3 {
   margin: 0;
-  max-width: 16ch;
-  font-size: clamp(1.45rem, 2.05vw, 2.15rem);
+  max-width: 17ch;
+  font-size: clamp(1.28rem, 1.7vw, 1.86rem);
   line-height: 0.94;
 }
 
@@ -287,12 +296,12 @@ body.visual-workover .switch-lab-detail p {
 }
 
 body.visual-workover .switch-lab-detail__status {
-  padding-left: 0.78rem;
+  padding-left: 0.68rem;
   border-left: 4px solid rgba(17, 17, 17, 0.14);
   color: #655d51;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.78rem;
-  line-height: 1.55;
+  font-size: 0.74rem;
+  line-height: 1.46;
   letter-spacing: 0.04em;
 }
 
@@ -304,21 +313,21 @@ body.visual-workover .switch-lab-detail__status.is-applied {
 body.visual-workover .switch-lab-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.45rem;
+  gap: 0.38rem;
   margin: 0;
 }
 
 body.visual-workover .switch-lab-metric {
-  padding: 0.56rem 0.62rem;
+  padding: 0.48rem 0.56rem;
   border: 1px solid rgba(17, 17, 17, 0.14);
   background: #f7f1e8;
 }
 
 body.visual-workover .switch-lab-metric dt {
-  margin: 0 0 0.3rem;
+  margin: 0 0 0.24rem;
   color: #72695d;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.66rem;
+  font-size: 0.62rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -326,7 +335,7 @@ body.visual-workover .switch-lab-metric dt {
 body.visual-workover .switch-lab-metric dd {
   margin: 0;
   color: var(--ink);
-  font: 700 0.96rem/1.1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font: 700 0.9rem/1.06 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -334,7 +343,7 @@ body.visual-workover .switch-lab-actions,
 body.visual-workover .switch-lab-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.48rem;
+  gap: 0.42rem;
 }
 
 body.visual-workover .switch-lab-action,
@@ -342,13 +351,13 @@ body.visual-workover .switch-lab-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
-  padding: 0.58rem 0.82rem;
+  min-height: 38px;
+  padding: 0.5rem 0.74rem;
   border: 2px solid var(--ink);
   background: #fffdf8;
   color: var(--ink);
   text-decoration: none;
-  font: 700 0.76rem/1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font: 700 0.72rem/1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   box-shadow: 3px 3px 0 rgba(5, 6, 8, 0.07);
@@ -411,14 +420,14 @@ body.visual-workover .switch-lab-card__head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: 0.48rem;
 }
 
 body.visual-workover .switch-lab-card__meta,
 body.visual-workover .switch-lab-card__label {
   color: rgba(238, 232, 224, 0.76);
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.66rem;
+  font-size: 0.62rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -426,9 +435,9 @@ body.visual-workover .switch-lab-card__label {
 body.visual-workover .switch-lab-telemetry {
   display: grid;
   grid-template-rows: auto auto 1fr;
-  gap: 0.58rem;
+  gap: 0.48rem;
   min-height: 0;
-  padding: 0.72rem;
+  padding: 0.64rem;
   border: 2px solid var(--ink);
   background: linear-gradient(180deg, #171717 0%, #0f0f10 100%);
   color: #f5f0e3;
@@ -438,13 +447,13 @@ body.visual-workover .switch-lab-telemetry {
 body.visual-workover .switch-lab-telemetry__summary {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 0.62rem;
+  gap: 0.5rem;
   align-items: start;
 }
 
 body.visual-workover .switch-lab-telemetry__count-value {
   font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+  font-size: clamp(1.92rem, 3.4vw, 2.72rem);
   line-height: 0.9;
   color: #ff4848;
   text-shadow: 4px 4px 0 rgba(255, 72, 72, 0.14);
@@ -456,7 +465,7 @@ body.visual-workover .switch-lab-telemetry__stat-label {
   margin-top: 0.15rem;
   color: rgba(168, 181, 205, 0.8);
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.64rem;
+  font-size: 0.6rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
@@ -464,17 +473,17 @@ body.visual-workover .switch-lab-telemetry__stat-label {
 body.visual-workover .switch-lab-telemetry__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.45rem;
+  gap: 0.34rem;
 }
 
 body.visual-workover .switch-lab-telemetry__stat {
-  padding: 0.35rem 0;
+  padding: 0.22rem 0;
 }
 
 body.visual-workover .switch-lab-telemetry__stat-value {
   display: block;
   font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  font-size: 1rem;
+  font-size: 0.92rem;
   line-height: 1;
   color: #f5f0e3;
 }
@@ -482,13 +491,13 @@ body.visual-workover .switch-lab-telemetry__stat-value {
 body.visual-workover .switch-lab-telemetry__wave {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 0.38rem;
+  gap: 0.28rem;
   min-height: 0;
 }
 
 body.visual-workover .switch-lab-telemetry__wave canvas {
   width: 100%;
-  height: clamp(3.9rem, 5.4vw, 4.9rem);
+  height: clamp(3.25rem, 4.2vw, 3.9rem);
   min-height: 0;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.03);
@@ -497,27 +506,27 @@ body.visual-workover .switch-lab-telemetry__wave canvas {
 body.visual-workover .switch-lab-curve {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 0.58rem;
+  gap: 0.46rem;
   min-height: 0;
-  padding: 0.72rem;
+  padding: 0.64rem;
   border: 2px solid var(--ink);
   background: #f7f1e8;
   box-shadow: 4px 4px 0 rgba(5, 6, 8, 0.06);
 }
 
 body.visual-workover .switch-lab-card__head--curve h4 {
-  margin: 0.2rem 0 0;
-  font-size: 0.9rem;
+  margin: 0.14rem 0 0;
+  font-size: 0.82rem;
 }
 
 body.visual-workover .switch-lab-curve__legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.55rem 0.8rem;
+  gap: 0.4rem 0.66rem;
   color: #6f6559;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -530,7 +539,7 @@ body.visual-workover .switch-lab-curve__legend-item {
 
 body.visual-workover .switch-lab-curve__legend-line {
   display: inline-block;
-  width: 16px;
+  width: 14px;
   height: 2px;
   background: currentColor;
 }
@@ -550,7 +559,7 @@ body.visual-workover .switch-lab-curve__canvas-wrap {
 
 body.visual-workover .switch-lab-curve__canvas-wrap canvas {
   width: 100%;
-  height: clamp(7.5rem, 9vw, 9rem);
+  height: clamp(6.4rem, 7.4vw, 7.3rem);
   min-height: 0;
   border: 1px solid rgba(17, 17, 17, 0.12);
   background:
@@ -584,17 +593,17 @@ body.visual-workover .switch-lab-curve__footer {
   gap: 0.8rem;
   color: #6f6559;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 body.visual-workover .switch-lab-attribution {
-  padding-top: 0.3rem;
+  padding-top: 0.22rem;
   border-top: 1px solid rgba(17, 17, 17, 0.14);
   align-self: start;
   color: #675f55;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
 body.visual-workover .switch-lab-attribution a {
