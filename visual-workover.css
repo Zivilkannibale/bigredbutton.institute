@@ -2536,3 +2536,13 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
     width: 128%;
   }
 }
+
+@media (min-width: 1200px) and (min-height: 960px) {
+  body.visual-workover .hero {
+    min-height: calc(100svh - 2.8rem);
+  }
+
+  body.visual-workover .field-section {
+    margin-top: 0.96rem;
+  }
+}

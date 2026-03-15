@@ -796,13 +796,18 @@
   }
 
   function shouldAttractToScene() {
+    if (!sceneWrap) return false;
+    var rect = sceneWrap.getBoundingClientRect();
+    var vh = window.innerHeight;
     var visibility = getSceneVisibilityRatio();
+    var enterVisible = visibility > 0.32 && rect.top < vh * 0.82 && rect.bottom > vh * 0.28;
+    var stayVisible = visibility > 0.16 && rect.top < vh * 0.92 && rect.bottom > vh * 0.12;
     if (reducedMotion) {
-      sceneAttractionActive = visibility > 0.2;
+      sceneAttractionActive = enterVisible;
       return sceneAttractionActive;
     }
-    if (sceneAttractionActive) sceneAttractionActive = visibility > 0.08;
-    else sceneAttractionActive = visibility > 0.24;
+    if (sceneAttractionActive) sceneAttractionActive = stayVisible;
+    else sceneAttractionActive = enterVisible;
     return sceneAttractionActive;
   }
 
