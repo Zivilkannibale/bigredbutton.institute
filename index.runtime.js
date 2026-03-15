@@ -87,7 +87,7 @@
   var sceneStatus = document.getElementById("sceneStatus");
   var fieldCaption = document.getElementById("fieldCaption");
   var miniDash = document.getElementById("miniDash");
-  var airshipLayer = document.getElementById("airshipLayer");
+  var airshipDomLayer = document.getElementById("sceneAirships");
   var landingSpot = document.getElementById("landingSpot");
   var person1 = document.getElementById("person1");
   var person2 = document.getElementById("person2");
@@ -148,73 +148,96 @@
     { skin: "#d8c0a0", shirt: "#8a5a6a", limbs: "#5a4a5a", hair: "#6a4632", hairRx: "4", hairRy: "2.3", hairCx: "0", hairCy: "-25", scale: 0.9 },
     { skin: "#c8b090", shirt: "#5a6a8a", limbs: "#3a4a5a", hair: "#4a3424", hairRx: "4.5", hairRy: "2.5", hairCx: "0", hairCy: "-26", scale: 0.93 }
   ];
+  var airshipSource = "Images/Airships/airship.glb";
+  var airshipPalettePaths = {
+    classic: "Images/Airships/palette-classic.png",
+    sand: "Images/Airships/palette-sand.png",
+    plum: "Images/Airships/palette-plum.png",
+    slate: "Images/Airships/palette-slate.png"
+  };
   var airships = [];
-  var airshipPhase = Math.random() * Math.PI * 2;
-  var airshipConfigs = [
+  var airshipClock = Math.random() * 7000;
+  var lastAirshipTickAt = 0;
+  var airshipBlueprints = [
     {
-      hull: "#f3f1f5",
-      band: "#c73c49",
-      accent: "#ffffff",
-      tail: "#6d2733",
-      fin: "#7f323d",
-      gondola: "#edf0f4",
-      window: "#94d1ff",
-      brace: "#a4a9b0",
-      prop: "rgba(118,124,136,0.45)",
-      seam: "rgba(92,94,103,0.18)",
-      scale: 0.96,
-      baseY: 44,
-      speed: 0.62,
-      xOffset: 300,
+      palette: "classic",
+      x: 792,
+      baseY: 32,
+      width: 182,
+      height: 98,
+      speed: 1.08,
       phase: 0.2,
-      swayX: 7,
-      swayY: 4.4,
-      tilt: 1.7,
-      reverse: false
+      floatY: 1.15,
+      tilt: 0.34
     },
     {
-      hull: "#f2ede6",
-      band: "#c43a47",
-      accent: "#fbfaf7",
-      tail: "#6a2a35",
-      fin: "#7b313d",
-      gondola: "#f0f1f3",
-      window: "#8ecfff",
-      brace: "#a6abb1",
-      prop: "rgba(118,124,136,0.42)",
-      seam: "rgba(96,96,104,0.18)",
-      scale: 1.03,
-      baseY: 98,
-      speed: 0.48,
-      xOffset: 360,
-      phase: 1.9,
-      swayX: 10,
-      swayY: 5.4,
-      tilt: 1.25,
-      reverse: true
+      palette: "sand",
+      x: 482,
+      baseY: 78,
+      width: 160,
+      height: 88,
+      speed: 0.84,
+      phase: 1.7,
+      floatY: 0.92,
+      tilt: 0.26
     },
     {
-      hull: "#f6f3ef",
-      band: "#c83f4c",
-      accent: "#ffffff",
-      tail: "#722934",
-      fin: "#82313d",
-      gondola: "#eef1f4",
-      window: "#97d4ff",
-      brace: "#a5aab2",
-      prop: "rgba(118,124,136,0.4)",
-      seam: "rgba(96,96,104,0.18)",
-      scale: 0.82,
-      baseY: 132,
-      speed: 0.56,
-      xOffset: 540,
-      phase: 3.25,
-      swayX: 12,
-      swayY: 6.2,
-      tilt: 2.1,
-      reverse: false
+      palette: "plum",
+      x: 1080,
+      baseY: 122,
+      width: 142,
+      height: 78,
+      speed: 0.92,
+      phase: 3.1,
+      floatY: 0.98,
+      tilt: 0.28
+    },
+    {
+      palette: "slate",
+      x: 1004,
+      baseY: 18,
+      width: 132,
+      height: 72,
+      speed: 0.94,
+      phase: 4.2,
+      floatY: 0.72,
+      tilt: 0.21
+    },
+    {
+      palette: "classic",
+      x: 1048,
+      baseY: 54,
+      width: 126,
+      height: 70,
+      speed: 1.18,
+      phase: 5.1,
+      floatY: 0.84,
+      tilt: 0.24
+    },
+    {
+      palette: "sand",
+      x: 1094,
+      baseY: 96,
+      width: 118,
+      height: 66,
+      speed: 1.02,
+      phase: 6.2,
+      floatY: 0.76,
+      tilt: 0.2
+    },
+    {
+      palette: "plum",
+      x: 1142,
+      baseY: 42,
+      width: 122,
+      height: 68,
+      speed: 1.1,
+      phase: 7.1,
+      floatY: 0.78,
+      tilt: 0.22
     }
   ];
+  var baseAirshipCount = 3;
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -1042,175 +1065,121 @@
     return group;
   }
 
-  function createAirshipNode(style) {
-    var group = createSceneNode("g", {
-      "pointer-events": "none",
-      opacity: "0.96"
+  function applyAirshipPalette(airship) {
+    if (!airship || !airship.model || !airship.model.model) return;
+    var materials = airship.model.model.materials || [];
+    if (!materials.length || typeof airship.model.createTexture !== "function") return;
+    var baseColorTexture = materials[0].pbrMetallicRoughness && materials[0].pbrMetallicRoughness.baseColorTexture;
+    if (!baseColorTexture || !airship.palettePath) return;
+    var textureToken = (airship.textureToken || 0) + 1;
+    airship.textureToken = textureToken;
+    airship.model.createTexture(airship.palettePath)
+      .then(function (texture) {
+        if (!texture || airship.textureToken !== textureToken) return;
+        baseColorTexture.setTexture(texture);
+      })
+      .catch(function () {});
+  }
+
+  function positionAirship(airship, x, y, tilt) {
+    if (!airship || !airship.node) return;
+    airship.node.style.left = (((x - sceneViewBox.minX) / sceneViewBox.width) * 100).toFixed(3) + "%";
+    airship.node.style.top = (((y - sceneViewBox.minY) / sceneViewBox.height) * 100).toFixed(3) + "%";
+    airship.node.style.width = ((airship.width / sceneViewBox.width) * 100).toFixed(3) + "%";
+    airship.node.style.height = ((airship.height / sceneViewBox.height) * 100).toFixed(3) + "%";
+    airship.node.style.transform = "translate(-50%, -50%) rotate(" + tilt.toFixed(3) + "deg)";
+  }
+
+  function createAirshipNode(config) {
+    if (!airshipDomLayer) return null;
+    var node = document.createElement("div");
+    var model = document.createElement("model-viewer");
+    node.className = "scene-airship";
+    model.className = "scene-airship__model";
+    model.setAttribute("alt", "");
+    model.setAttribute("aria-hidden", "true");
+    model.setAttribute("tabindex", "-1");
+    model.setAttribute("camera-orbit", "0deg 90deg 1.9m");
+    model.setAttribute("field-of-view", "18deg");
+    model.setAttribute("interaction-prompt", "none");
+    model.setAttribute("shadow-intensity", "0");
+    model.setAttribute("environment-image", "neutral");
+    model.setAttribute("exposure", "1.08");
+    model.setAttribute("orientation", "0deg 180deg 0deg");
+    model.setAttribute("scale", "1.16 1.16 1.16");
+    model.style.opacity = "1";
+    var airship = {
+      node: node,
+      model: model,
+      x: config.x,
+      baseY: config.baseY,
+      width: config.width,
+      height: config.height,
+      speed: config.speed,
+      phase: config.phase,
+      floatY: config.floatY,
+      tilt: config.tilt,
+      palettePath: airshipPalettePaths[config.palette] || airshipPalettePaths.classic,
+      textureToken: 0
+    };
+    model.addEventListener("load", function () {
+      applyAirshipPalette(airship);
     });
-    var craft = createSceneNode("g", {});
+    node.appendChild(model);
+    airshipDomLayer.appendChild(node);
+    model.setAttribute("src", airshipSource);
+    positionAirship(airship, airship.x, airship.baseY, 0);
+    return airship;
+  }
 
-    craft.appendChild(createSceneNode("path", {
-      d: "M-84,0 L-70,-11 L-50,-15 L8,-17 L50,-16 L68,-14 L79,-9 L86,-3 L86,3 L79,9 L68,14 L50,16 L8,17 L-50,15 L-70,11 Z",
-      fill: style.hull,
-      stroke: style.seam,
-      "stroke-width": "1.2"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M-55,-11 L6,-14 L60,-12 L72,-8 L30,-9 L-34,-8 Z",
-      fill: style.accent,
-      opacity: "0.42"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M-60,-12 L-52,-14 L-49,14 L-57,12 Z",
-      fill: style.band,
-      opacity: "0.96"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M-8,-16 L1,-17 L3,17 L-6,16 Z",
-      stroke: style.band,
-      fill: style.band,
-      opacity: "0.96"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M-7,15 L44,15 L24,28 L-15,28 Z",
-      fill: style.band,
-      opacity: "0.94"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M66,-13 L86,-15 L100,-12 L107,-5 L107,5 L100,12 L86,15 L66,13 Z",
-      fill: style.tail,
-      stroke: style.seam,
-      "stroke-width": "1"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M86,-10 L102,-34 L118,-34 L110,-10 Z",
-      fill: style.fin,
-      opacity: "0.94"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M93,-2 L150,-7 L150,-2 L112,0 L150,2 L150,7 L93,2 Z",
-      fill: style.fin,
-      opacity: "0.94"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M20,18 L55,18 L60,35 L14,35 Z",
-      fill: style.gondola
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M18,17 L57,17",
-      stroke: style.seam,
-      "stroke-width": "1"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M23,22 L50,22 L44,32 L19,32 Z",
-      fill: style.window,
-      opacity: "0.92"
-    }));
-    craft.appendChild(createSceneNode("path", {
-      d: "M12,17 L18,17 L12,31 L6,31 Z",
-      stroke: style.brace,
-      fill: style.brace
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "86",
-      y1: "-7",
-      x2: "86",
-      y2: "7",
-      stroke: style.seam,
-      "stroke-width": "0.9",
-      opacity: "0.45"
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "28",
-      y1: "18",
-      x2: "24",
-      y2: "7",
-      stroke: style.brace,
-      "stroke-width": "1.4",
-      "stroke-linecap": "round"
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "42",
-      y1: "18",
-      x2: "36",
-      y2: "6",
-      stroke: style.brace,
-      "stroke-width": "1.4",
-      "stroke-linecap": "round"
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "152",
-      y1: "-7",
-      x2: "152",
-      y2: "7",
-      stroke: style.prop,
-      "stroke-width": "1.3",
-      "stroke-linecap": "round"
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "147",
-      y1: "0",
-      x2: "157",
-      y2: "0",
-      stroke: style.prop,
-      "stroke-width": "1.3",
-      "stroke-linecap": "round"
-    }));
-    craft.appendChild(createSceneNode("circle", {
-      cx: "152",
-      cy: "0",
-      r: "4.6",
-      fill: "rgba(255,255,255,0.18)"
-    }));
-
-    group.appendChild(craft);
-    group._airshipCraft = craft;
-    return group;
+  function clearAirships() {
+    lastAirshipTickAt = 0;
+    airshipClock = Math.random() * 7000;
+    while (airships.length) {
+      var airship = airships.pop();
+      if (airship && airship.node && airship.node.parentNode) airship.node.parentNode.removeChild(airship.node);
+    }
   }
 
   function ensureAirships() {
-    if (!airshipLayer || airships.length) return;
-    for (var i = 0; i < airshipConfigs.length; i++) {
-      var config = airshipConfigs[i];
-      var node = createAirshipNode(config);
-      airshipLayer.appendChild(node);
-      airships.push({
-        node: node,
-        craft: node._airshipCraft || null,
-        flip: config.reverse ? 1 : -1,
-        scale: config.scale,
-        baseY: config.baseY,
-        speed: config.speed,
-        xOffset: config.xOffset,
-        phase: config.phase,
-        swayX: config.swayX,
-        swayY: config.swayY,
-        tilt: config.tilt,
-        reverse: !!config.reverse
-      });
+    if (!airshipDomLayer || airships.length) return;
+    for (var i = 0; i < baseAirshipCount; i++) {
+      var airship = createAirshipNode(airshipBlueprints[i]);
+      if (airship) airships.push(airship);
     }
+  }
+
+  function spawnAirship() {
+    if (!airshipDomLayer) return;
+    if (!airships.length) ensureAirships();
+    if (airships.length >= airshipBlueprints.length) return;
+    var airship = createAirshipNode(airshipBlueprints[airships.length]);
+    if (airship) airships.push(airship);
+  }
+
+  function resetAirships() {
+    clearAirships();
+    ensureAirships();
   }
 
   function updateAirships() {
     if (!airships.length) return;
-    var motionScale = reducedMotion ? 0.22 : 1;
-    var swayScale = reducedMotion ? 0.28 : 1;
-    var loopWidth = sceneViewBox.width + 320;
-    airshipPhase += reducedMotion ? 0.004 : 0.012;
+    var now = performance.now();
+    if (!lastAirshipTickAt) lastAirshipTickAt = now;
+    var dt = clamp(now - lastAirshipTickAt, 10, 40);
+    var motionScale = reducedMotion ? 0.3 : 1;
+    var floatScale = reducedMotion ? 0.18 : 1;
+    lastAirshipTickAt = now;
+    airshipClock += dt;
     for (var i = 0; i < airships.length; i++) {
       var airship = airships[i];
-      var travel = (walkPhase * airship.speed * motionScale + airship.xOffset) % loopWidth;
-      var baseX = airship.reverse ? sceneViewBox.width + 150 - travel : travel - 160;
-      var swayX = Math.sin(airshipPhase * 0.9 + airship.phase) * airship.swayX * swayScale;
-      var swayY = Math.sin(airshipPhase * 1.4 + airship.phase) * airship.swayY * swayScale;
-      var tilt = Math.sin(airshipPhase * 1.1 + airship.phase) * airship.tilt * swayScale;
-      airship.node.setAttribute("transform", "translate(" + (baseX + swayX).toFixed(1) + "," + (airship.baseY + swayY).toFixed(1) + ")");
-      if (airship.craft) {
-        airship.craft.setAttribute(
-          "transform",
-          "rotate(" + tilt.toFixed(2) + ") scale(" + (airship.scale * airship.flip).toFixed(2) + "," + airship.scale.toFixed(2) + ")"
-        );
+      airship.x -= airship.speed * dt * 0.026 * motionScale;
+      if (airship.x < sceneViewBox.minX - airship.width * 0.72) {
+        airship.x = sceneViewBox.minX + sceneViewBox.width + airship.width * (0.9 + Math.random() * 0.7);
       }
+      var driftY = Math.sin(airshipClock * 0.00014 + airship.phase) * airship.floatY * floatScale;
+      var tilt = Math.sin(airshipClock * 0.00009 + airship.phase) * airship.tilt * floatScale;
+      positionAirship(airship, airship.x, airship.baseY + driftY, tilt);
     }
   }
 
@@ -1404,6 +1373,7 @@
     }
     stopReggieQuotes();
     resetCrowdPeople();
+    resetAirships();
     var current2 = person2 && person2.getAttribute("transform");
     var match2 = current2 && current2.match(/translate\(([\d.]+)/);
     var person2StartX = match2 ? parseFloat(match2[1]) : curiosityHomeX;
@@ -1761,7 +1731,10 @@
     injectWaveFromHold(effectiveHoldMs);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
-    if (isDocked) spawnCrowdPerson();
+    if (isDocked) {
+      spawnCrowdPerson();
+      spawnAirship();
+    }
     if (source === "pedestal" && isDocked) {
       interruptReggieQuote();
     }

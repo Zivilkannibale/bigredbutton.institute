@@ -9,10 +9,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="visual-workover.css?v=20260315e">
+  <link rel="stylesheet" href="visual-workover.css?v=20260315f">
   <link rel="stylesheet" href="switch-lab.css?v=20260315k">
   <link rel="stylesheet" href="sound-lab.css?v=20260315a">
   <link rel="stylesheet" href="button-choice.css?v=20260315a">
+  <script type="module" src="vendor/model-viewer.min.js"></script>
 </head>
 <body class="visual-workover">
   <canvas id="ambientCanvas"></canvas>
@@ -73,9 +74,6 @@
             <radialGradient id="treeG" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#7aab65"></stop><stop offset="70%" stop-color="#5a8a48"></stop><stop offset="100%" stop-color="#4a7a3a"></stop></radialGradient>
             <linearGradient id="winG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8dcc0"></stop><stop offset="100%" stop-color="#c8bca0"></stop></linearGradient>
             <linearGradient id="groundSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(60,50,40,.15)"></stop><stop offset="100%" stop-color="rgba(60,50,40,0)"></stop></linearGradient>
-            <linearGradient id="airshipRoseG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f1b4aa"></stop><stop offset="55%" stop-color="#e08a8a"></stop><stop offset="100%" stop-color="#d8c3cf"></stop></linearGradient>
-            <linearGradient id="airshipSandG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d3b58b"></stop><stop offset="58%" stop-color="#cfbf8f"></stop><stop offset="100%" stop-color="#c5a88a"></stop></linearGradient>
-            <linearGradient id="airshipIvoryG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f5eee8"></stop><stop offset="60%" stop-color="#efe4dd"></stop><stop offset="100%" stop-color="#dbcfd6"></stop></linearGradient>
           </defs>
           <rect x="0" y="-80" width="960" height="500" fill="url(#skyG)"></rect>
           <ellipse cx="132" cy="-16" rx="76" ry="18" fill="rgba(255,255,255,.44)"></ellipse><ellipse cx="184" cy="-22" rx="44" ry="12" fill="rgba(255,255,255,.55)"></ellipse>
@@ -100,7 +98,6 @@
           <rect x="730" y="160" width="230" height="180" rx="2" fill="#b4a898"></rect>
           <g fill="url(#winG)" opacity=".5"><rect x="750" y="180" width="18" height="22" rx="1"></rect><rect x="782" y="180" width="18" height="22" rx="1"></rect><rect x="814" y="180" width="18" height="22" rx="1"></rect><rect x="846" y="180" width="18" height="22" rx="1"></rect><rect x="878" y="180" width="18" height="22" rx="1"></rect><rect x="910" y="180" width="18" height="22" rx="1"></rect><rect x="750" y="218" width="18" height="22" rx="1"></rect><rect x="782" y="218" width="18" height="22" rx="1"></rect><rect x="814" y="218" width="18" height="22" rx="1"></rect><rect x="846" y="218" width="18" height="22" rx="1"></rect><rect x="878" y="218" width="18" height="22" rx="1"></rect><rect x="910" y="218" width="18" height="22" rx="1"></rect><rect x="750" y="256" width="18" height="22" rx="1"></rect><rect x="782" y="256" width="18" height="22" rx="1"></rect><rect x="814" y="256" width="18" height="22" rx="1"></rect><rect x="846" y="256" width="18" height="22" rx="1"></rect></g>
           <rect x="820" y="306" width="30" height="34" rx="2" fill="#3a3228"></rect><rect x="823" y="308" width="24" height="28" rx="1" fill="#5a5242"></rect><circle cx="844" cy="322" r="1.5" fill="#b0a080"></circle>
-          <g id="airshipLayer"></g>
           <rect x="0" y="340" width="960" height="35" fill="url(#sidewalkG)"></rect><rect x="0" y="338" width="960" height="3" fill="#c0b8a5"></rect>
           <g stroke="rgba(160,150,135,.3)" stroke-width=".8"><line x1="120" y1="342" x2="120" y2="375"></line><line x1="240" y1="342" x2="240" y2="375"></line><line x1="360" y1="342" x2="360" y2="375"></line><line x1="480" y1="342" x2="480" y2="375"></line><line x1="600" y1="342" x2="600" y2="375"></line><line x1="720" y1="342" x2="720" y2="375"></line><line x1="840" y1="342" x2="840" y2="375"></line></g>
           <rect x="0" y="340" width="960" height="8" fill="url(#groundSh)"></rect>
@@ -144,6 +141,7 @@
           <g id="dollarNetworkLayer"></g>
           <g id="dollarLayer"></g>
         </svg>
+        <div class="scene-airships" id="sceneAirships" aria-hidden="true"></div>
         <div class="scene-dock-halo" id="sceneDockHalo" aria-hidden="true"></div>
         <div class="scene-status" id="sceneStatus">FIELD UNIT DEPLOYING...</div>
       </div>
@@ -1151,7 +1149,7 @@
     setInterval(updateStats,1000);
   })();
   </script>
-  <script src="index.runtime.js?v=20260315o"></script>
+  <script src="index.runtime.js?v=20260315p"></script>
   <script src="switch-lab.runtime.js?v=20260315j"></script>
   <script src="sound-lab.runtime.js?v=20260315a"></script>
   <script src="button-choice.runtime.js?v=20260315a"></script>
