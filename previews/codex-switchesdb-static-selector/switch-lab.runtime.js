@@ -28,6 +28,8 @@
     error: null,
     telemetry: defaultTelemetry()
   };
+  var telemetryEntropyParticles = [];
+  var telemetryVisualRaf = null;
 
   function defaultTelemetry() {
     return {
@@ -91,6 +93,10 @@
 
   function formatAvgInterval(value) {
     return value == null ? "\u2014" : Math.round(Number(value)).toString();
+  }
+
+  function formatEntropy(value) {
+    return value == null ? "\u2014" : Number(value).toFixed(2);
   }
 
   function titleCase(value) {
@@ -271,20 +277,32 @@
           '<p class="switch-lab-card__eyebrow" id="switchLabTelemetryTitle">Field Telemetry</p>' +
           '<p class="switch-lab-card__meta">Live BRB session</p>' +
         "</div>" +
-        '<div class="switch-lab-telemetry__summary">' +
-          '<div class="switch-lab-telemetry__count">' +
-            '<div class="switch-lab-telemetry__count-value" id="switchLabTelemetryCount">' + escapeHtml(formatCount(telemetry.verifiedPresses)) + "</div>" +
-            '<div class="switch-lab-telemetry__count-label">Verified presses</div>' +
+        '<div class="switch-lab-telemetry__body">' +
+          '<div class="switch-lab-telemetry__main">' +
+            '<div class="switch-lab-telemetry__summary">' +
+              '<div class="switch-lab-telemetry__count">' +
+                '<div class="switch-lab-telemetry__count-value" id="switchLabTelemetryCount">' + escapeHtml(formatCount(telemetry.verifiedPresses)) + "</div>" +
+                '<div class="switch-lab-telemetry__count-label">Verified presses</div>' +
+              "</div>" +
+              '<div class="switch-lab-telemetry__stats">' +
+                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryRate">' + escapeHtml(formatRate(telemetry.ratePerMinute)) + '</span><span class="switch-lab-telemetry__stat-label">Press/min</span></div>' +
+                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryAvg">' + escapeHtml(formatAvgInterval(telemetry.avgIntervalMs)) + '</span><span class="switch-lab-telemetry__stat-label">Avg ms</span></div>' +
+                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryBurst">' + escapeHtml(String(telemetry.maxBurst || 0)) + '</span><span class="switch-lab-telemetry__stat-label">Max burst</span></div>' +
+              "</div>" +
+            "</div>" +
+            '<div class="switch-lab-telemetry__wave">' +
+              '<div class="switch-lab-card__label">Temporal waveform</div>' +
+              '<canvas id="switchLabTelemetryWave" aria-label="BRB temporal waveform"></canvas>' +
+            "</div>" +
           "</div>" +
-          '<div class="switch-lab-telemetry__stats">' +
-            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryRate">' + escapeHtml(formatRate(telemetry.ratePerMinute)) + '</span><span class="switch-lab-telemetry__stat-label">Press/min</span></div>' +
-            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryAvg">' + escapeHtml(formatAvgInterval(telemetry.avgIntervalMs)) + '</span><span class="switch-lab-telemetry__stat-label">Avg ms</span></div>' +
-            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryBurst">' + escapeHtml(String(telemetry.maxBurst || 0)) + '</span><span class="switch-lab-telemetry__stat-label">Max burst</span></div>' +
+          '<div class="switch-lab-telemetry__entropy">' +
+            '<div class="switch-lab-card__label">Entropy</div>' +
+            '<div class="switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</div>" +
+            '<div class="switch-lab-telemetry__entropy-field">' +
+              '<div class="switch-lab-card__label">Entropy field</div>' +
+              '<canvas id="switchLabTelemetryEntropyField" aria-label="BRB entropy field"></canvas>' +
+            "</div>" +
           "</div>" +
-        "</div>" +
-        '<div class="switch-lab-telemetry__wave">' +
-          '<div class="switch-lab-card__label">Temporal waveform</div>' +
-          '<canvas id="switchLabTelemetryWave" aria-label="BRB temporal waveform"></canvas>' +
         "</div>" +
       "</section>"
     );
@@ -410,8 +428,12 @@
     if (!canvas) return null;
     var rect = canvas.getBoundingClientRect();
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.max(1, Math.round(rect.width * dpr));
-    canvas.height = Math.max(1, Math.round(rect.height * dpr));
+    var width = Math.max(1, Math.round(rect.width * dpr));
+    var height = Math.max(1, Math.round(rect.height * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
     canvas._vw = rect.width;
     canvas._vh = rect.height;
     var ctx = canvas.getContext("2d");
@@ -426,6 +448,37 @@
     };
   }
 
+  function traceSmoothLine(ctx, coords) {
+    if (!coords.length) return;
+    ctx.beginPath();
+    ctx.moveTo(coords[0].x, coords[0].y);
+    if (coords.length === 1) return;
+    for (var i = 1; i < coords.length - 1; i++) {
+      var midX = (coords[i].x + coords[i + 1].x) / 2;
+      var midY = (coords[i].y + coords[i + 1].y) / 2;
+      ctx.quadraticCurveTo(coords[i].x, coords[i].y, midX, midY);
+    }
+    ctx.quadraticCurveTo(
+      coords[coords.length - 2].x,
+      coords[coords.length - 2].y,
+      coords[coords.length - 1].x,
+      coords[coords.length - 1].y
+    );
+  }
+
+  function initEntropyParticles(width, height) {
+    telemetryEntropyParticles.length = 0;
+    for (var i = 0; i < 40; i++) {
+      telemetryEntropyParticles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: 0,
+        vy: 0,
+        r: Math.random() * 1.6 + 0.8
+      });
+    }
+  }
+
   function drawTelemetryWave() {
     var canvas = document.getElementById("switchLabTelemetryWave");
     if (!canvas) return;
@@ -435,23 +488,21 @@
     var width = metrics.width;
     var height = metrics.height;
     if (!width || !height) return;
-    var points = state.telemetry.waveform.slice(-72);
-    var peak = 0;
+    var points = state.telemetry.waveform.slice(-96);
     var i;
-    for (i = 0; i < points.length; i++) peak = Math.max(peak, Math.abs(points[i]));
-    while (points.length < 72) points.unshift(0);
+    while (points.length < 96) points.unshift(0);
     ctx.clearRect(0, 0, width, height);
     ctx.strokeStyle = "rgba(255,255,255,0.06)";
     ctx.lineWidth = 1;
     var gx;
     var gy;
-    for (gy = 16; gy < height; gy += 16) {
+    for (gy = 18; gy < height; gy += 18) {
       ctx.beginPath();
       ctx.moveTo(0, gy);
       ctx.lineTo(width, gy);
       ctx.stroke();
     }
-    for (gx = 20; gx < width; gx += 24) {
+    for (gx = 18; gx < width; gx += 24) {
       ctx.beginPath();
       ctx.moveTo(gx, 0);
       ctx.lineTo(gx, height);
@@ -462,19 +513,95 @@
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     ctx.stroke();
-    ctx.beginPath();
     var gradient = ctx.createLinearGradient(0, 0, width, 0);
-    gradient.addColorStop(0, "rgba(255,120,120,0.3)");
+    gradient.addColorStop(0, "rgba(255,120,120,0.18)");
+    gradient.addColorStop(0.45, "rgba(255,92,92,0.5)");
     gradient.addColorStop(1, "rgba(255,76,76,0.98)");
     ctx.strokeStyle = gradient;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.2;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    var coords = [];
     for (i = 0; i < points.length; i++) {
-      var px = (i / Math.max(1, points.length - 1)) * width;
-      var py = height / 2 - points[i] * (height * 0.38);
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+      coords.push({
+        x: (i / Math.max(1, points.length - 1)) * width,
+        y: height / 2 - points[i] * (height * 0.38)
+      });
     }
+    traceSmoothLine(ctx, coords);
     ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.strokeStyle = "rgba(255,84,84,0.16)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+  }
+
+  function drawTelemetryEntropyField() {
+    var canvas = document.getElementById("switchLabTelemetryEntropyField");
+    if (!canvas) return;
+    var ctx = setupCanvas(canvas);
+    if (!ctx) return;
+    var metrics = getCanvasMetrics(canvas);
+    var width = metrics.width;
+    var height = metrics.height;
+    if (!width || !height) return;
+    if (!telemetryEntropyParticles.length || canvas._entropyW !== width || canvas._entropyH !== height) {
+      canvas._entropyW = width;
+      canvas._entropyH = height;
+      initEntropyParticles(width, height);
+    }
+    ctx.clearRect(0, 0, width, height);
+    var entropyValue = state.telemetry.entropy == null ? 0 : Number(state.telemetry.entropy) || 0;
+    var chaos = Math.min(entropyValue / 3, 1);
+    ctx.strokeStyle = "rgba(255,255,255,0.04)";
+    ctx.lineWidth = 1;
+    for (var gy = 18; gy < height; gy += 18) {
+      ctx.beginPath();
+      ctx.moveTo(0, gy);
+      ctx.lineTo(width, gy);
+      ctx.stroke();
+    }
+    for (var gx = 18; gx < width; gx += 22) {
+      ctx.beginPath();
+      ctx.moveTo(gx, 0);
+      ctx.lineTo(gx, height);
+      ctx.stroke();
+    }
+    for (var i = 0; i < telemetryEntropyParticles.length; i++) {
+      var p = telemetryEntropyParticles[i];
+      p.vx += (Math.random() - 0.5) * chaos * 1.4;
+      p.vy += (Math.random() - 0.5) * chaos * 1.4;
+      p.vx *= 0.92;
+      p.vy *= 0.92;
+      p.vx += (width / 2 - p.x) * 0.001;
+      p.vy += (height / 2 - p.y) * 0.001;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.x = clampNumber(p.x, 0, width);
+      p.y = clampNumber(p.y, 0, height);
+      for (var j = i + 1; j < telemetryEntropyParticles.length; j++) {
+        var q = telemetryEntropyParticles[j];
+        var dx = q.x - p.x;
+        var dy = q.y - p.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var maxDist = 42 + chaos * 26;
+        if (dist < maxDist) {
+          ctx.strokeStyle = "rgba(255,92,74," + ((1 - dist / maxDist) * 0.22) + ")";
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.stroke();
+        }
+      }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r + chaos * 1.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,92,74," + (0.22 + chaos * 0.46) + ")";
+      ctx.fill();
+    }
   }
 
   function drawCurvePlaceholder(ctx, width, height, message) {
@@ -596,11 +723,14 @@
     var rateEl = document.getElementById("switchLabTelemetryRate");
     var avgEl = document.getElementById("switchLabTelemetryAvg");
     var burstEl = document.getElementById("switchLabTelemetryBurst");
+    var entropyEl = document.getElementById("switchLabTelemetryEntropy");
     if (countEl) countEl.textContent = formatCount(state.telemetry.verifiedPresses);
     if (rateEl) rateEl.textContent = formatRate(state.telemetry.ratePerMinute);
     if (avgEl) avgEl.textContent = formatAvgInterval(state.telemetry.avgIntervalMs);
     if (burstEl) burstEl.textContent = String(state.telemetry.maxBurst || 0);
+    if (entropyEl) entropyEl.textContent = formatEntropy(state.telemetry.entropy);
     drawTelemetryWave();
+    drawTelemetryEntropyField();
   }
 
   function syncCurvePanel() {
@@ -625,6 +755,17 @@
     syncTelemetryPanel();
     syncCurvePanel();
     syncPanelHeight();
+  }
+
+  function drawTelemetryVisuals() {
+    drawTelemetryWave();
+    drawTelemetryEntropyField();
+    telemetryVisualRaf = window.requestAnimationFrame(drawTelemetryVisuals);
+  }
+
+  function ensureTelemetryVisualLoop() {
+    if (telemetryVisualRaf !== null) return;
+    telemetryVisualRaf = window.requestAnimationFrame(drawTelemetryVisuals);
   }
 
   function bindEvents() {
@@ -704,6 +845,7 @@
     root.innerHTML = renderApp();
     updateMeta();
     bindEvents();
+    ensureTelemetryVisualLoop();
     window.requestAnimationFrame(syncSupplementalPanels);
   }
 
@@ -820,9 +962,11 @@
   window.addEventListener("load", function () {
     syncPanelHeight();
     syncSupplementalPanels();
+    ensureTelemetryVisualLoop();
   });
 
   state.telemetry = readTelemetrySnapshot();
+  ensureTelemetryVisualLoop();
   render();
   loadInitialState();
 })();
