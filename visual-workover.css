@@ -284,8 +284,8 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   overflow: hidden;
   background: #c8ddf0;
   box-shadow: var(--shadow);
-  aspect-ratio: 16 / 7;
-  max-height: 520px;
+  aspect-ratio: 960 / 500;
+  max-height: 560px;
 }
 .scene-wrap svg.street-svg {
   display: block;
@@ -716,7 +716,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   .hero-latour { max-width: 100%; justify-self: stretch; }
   .viz-column { grid-template-columns: 1fr; }
   .mini-viz-row { grid-template-columns: 1fr 1fr; }
-  .scene-wrap { aspect-ratio: 16 / 9; }
+  .scene-wrap { aspect-ratio: 4 / 3; }
   .pedestal-float {
     width: 100px;
     height: 230px;
