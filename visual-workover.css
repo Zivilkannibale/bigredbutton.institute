@@ -1911,38 +1911,55 @@ body.visual-workover .scene-wrap {
   background: linear-gradient(180deg, #cfdae5 0%, #c0cdde 100%);
 }
 
+body.visual-workover .scene-dock-halo {
+  --dock-halo-spread: 14px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 104px;
+  height: 104px;
+  transform: translate(-50%, -50%) scale(0.92);
+  border-radius: 50%;
+  border: 1px solid rgba(214, 29, 35, 0.24);
+  box-shadow: 0 0 0 var(--dock-halo-spread) rgba(214, 29, 35, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 220ms ease, transform 260ms ease;
+}
+
+body.visual-workover .scene-dock-halo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(214, 29, 35, 0.3);
+  opacity: 0;
+  transform: scale(0.84);
+}
+
+body.visual-workover .scene-dock-halo.active {
+  opacity: 0.34;
+  transform: translate(-50%, -50%) scale(1);
+  animation: scene-dock-halo-idle 4.8s ease-in-out infinite;
+}
+
+body.visual-workover .scene-dock-halo.pulse::after {
+  animation: scene-dock-halo-press 520ms cubic-bezier(0.16, 0.84, 0.28, 1);
+}
+
 body.visual-workover .panel {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.93), rgba(247, 243, 235, 0.95));
 }
 
 body.visual-workover .pedestal-float {
   overflow: visible;
-  filter: drop-shadow(0 18px 28px rgba(5, 6, 8, 0.24))
-          drop-shadow(0 0 30px rgba(214, 29, 35, 0.16));
+  filter: drop-shadow(0 18px 28px rgba(5, 6, 8, 0.24));
 }
 
 body.visual-workover .pedestal-float::before {
-  content: "";
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  width: 112px;
-  height: 112px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  border: 1px solid rgba(214, 29, 35, 0.22);
-  box-shadow: 0 0 0 18px rgba(214, 29, 35, 0.07);
-  opacity: 0.58;
-  pointer-events: none;
-  animation: pedestal-lure 4.8s ease-in-out infinite;
-}
-
-body.visual-workover .pedestal-float.docked::before {
-  top: -18px;
-  width: 104px;
-  height: 104px;
-  box-shadow: 0 0 0 14px rgba(214, 29, 35, 0.06);
-  opacity: 0.26;
+  content: none;
+  display: none;
 }
 
 body.visual-workover .pedestal-float__button {
@@ -2010,15 +2027,27 @@ body.visual-workover .scroll-hint {
   display: none !important;
 }
 
-@keyframes pedestal-lure {
+@keyframes scene-dock-halo-idle {
   0%, 100% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.52;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.28;
   }
 
   50% {
-    transform: translateX(-50%) scale(1.08);
-    opacity: 0.74;
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 0.42;
+  }
+}
+
+@keyframes scene-dock-halo-press {
+  0% {
+    opacity: 0.56;
+    transform: scale(0.78);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.48);
   }
 }
 
@@ -2070,7 +2099,8 @@ body.visual-workover .hero::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.visual-workover .pedestal-float::before {
+  body.visual-workover .scene-dock-halo.active,
+  body.visual-workover .scene-dock-halo.pulse::after {
     animation: none;
   }
 }
@@ -2129,13 +2159,6 @@ body.visual-workover .hero::before {
 
   body.visual-workover .md-stat {
     text-align: left;
-  }
-
-  body.visual-workover .pedestal-float::before {
-    top: 10px;
-    width: 84px;
-    height: 84px;
-    box-shadow: 0 0 0 12px rgba(214, 29, 35, 0.06);
   }
 
   body.visual-workover .pedestal-float__button::before {
@@ -2516,13 +2539,6 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
   body.visual-workover .mini-viz-card canvas,
   body.visual-workover .mini-viz-card--wave canvas {
     height: 72px;
-  }
-
-  body.visual-workover .pedestal-float::before {
-    top: 8px;
-    width: 68px;
-    height: 68px;
-    box-shadow: 0 0 0 9px rgba(214, 29, 35, 0.06);
   }
 
   body.visual-workover .pedestal-float__button::before {

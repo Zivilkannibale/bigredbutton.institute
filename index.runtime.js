@@ -58,6 +58,7 @@
   var pedestalScrollHint = document.getElementById("pedestalScrollHint");
   var sceneWrap = document.getElementById("sceneWrap");
   var sceneSvg = sceneWrap && sceneWrap.querySelector("svg.street-svg");
+  var sceneDockHalo = document.getElementById("sceneDockHalo");
   var sceneStatus = document.getElementById("sceneStatus");
   var fieldCaption = document.getElementById("fieldCaption");
   var miniDash = document.getElementById("miniDash");
@@ -767,6 +768,21 @@
     };
   }
 
+  function syncSceneDockHalo() {
+    if (!sceneDockHalo) return;
+    var absolute = getDockAbsolutePos();
+    if (!absolute) return;
+    var diameter = clamp(absolute.height * 0.82, 76, 112);
+    var spread = Math.max(10, Math.round(diameter * 0.16));
+    var centerX = absolute.left + absolute.width * 0.5;
+    var centerY = absolute.top + absolute.height * 0.2125;
+    sceneDockHalo.style.left = centerX.toFixed(1) + "px";
+    sceneDockHalo.style.top = centerY.toFixed(1) + "px";
+    sceneDockHalo.style.width = diameter.toFixed(1) + "px";
+    sceneDockHalo.style.height = diameter.toFixed(1) + "px";
+    sceneDockHalo.style.setProperty("--dock-halo-spread", spread + "px");
+  }
+
   function getHomeScreenPose() {
     var size = getPedestalFloatSize();
     return {
@@ -865,6 +881,10 @@
 
   function updateFieldDeploymentUI(isAttracting) {
     if (miniDash) miniDash.classList.toggle("visible", isDocked || currentDockProgress > 0.62);
+    if (sceneDockHalo) {
+      syncSceneDockHalo();
+      sceneDockHalo.classList.toggle("active", isDocked);
+    }
     if (landingSpot) {
       var alpha = isDocked ? 1 : (isAttracting ? clamp((currentDockProgress - 0.18) / 0.82, 0, 1) : 0);
       landingSpot.setAttribute("stroke", "rgba(223,44,44," + (alpha * 0.6) + ")");
@@ -994,6 +1014,7 @@
     pedestal.style.height = absolute.height + "px";
     pedestal.style.transform = "rotate(0deg)";
     pedestal.style.filter = "";
+    syncSceneDockHalo();
     if (miniDash) miniDash.classList.add("visible");
     if (fieldCaption) fieldCaption.textContent = "Button deployed. Press it and watch telemetry below.";
     if (fieldStatusTimer) {
@@ -1030,6 +1051,7 @@
       clearTimeout(fieldStatusTimer);
       fieldStatusTimer = null;
     }
+    if (sceneDockHalo) sceneDockHalo.classList.remove("active");
     if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
     resetPeople();
   }
@@ -1358,6 +1380,10 @@
     if (!pedestal) return;
     var center = getPedestalCenter();
     transient("pedGlow", pedestal, "pressed-glow", 420, false);
+    if (sceneDockHalo && isDocked) {
+      syncSceneDockHalo();
+      transient("sceneDockHaloPulse", sceneDockHalo, "pulse", 520, true);
+    }
     if (pedestalShockwave) {
       pedestalShockwave.style.left = center.x + "px";
       pedestalShockwave.style.top = center.y + "px";
