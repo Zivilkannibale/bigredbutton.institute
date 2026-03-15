@@ -12,6 +12,7 @@
   var sessionStart = Date.now();
   var maxBurst = 0;
   var fieldPressCount = 0;
+  var fieldPressWindow = [];
   var entropyVal = 0;
   var telemetryRatePerMinute = 0;
   var telemetryAvgIntervalMs = null;
@@ -151,6 +152,7 @@
   var airshipSource = "Images/Airships/airship.glb";
   var airshipPalettePaths = {
     classic: "Images/Airships/palette-classic.png",
+    bigred: "Images/Airships/palette-bigred.png",
     sand: "Images/Airships/palette-sand.png",
     plum: "Images/Airships/palette-plum.png",
     slate: "Images/Airships/palette-slate.png"
@@ -158,6 +160,9 @@
   var airships = [];
   var airshipClock = Math.random() * 7000;
   var lastAirshipTickAt = 0;
+  var crimsonAirshipActive = false;
+  var crimsonPressThreshold = 42;
+  var crimsonPressWindowMs = 60000;
   var airshipBlueprints = [
     {
       palette: "classic",
@@ -245,6 +250,19 @@
     }
   ];
   var baseAirshipCount = 3;
+  var crimsonAirshipBlueprint = {
+    palette: "bigred",
+    x: 1118,
+    baseY: 52,
+    width: 340,
+    height: 186,
+    speed: 1.42,
+    direction: -1,
+    phase: 9.2,
+    floatY: 0.34,
+    tilt: 0.08,
+    special: true
+  };
   var floatState = {
     baseX: 78,
     baseY: 32,
@@ -1103,6 +1121,7 @@
     var node = document.createElement("div");
     var model = document.createElement("model-viewer");
     node.className = "scene-airship";
+    if (config.special) node.classList.add("scene-airship--crimson");
     model.className = "scene-airship__model";
     model.setAttribute("alt", "");
     model.setAttribute("aria-hidden", "true");
@@ -1128,6 +1147,7 @@
       phase: config.phase,
       floatY: config.floatY,
       tilt: config.tilt,
+      special: !!config.special,
       palettePath: airshipPalettePaths[config.palette] || airshipPalettePaths.classic,
       textureToken: 0
     };
@@ -1152,6 +1172,11 @@
 
   function ensureAirships() {
     if (!airshipDomLayer || airships.length) return;
+    if (crimsonAirshipActive) {
+      var crimsonAirship = createAirshipNode(crimsonAirshipBlueprint);
+      if (crimsonAirship) airships.push(crimsonAirship);
+      return;
+    }
     for (var i = 0; i < baseAirshipCount; i++) {
       var airship = createAirshipNode(airshipBlueprints[i]);
       if (airship) airships.push(airship);
@@ -1160,13 +1185,38 @@
 
   function spawnAirship() {
     if (!airshipDomLayer) return;
+    if (crimsonAirshipActive) return;
     if (!airships.length) ensureAirships();
     if (airships.length >= airshipBlueprints.length) return;
     var airship = createAirshipNode(airshipBlueprints[airships.length]);
     if (airship) airships.push(airship);
   }
 
+  function trimFieldPressWindow(now) {
+    while (fieldPressWindow.length && now - fieldPressWindow[0] > crimsonPressWindowMs) fieldPressWindow.shift();
+  }
+
+  function activateCrimsonAirship() {
+    if (crimsonAirshipActive) return;
+    crimsonAirshipActive = true;
+    clearAirships();
+    ensureAirships();
+    if (sceneStatus) {
+      sceneStatus.textContent = "PRESS SURGE VERIFIED - RED FLAG AIRSHIP DEPLOYED";
+      sceneStatus.classList.add("show");
+      queueSceneStatusReset(2200);
+    }
+  }
+
+  function registerFieldPress(now) {
+    fieldPressWindow.push(now);
+    trimFieldPressWindow(now);
+    if (!crimsonAirshipActive && fieldPressWindow.length >= crimsonPressThreshold) activateCrimsonAirship();
+  }
+
   function resetAirships() {
+    crimsonAirshipActive = false;
+    fieldPressWindow.length = 0;
     clearAirships();
     ensureAirships();
   }
@@ -1248,7 +1298,9 @@
   function resetSceneStatus() {
     if (!sceneStatus) return;
     if (isDocked) {
-      sceneStatus.textContent = "FIELD UNIT ACTIVE - AWAITING PRESSES";
+      sceneStatus.textContent = crimsonAirshipActive
+        ? "RED FLAG AIRSHIP OVERHEAD - PRESS WINDOW SATURATED"
+        : "FIELD UNIT ACTIVE - AWAITING PRESSES";
       sceneStatus.classList.add("show");
     } else if (sceneAttractionActive && currentDockProgress > 0.08) {
       sceneStatus.textContent = "FIELD UNIT DEPLOYING... " + Math.round(currentDockProgress * 100) + "%";
@@ -1742,19 +1794,18 @@
     injectWaveFromHold(effectiveHoldMs);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
-    if (isDocked) {
-      spawnCrowdPerson();
-      spawnAirship();
-    }
+    if (isDocked) spawnCrowdPerson();
     if (source === "pedestal" && isDocked) {
       interruptReggieQuote();
+      registerFieldPress(now);
     }
     if (source === "pedestal" && isDocked && sceneStatus) {
       fieldPressCount++;
-      sceneStatus.textContent = "PRESS #" + fieldPressCount + " RECORDED - FIELD DATA LOGGED";
+      if (!crimsonAirshipActive) sceneStatus.textContent = "PRESS #" + fieldPressCount + " RECORDED - FIELD DATA LOGGED";
       sceneStatus.classList.add("show");
-      queueSceneStatusReset(900);
+      queueSceneStatusReset(crimsonAirshipActive ? 2200 : 900);
     }
+    if (isDocked && !crimsonAirshipActive) spawnAirship();
     updateStats();
   }
 
