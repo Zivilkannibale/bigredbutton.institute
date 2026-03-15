@@ -1395,6 +1395,19 @@
     burstBins[index] += 1;
   }
 
+  function queueWaveSamples(samples, stepMs, publishAtEnd) {
+    if (!samples || !samples.length) return;
+    for (var i = 0; i < samples.length; i++) {
+      (function (sample, isLast, delay) {
+        setTimeout(function () {
+          waveData.push(sample);
+          trimData();
+          if (isLast && publishAtEnd) publishTelemetrySnapshot();
+        }, delay);
+      })(samples[i], i === samples.length - 1, i * stepMs);
+    }
+  }
+
   function injectWaveFromHold(holdMs) {
     var clamped = clamp(holdMs, 40, 1600);
     var norm = (clamped - 40) / 1560;
@@ -1410,27 +1423,27 @@
     var decayBase = clamp(0.5 - waveTailFactor * 0.22 - familyRinging * 0.12 + (0.12 - clickiness * 0.06), 0.11, 0.44);
     var initialPeak = peak * (0.84 + familyRinging * 0.18);
     var recoil = -peak * (0.05 + familyRinging * 0.1 + clickiness * 0.05);
-    waveData.push(initialPeak);
-    publishTelemetrySnapshot();
-    setTimeout(function () {
-      if (Math.abs(recoil) > 0.035) waveData.push(recoil);
-      for (var i = 0; i < tailCount; i++) {
-        var step = i + 1;
-        var ring = Math.sin(step * freq) *
-          Math.exp(-step * decayBase) *
-          peak *
-          (0.18 + familyRinging * 0.48 + clickiness * 0.08);
-        var body = Math.exp(-Math.pow((step - (1.7 + waveTailFactor * 4.5)) / (1.8 + (1 - familyRinging) * 2.4), 2)) *
-          peak *
-          (0.05 + waveTailFactor * 0.18 + travelDepth * 0.08);
-        var sample = ring + body;
-        if (family === "linear") sample *= 0.88;
-        if (family === "clicky" && step < 4) sample += peak * 0.05;
-        waveData.push(sample);
-      }
-      trimData();
-      publishTelemetrySnapshot();
-    }, 30);
+    var queuedSamples = [
+      initialPeak * 0.46,
+      initialPeak * 0.78,
+      initialPeak
+    ];
+    if (Math.abs(recoil) > 0.035) queuedSamples.push(recoil);
+    for (var i = 0; i < tailCount; i++) {
+      var step = i + 1;
+      var ring = Math.sin(step * freq) *
+        Math.exp(-step * decayBase) *
+        peak *
+        (0.18 + familyRinging * 0.48 + clickiness * 0.08);
+      var body = Math.exp(-Math.pow((step - (1.7 + waveTailFactor * 4.5)) / (1.8 + (1 - familyRinging) * 2.4), 2)) *
+        peak *
+        (0.05 + waveTailFactor * 0.18 + travelDepth * 0.08);
+      var sample = ring + body;
+      if (family === "linear") sample *= 0.88;
+      if (family === "clicky" && step < 4) sample += peak * 0.05;
+      queuedSamples.push(sample);
+    }
+    queueWaveSamples(queuedSamples, 22, true);
   }
 
   function runPedestalEffects() {
