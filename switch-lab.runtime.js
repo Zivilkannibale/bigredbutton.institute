@@ -26,8 +26,7 @@
     selectedId: null,
     appliedId: null,
     error: null,
-    telemetry: defaultTelemetry(),
-    forceTelemetryPreviewUntil: 0
+    telemetry: defaultTelemetry()
   };
 
   function defaultTelemetry() {
@@ -440,9 +439,6 @@
     var peak = 0;
     var i;
     for (i = 0; i < points.length; i++) peak = Math.max(peak, Math.abs(points[i]));
-    if (Date.now() < state.forceTelemetryPreviewUntil || points.length < 18 || peak < 0.08) {
-      points = buildTelemetryPreview().slice(-72);
-    }
     while (points.length < 72) points.unshift(0);
     ctx.clearRect(0, 0, width, height);
     ctx.strokeStyle = "rgba(255,255,255,0.06)";
@@ -479,33 +475,6 @@
       else ctx.lineTo(px, py);
     }
     ctx.stroke();
-  }
-
-  function buildTelemetryPreview() {
-    var profile = currentAppliedProfile() || currentSelectedProfile();
-    var telemetry = profile && profile.telemetryProfile ? profile.telemetryProfile : {};
-    var animation = profile && profile.animationProfile ? profile.animationProfile : {};
-    var wavePeak = clampNumber(Number(telemetry.wavePeak) || 1, 0.75, 1.7);
-    var waveTail = clampNumber(Number(telemetry.waveTail) || 0.42, 0.22, 0.72);
-    var snapAt = clampNumber(Number(animation.snapAt) || 0.46, 0.16, 0.9);
-    var clickiness = clampNumber(
-      profile && profile.soundProfile ? Number(profile.soundProfile.clickiness) || 0 : 0,
-      0,
-      1
-    );
-    var points = [];
-    var sampleCount = 72;
-    var i;
-    for (i = 0; i < sampleCount; i++) {
-      var t = i / Math.max(1, sampleCount - 1);
-      var impact = Math.exp(-Math.pow((t - snapAt * 0.5) / 0.085, 2)) * (0.24 + wavePeak * 0.16);
-      var rebound = Math.sin((t + clickiness * 0.08) * (5.3 + wavePeak * 1.4)) *
-        Math.exp(-t * (3.1 - waveTail * 1.8)) *
-        (0.08 + waveTail * 0.24);
-      var release = Math.exp(-Math.pow((t - (0.42 + waveTail * 0.18)) / 0.12, 2)) * -0.09;
-      points.push(clampNumber(impact + rebound + release, -0.46, 0.94));
-    }
-    return points;
   }
 
   function drawCurvePlaceholder(ctx, width, height, message) {
@@ -563,10 +532,10 @@
     maxY = Math.ceil(maxY / 20) * 20;
 
     var chart = {
-      left: 36,
-      top: 16,
-      width: Math.max(40, width - 54),
-      height: Math.max(40, height - 42)
+      left: 48,
+      top: 22,
+      width: Math.max(40, width - 72),
+      height: Math.max(40, height - 56)
     };
 
     ctx.clearRect(0, 0, width, height);
@@ -612,11 +581,13 @@
     ctx.fillStyle = "rgba(74, 66, 56, 0.88)";
     ctx.font = "11px 'IBM Plex Mono', monospace";
     ctx.textAlign = "left";
-    ctx.fillText("0 gf", 0, chart.top + chart.height + 1);
-    ctx.fillText(String(maxY) + " gf", 0, chart.top + 5);
+    ctx.textBaseline = "middle";
+    ctx.fillText(String(maxY) + " gf", 6, chart.top + 4);
+    ctx.fillText("0 gf", 12, chart.top + chart.height - 3);
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("0 mm", chart.left, height - 7);
     ctx.textAlign = "right";
-    ctx.fillText("0 mm", chart.left + 2, height - 2);
-    ctx.fillText(maxX.toFixed(1) + " mm", chart.left + chart.width, height - 2);
+    ctx.fillText(maxX.toFixed(1) + " mm", chart.left + chart.width, height - 7);
   }
 
   function syncTelemetryPanel() {
@@ -834,7 +805,6 @@
 
   window.addEventListener("brb:switch-profile-change", function () {
     syncAppliedIdFromRuntime();
-    state.forceTelemetryPreviewUntil = Date.now() + 1200;
     render();
   });
 
