@@ -145,6 +145,16 @@
   var pedestalAspectRatio = 140 / 320;
   var pedestalMotionValue = 0;
   var lastWaveSampleAt = 0;
+  var lastPedestalLoopAt = 0;
+  var sceneAttractionActive = false;
+  var pedestalScreenPose = {
+    x: 0,
+    y: 0,
+    rot: 0,
+    width: 0,
+    height: 0,
+    initialized: false
+  };
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -744,6 +754,29 @@
     };
   }
 
+  function getHomeScreenPose() {
+    var size = getPedestalFloatSize();
+    return {
+      x: floatState.x,
+      y: floatState.y,
+      rot: floatState.rot,
+      width: size.width,
+      height: size.height
+    };
+  }
+
+  function getDockPose() {
+    var dock = getDockScreenPos();
+    if (!dock) return null;
+    return {
+      x: dock.x,
+      y: dock.y,
+      rot: 0,
+      width: dock.width,
+      height: dock.height
+    };
+  }
+
   function getScrollProgress() {
     if (!sceneWrap) return 0;
     var rect = sceneWrap.getBoundingClientRect();
@@ -752,6 +785,74 @@
       return rect.top < vh * 0.6 && rect.bottom > vh * 0.2 ? 1 : 0;
     }
     return clamp((vh * 0.9 - rect.top) / (vh * 0.9 - vh * 0.3), 0, 1);
+  }
+
+  function getSceneVisibilityRatio() {
+    if (!sceneWrap) return 0;
+    var rect = sceneWrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var visible = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+    return clamp(visible / Math.max(1, Math.min(rect.height, vh)), 0, 1);
+  }
+
+  function shouldAttractToScene() {
+    var visibility = getSceneVisibilityRatio();
+    if (reducedMotion) {
+      sceneAttractionActive = visibility > 0.2;
+      return sceneAttractionActive;
+    }
+    if (sceneAttractionActive) sceneAttractionActive = visibility > 0.08;
+    else sceneAttractionActive = visibility > 0.24;
+    return sceneAttractionActive;
+  }
+
+  function getFrameSmoothing(amount, dt) {
+    return 1 - Math.pow(1 - amount, Math.max(0.5, dt / 16.6667));
+  }
+
+  function ensurePedestalScreenPose(homePose) {
+    if (pedestalScreenPose.initialized) return;
+    pedestalScreenPose.x = homePose.x;
+    pedestalScreenPose.y = homePose.y;
+    pedestalScreenPose.rot = homePose.rot;
+    pedestalScreenPose.width = homePose.width;
+    pedestalScreenPose.height = homePose.height;
+    pedestalScreenPose.initialized = true;
+  }
+
+  function applyPedestalScreenPose() {
+    if (!pedestal || !pedestalScreenPose.initialized) return;
+    ensureFloatingHost();
+    pedestal.classList.remove("docked");
+    pedestal.classList.remove("undocking");
+    pedestal.style.position = "fixed";
+    pedestal.style.left = "0";
+    pedestal.style.top = "0";
+    pedestal.style.width = pedestalScreenPose.width + "px";
+    pedestal.style.height = pedestalScreenPose.height + "px";
+    pedestal.style.transform = "translate(" + pedestalScreenPose.x + "px, " + pedestalScreenPose.y + "px) rotate(" + pedestalScreenPose.rot + "deg)";
+    if (!pedestal.classList.contains("pressed-glow")) pedestal.style.filter = "";
+  }
+
+  function getPoseDistance(a, b) {
+    if (!a || !b) return 0;
+    var dx = (a.x || 0) - (b.x || 0);
+    var dy = (a.y || 0) - (b.y || 0);
+    var dw = (a.width || 0) - (b.width || 0);
+    var dh = (a.height || 0) - (b.height || 0);
+    var dr = (a.rot || 0) - (b.rot || 0);
+    return Math.sqrt(dx * dx + dy * dy + dw * dw * 0.5 + dh * dh * 0.5 + dr * dr * 12);
+  }
+
+  function updateFieldDeploymentUI(isAttracting) {
+    if (miniDash) miniDash.classList.toggle("visible", isDocked || currentDockProgress > 0.62);
+    if (landingSpot) {
+      var alpha = isDocked ? 1 : (isAttracting ? clamp((currentDockProgress - 0.18) / 0.82, 0, 1) : 0);
+      landingSpot.setAttribute("stroke", "rgba(223,44,44," + (alpha * 0.6) + ")");
+      landingSpot.setAttribute("fill", "rgba(223,44,44," + (alpha * 0.1) + ")");
+    }
+    if (fieldStatusTimer) return;
+    resetSceneStatus();
   }
 
   function createSceneNode(tagName, attrs) {
@@ -838,8 +939,11 @@
     if (isDocked) {
       sceneStatus.textContent = "FIELD UNIT ACTIVE - AWAITING PRESSES";
       sceneStatus.classList.add("show");
-    } else if (currentDockProgress > 0.2 && !isUndocking) {
+    } else if (sceneAttractionActive && currentDockProgress > 0.08) {
       sceneStatus.textContent = "FIELD UNIT DEPLOYING... " + Math.round(currentDockProgress * 100) + "%";
+      sceneStatus.classList.add("show");
+    } else if (!sceneAttractionActive && currentDockProgress > 0.08) {
+      sceneStatus.textContent = "FIELD UNIT RETRACTING...";
       sceneStatus.classList.add("show");
     } else {
       sceneStatus.classList.remove("show");
@@ -852,50 +956,6 @@
       fieldStatusTimer = null;
       resetSceneStatus();
     }, ms);
-  }
-
-  function applyDockProgress(progress) {
-    if (!pedestal || !sceneWrap || isDocked || isUndocking) return;
-    currentDockProgress = progress;
-    var size = getPedestalFloatSize();
-    if (progress > 0 && progress < 1 && !capturedFloatPos) {
-      capturedFloatPos = { x: floatState.x, y: floatState.y, rot: floatState.rot };
-    }
-    if (progress === 0) capturedFloatPos = null;
-    if (miniDash) miniDash.classList.toggle("visible", progress > 0.6);
-    if (progress <= 0) {
-      if (landingSpot) {
-        landingSpot.setAttribute("stroke", "rgba(223,44,44,0)");
-        landingSpot.setAttribute("fill", "rgba(223,44,44,0)");
-      }
-      if (!fieldStatusTimer) resetSceneStatus();
-      pedestal.style.filter = "";
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, size.width, size.height);
-      return;
-    }
-    ensureFloatingHost();
-    pedestal.classList.remove("docked");
-    pedestal.style.position = "fixed";
-    pedestal.style.left = "0";
-    pedestal.style.top = "0";
-    var dock = getDockScreenPos();
-    if (!dock) return;
-    var t = smoothstep(progress);
-    var src = capturedFloatPos || { x: floatState.x, y: floatState.y, rot: floatState.rot };
-    pedestal.style.width = (size.width + (dock.width - size.width) * t) + "px";
-    pedestal.style.height = (size.height + (dock.height - size.height) * t) + "px";
-    pedestal.style.transform = "translate(" + (src.x + (dock.x - src.x) * t) + "px, " + (src.y + (dock.y - src.y) * t) + "px) rotate(" + (src.rot * (1 - t)) + "deg)";
-    pedestal.style.filter = "drop-shadow(0 " + (20 * (1 - t) + 3 * t) + "px " + (40 * (1 - t) + 6 * t) + "px rgba(22,28,38,.25))";
-    if (landingSpot) {
-      var alpha = Math.max(0, (t - 0.3) / 0.7);
-      landingSpot.setAttribute("stroke", "rgba(223,44,44," + (alpha * 0.6) + ")");
-      landingSpot.setAttribute("fill", "rgba(223,44,44," + (alpha * 0.1) + ")");
-    }
-    if (!fieldStatusTimer && sceneStatus && progress > 0.2) {
-      sceneStatus.textContent = "FIELD UNIT DEPLOYING... " + Math.round(t * 100) + "%";
-      sceneStatus.classList.add("show");
-    }
-    if (progress >= 1) finalizeDock();
   }
 
   function finalizeDock() {
@@ -925,60 +985,59 @@
     animateCuriosity();
   }
 
-  function undockFromScene() {
-    if (!pedestal || !isDocked || isUndocking) return;
-    isUndocking = true;
-    isDocked = false;
-    currentDockProgress = 0;
-    if (miniDash) miniDash.classList.remove("visible");
-    if (landingSpot) {
-      landingSpot.setAttribute("stroke", "rgba(223,44,44,0)");
-      landingSpot.setAttribute("fill", "rgba(223,44,44,0)");
-    }
-    if (fieldStatusTimer) {
-      clearTimeout(fieldStatusTimer);
-      fieldStatusTimer = null;
-    }
-    if (sceneStatus) {
-      sceneStatus.textContent = "FIELD UNIT RETRACTING...";
-      sceneStatus.classList.add("show");
-    }
+  function releaseDockToFloat() {
+    if (!pedestal || !isDocked) return;
     var rect = pedestal.getBoundingClientRect();
     ensureFloatingHost();
     pedestal.classList.remove("docked");
+    pedestal.classList.remove("undocking");
     pedestal.style.position = "fixed";
     pedestal.style.left = "0";
     pedestal.style.top = "0";
     pedestal.style.transform = "translate(" + rect.left + "px, " + rect.top + "px) rotate(0deg)";
     pedestal.style.width = rect.width + "px";
     pedestal.style.height = rect.height + "px";
-    if (reducedMotion) {
-      pedestal.classList.remove("undocking");
-      pedestal.style.filter = "";
-      var reducedSize = getPedestalFloatSize();
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, reducedSize.width, reducedSize.height);
-      isUndocking = false;
-      capturedFloatPos = null;
-      if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
-      if (sceneStatus) sceneStatus.classList.remove("show");
-      resetPeople();
-      return;
+    if (!pedestal.classList.contains("pressed-glow")) pedestal.style.filter = "";
+    pedestalScreenPose.x = rect.left;
+    pedestalScreenPose.y = rect.top;
+    pedestalScreenPose.rot = 0;
+    pedestalScreenPose.width = rect.width;
+    pedestalScreenPose.height = rect.height;
+    pedestalScreenPose.initialized = true;
+    isDocked = false;
+    isUndocking = false;
+    capturedFloatPos = null;
+    if (fieldStatusTimer) {
+      clearTimeout(fieldStatusTimer);
+      fieldStatusTimer = null;
     }
-    pedestal.classList.add("undocking");
-    void pedestal.offsetWidth;
-    var size = getPedestalFloatSize();
-    pedestal.style.width = size.width + "px";
-    pedestal.style.height = size.height + "px";
-    pedestal.style.filter = "";
-    pedestal.style.transform = "translate(" + floatState.x + "px, " + floatState.y + "px) rotate(" + floatState.rot + "deg)";
-    setTimeout(function () {
-      pedestal.classList.remove("undocking");
-      isUndocking = false;
-      capturedFloatPos = null;
-      if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
-      if (sceneStatus) sceneStatus.classList.remove("show");
-      resetPeople();
-    }, 1250);
+    if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
+    resetPeople();
+  }
+
+  function updatePedestalFreeMotion(isAttracting, dt) {
+    if (!pedestal) return;
+    var home = getHomeScreenPose();
+    var dock = getDockPose();
+    ensurePedestalScreenPose(home);
+    var target = isAttracting && dock ? dock : home;
+    var moveFactor = getFrameSmoothing(isAttracting ? 0.1 : 0.08, dt);
+    var sizeFactor = getFrameSmoothing(isAttracting ? 0.12 : 0.09, dt);
+    var rotFactor = getFrameSmoothing(isAttracting ? 0.14 : 0.1, dt);
+    pedestalScreenPose.x += (target.x - pedestalScreenPose.x) * moveFactor;
+    pedestalScreenPose.y += (target.y - pedestalScreenPose.y) * moveFactor;
+    pedestalScreenPose.width += (target.width - pedestalScreenPose.width) * sizeFactor;
+    pedestalScreenPose.height += (target.height - pedestalScreenPose.height) * sizeFactor;
+    pedestalScreenPose.rot += (target.rot - pedestalScreenPose.rot) * rotFactor;
+    if (dock) {
+      var totalDistance = Math.max(1, getPoseDistance(home, dock));
+      currentDockProgress = clamp(1 - getPoseDistance(pedestalScreenPose, dock) / totalDistance, 0, 1);
+    } else {
+      currentDockProgress = 0;
+    }
+    applyPedestalScreenPose();
+    updateFieldDeploymentUI(isAttracting);
+    if (isAttracting && dock && getPoseDistance(pedestalScreenPose, dock) < 1.8) finalizeDock();
   }
 
   function animateCuriosity() {
@@ -1160,35 +1219,63 @@
     requestAnimationFrame(walkPeople);
   }
 
-  function renderPedestalLoop() {
-    var now = performance.now();
+  function renderPedestalLoop(now) {
+    if (!now) now = performance.now();
+    if (!lastPedestalLoopAt) lastPedestalLoopAt = now;
+    var dt = clamp(now - lastPedestalLoopAt, 8, 48);
+    lastPedestalLoopAt = now;
     if (!lastWaveSampleAt || now - lastWaveSampleAt >= 32) {
       waveData.push(pedestalMotionValue);
       trimData();
       lastWaveSampleAt = now;
     }
     tickFloatState();
-    currentDockProgress = getScrollProgress();
+    var isAttracting = shouldAttractToScene();
+    if (reducedMotion) {
+      currentDockProgress = isAttracting ? 1 : 0;
+      if (isAttracting) {
+        if (!isDocked) finalizeDock();
+        if (pedestal) {
+          var reducedAbsolute = getDockAbsolutePos();
+          if (reducedAbsolute) {
+            pedestal.style.left = reducedAbsolute.left + "px";
+            pedestal.style.top = reducedAbsolute.top + "px";
+            pedestal.style.width = reducedAbsolute.width + "px";
+            pedestal.style.height = reducedAbsolute.height + "px";
+          }
+        }
+      } else {
+        if (isDocked) releaseDockToFloat();
+        var homePose = getHomeScreenPose();
+        pedestalScreenPose.x = homePose.x;
+        pedestalScreenPose.y = homePose.y;
+        pedestalScreenPose.rot = homePose.rot;
+        pedestalScreenPose.width = homePose.width;
+        pedestalScreenPose.height = homePose.height;
+        pedestalScreenPose.initialized = true;
+        applyPedestalScreenPose();
+      }
+      updateFieldDeploymentUI(isAttracting);
+      requestAnimationFrame(renderPedestalLoop);
+      return;
+    }
     if (isDocked) {
-      if (currentDockProgress < 0.5) {
-        undockFromScene();
+      if (!isAttracting) {
+        releaseDockToFloat();
       } else if (pedestal) {
+        currentDockProgress = 1;
         var absolute = getDockAbsolutePos();
         if (absolute) {
-          bobPhase += reducedMotion ? 0 : 0.025;
+          bobPhase += 0.025;
           pedestal.style.left = absolute.left + "px";
-          pedestal.style.top = (absolute.top + (reducedMotion ? 0 : Math.sin(bobPhase) * 1.2)) + "px";
+          pedestal.style.top = (absolute.top + Math.sin(bobPhase) * 1.2) + "px";
           pedestal.style.width = absolute.width + "px";
           pedestal.style.height = absolute.height + "px";
         }
-      }
-    } else if (!isUndocking) {
-      applyDockProgress(currentDockProgress);
-      if (currentDockProgress <= 0 && pedestal) {
-        var size = getPedestalFloatSize();
-        placePedestalFixed(floatState.x, floatState.y, floatState.rot, size.width, size.height);
+        updateFieldDeploymentUI(true);
       }
     }
+    if (!isDocked) updatePedestalFreeMotion(isAttracting, dt);
     requestAnimationFrame(renderPedestalLoop);
   }
 
