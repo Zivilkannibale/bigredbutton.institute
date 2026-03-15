@@ -1,108 +1,82 @@
 {
-  "generatedAt": "2026-03-15T18:10:00Z",
+  "generatedAt": "2026-03-15T17:09:40.868Z",
   "items": [
     {
-      "id": "mechvibes-v1-cherrymx-blue-abs",
-      "name": "CherryMX Blue / ABS",
-      "source_bundle": "mechvibes-mit",
-      "source_name": "CherryMX Blue - ABS keycaps",
-      "source_type": "mechvibes-v1-slice-pack",
-      "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
-      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
-      "switch_families": ["clicky"],
+      "id": "bucklespring-gpl-canonical-31",
+      "name": "Bucklespring Canonical Pair",
+      "source_bundle": "bucklespring-gpl",
+      "source_name": "bucklespring fallback sample 0x31",
+      "source_type": "bucklespring-wav-pair",
+      "license_spdx": "GPL-2.0",
+      "previewPress": "data/audio/bucklespring-gpl/wav/31-1.wav",
+      "previewRelease": "data/audio/bucklespring-gpl/wav/31-0.wav",
+      "switch_families": [
+        "clicky"
+      ],
       "is_silent_compatible": false,
-      "tags": ["clicky", "bright", "sharp", "light"],
-      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
-      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
-      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "Bright click-jacket slice from the original Mechvibes sprite bundle.",
+      "tags": [
+        "buckling-spring",
+        "clicky",
+        "bright",
+        "sharp"
+      ],
+      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
+      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
+      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
+      "summary": "Curated single-button bucklespring mapping using the upstream 0x31 fallback press and release pair.",
       "adapter": {
-        "type": "mechvibes-v1-slice-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/config.json",
-        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
-        "press": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
-          "representative_keycode": "57",
-          "offset_ms": 36804,
-          "duration_ms": 240
-        },
-        "release": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
-          "representative_keycode": "57",
-          "offset_ms": 36804,
-          "duration_ms": 240
-        }
+        "type": "bucklespring-wav-pair",
+        "curated_keycodes": [
+          "31"
+        ],
+        "press_variants": [
+          "data/audio/bucklespring-gpl/wav/31-1.wav"
+        ],
+        "release_variants": [
+          "data/audio/bucklespring-gpl/wav/31-0.wav"
+        ]
       }
     },
     {
-      "id": "mechvibes-v1-cherrymx-brown-abs",
-      "name": "CherryMX Brown / ABS",
+      "id": "mechvibes-v1-cherrymx-black-abs",
+      "name": "CherryMX Black / ABS",
       "source_bundle": "mechvibes-mit",
-      "source_name": "CherryMX Brown - ABS keycaps",
+      "source_name": "CherryMX Black - ABS keycaps",
       "source_type": "mechvibes-v1-slice-pack",
       "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
-      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
-      "switch_families": ["tactile"],
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/sound.ogg",
+      "switch_families": [
+        "linear"
+      ],
       "is_silent_compatible": false,
-      "tags": ["tactile", "mid", "firm", "rounded"],
+      "tags": [
+        "linear",
+        "mid",
+        "firm",
+        "clean"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
       "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "A light tactile slice with a modest top-out and little extra ring.",
+      "summary": "Heavier linear sprite cut with a firmer attack and less low-end weight than the PBT black variant.",
       "adapter": {
         "type": "mechvibes-v1-slice-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/config.json",
-        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/sound.ogg",
         "press": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/sound.ogg",
           "representative_keycode": "57",
-          "offset_ms": 37338,
-          "duration_ms": 200
+          "offset_ms": 51541,
+          "duration_ms": 287
         },
         "release": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-black-abs/sound.ogg",
           "representative_keycode": "57",
-          "offset_ms": 37338,
-          "duration_ms": 200
-        }
-      }
-    },
-    {
-      "id": "mechvibes-v1-cherrymx-red-pbt",
-      "name": "CherryMX Red / PBT",
-      "source_bundle": "mechvibes-mit",
-      "source_name": "CherryMX Red - PBT keycaps",
-      "source_type": "mechvibes-v1-slice-pack",
-      "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
-      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
-      "switch_families": ["linear"],
-      "is_silent_compatible": false,
-      "tags": ["linear", "bright", "light", "clean"],
-      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
-      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
-      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "A lighter linear sprite cut with more brightness than depth.",
-      "adapter": {
-        "type": "mechvibes-v1-slice-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/config.json",
-        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
-        "press": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
-          "representative_keycode": "57",
-          "offset_ms": 47621,
-          "duration_ms": 300
-        },
-        "release": {
-          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
-          "representative_keycode": "57",
-          "offset_ms": 47621,
-          "duration_ms": 300
+          "offset_ms": 51541,
+          "duration_ms": 287
         }
       }
     },
@@ -115,9 +89,16 @@
       "license_spdx": "MIT",
       "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-black-pbt/sound.ogg",
       "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-black-pbt/sound.ogg",
-      "switch_families": ["linear"],
+      "switch_families": [
+        "linear"
+      ],
       "is_silent_compatible": true,
-      "tags": ["linear", "deep", "muted", "heavy"],
+      "tags": [
+        "linear",
+        "deep",
+        "muted",
+        "heavy"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
@@ -142,37 +123,296 @@
       }
     },
     {
-      "id": "mechvibes-v1-topre-purple-hybrid-pbt",
-      "name": "Topre Purple Hybrid / PBT",
+      "id": "mechvibes-v1-cherrymx-blue-abs",
+      "name": "CherryMX Blue / ABS",
       "source_bundle": "mechvibes-mit",
-      "source_name": "Topre Purple Hybrid - PBT keycaps",
+      "source_name": "CherryMX Blue - ABS keycaps",
       "source_type": "mechvibes-v1-slice-pack",
       "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
-      "previewRelease": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
-      "switch_families": ["tactile"],
-      "is_silent_compatible": true,
-      "tags": ["tactile", "deep", "rounded", "muted"],
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "clicky",
+        "bright",
+        "sharp",
+        "light"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
       "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "Rounded tactile slice with deeper body and restrained brightness.",
+      "summary": "Bright click-jacket slice from the original Mechvibes sprite bundle.",
       "adapter": {
         "type": "mechvibes-v1-slice-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/config.json",
-        "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
         "press": {
-          "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
           "representative_keycode": "57",
-          "offset_ms": 87213,
-          "duration_ms": 181
+          "offset_ms": 36804,
+          "duration_ms": 240
         },
         "release": {
-          "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-abs/sound.ogg",
           "representative_keycode": "57",
-          "offset_ms": 87213,
-          "duration_ms": 181
+          "offset_ms": 36804,
+          "duration_ms": 240
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-cherrymx-blue-pbt",
+      "name": "CherryMX Blue / PBT",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "CherryMX Blue - PBT keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/sound.ogg",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "clicky",
+        "bright",
+        "sharp",
+        "dense"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Click-jacket sprite cut with a denser body than the ABS blue variant.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 49628,
+          "duration_ms": 230
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-blue-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 49628,
+          "duration_ms": 230
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-cherrymx-brown-abs",
+      "name": "CherryMX Brown / ABS",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "CherryMX Brown - ABS keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+      "switch_families": [
+        "tactile"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "tactile",
+        "mid",
+        "firm",
+        "rounded"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "A light tactile slice with a modest top-out and little extra ring.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 37338,
+          "duration_ms": 200
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-abs/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 37338,
+          "duration_ms": 200
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-cherrymx-brown-pbt",
+      "name": "CherryMX Brown / PBT",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "CherryMX Brown - PBT keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/sound.ogg",
+      "switch_families": [
+        "tactile"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "tactile",
+        "mid",
+        "dense",
+        "rounded"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Tactile sprite cut with a denser body and calmer top-end than the ABS brown variant.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 34910,
+          "duration_ms": 223
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-brown-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 34910,
+          "duration_ms": 223
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-cherrymx-red-abs",
+      "name": "CherryMX Red / ABS",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "CherryMX Red - ABS keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/sound.ogg",
+      "switch_families": [
+        "linear"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "linear",
+        "bright",
+        "light",
+        "clean"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Lighter linear sprite cut with a cleaner, brighter attack than the PBT red variant.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 42071,
+          "duration_ms": 230
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-abs/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 42071,
+          "duration_ms": 230
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-cherrymx-red-pbt",
+      "name": "CherryMX Red / PBT",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "CherryMX Red - PBT keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
+      "switch_families": [
+        "linear"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "linear",
+        "bright",
+        "light",
+        "clean"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "A lighter linear sprite cut with more brightness than depth.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 47621,
+          "duration_ms": 300
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/cherrymx-red-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 47621,
+          "duration_ms": 300
+        }
+      }
+    },
+    {
+      "id": "mechvibes-v1-eg-crystal-purple",
+      "name": "EG Crystal Purple",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "EG Crystal Purple",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/eg-crystal-purple/purple.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/eg-crystal-purple/purple.ogg",
+      "switch_families": [
+        "tactile"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "tactile",
+        "bright",
+        "crisp",
+        "sharp"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Sharper tactile sprite cut with a brighter edge than the EG Oreo pack.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/eg-crystal-purple/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/eg-crystal-purple/purple.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/eg-crystal-purple/purple.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 22501,
+          "duration_ms": 164
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/eg-crystal-purple/purple.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 22501,
+          "duration_ms": 164
         }
       }
     },
@@ -185,9 +425,16 @@
       "license_spdx": "MIT",
       "previewPress": "data/audio/mechvibes-mit/packs/eg-oreo/oreo.ogg",
       "previewRelease": "data/audio/mechvibes-mit/packs/eg-oreo/oreo.ogg",
-      "switch_families": ["tactile"],
+      "switch_families": [
+        "tactile"
+      ],
       "is_silent_compatible": false,
-      "tags": ["tactile", "sharp", "mid", "crisp"],
+      "tags": [
+        "tactile",
+        "sharp",
+        "mid",
+        "crisp"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
@@ -212,102 +459,6 @@
       }
     },
     {
-      "id": "mechvibes-v2-mxblue-travel",
-      "name": "MX Blue / Full Travel",
-      "source_bundle": "mechvibes-mit",
-      "source_name": "MX Blue - Full Travel",
-      "source_type": "mechvibes-v2-press-release-pack",
-      "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R0.mp3",
-      "previewRelease": "data/audio/mechvibes-mit/packs/mxblue-travel/release/GENERIC.mp3",
-      "switch_families": ["clicky"],
-      "is_silent_compatible": false,
-      "tags": ["clicky", "bright", "sharp", "full-travel"],
-      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
-      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
-      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "Overt full-travel click pack with light press variation and a clear top-out.",
-      "adapter": {
-        "type": "mechvibes-v2-press-release-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/mxblue-travel/config.json",
-        "press_variants": [
-          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R0.mp3",
-          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R1.mp3",
-          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R2.mp3",
-          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R3.mp3",
-          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R4.mp3"
-        ],
-        "release_variants": [
-          "data/audio/mechvibes-mit/packs/mxblue-travel/release/GENERIC.mp3"
-        ]
-      }
-    },
-    {
-      "id": "mechvibes-v2-mxbrown-travel",
-      "name": "MX Brown / Full Travel",
-      "source_bundle": "mechvibes-mit",
-      "source_name": "MX Brown - Full Travel",
-      "source_type": "mechvibes-v2-press-release-pack",
-      "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R0.mp3",
-      "previewRelease": "data/audio/mechvibes-mit/packs/mxbrown-travel/release/GENERIC.mp3",
-      "switch_families": ["tactile"],
-      "is_silent_compatible": false,
-      "tags": ["tactile", "firm", "mid", "full-travel"],
-      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
-      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
-      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "Balanced tactile full-travel set with modest press variation and a neutral release.",
-      "adapter": {
-        "type": "mechvibes-v2-press-release-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/mxbrown-travel/config.json",
-        "press_variants": [
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R0.mp3",
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R1.mp3",
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R2.mp3",
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R3.mp3",
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R4.mp3"
-        ],
-        "release_variants": [
-          "data/audio/mechvibes-mit/packs/mxbrown-travel/release/GENERIC.mp3"
-        ]
-      }
-    },
-    {
-      "id": "mechvibes-v2-mxblack-travel",
-      "name": "MX Black / Full Travel",
-      "source_bundle": "mechvibes-mit",
-      "source_name": "MX Black - Full Travel",
-      "source_type": "mechvibes-v2-press-release-pack",
-      "license_spdx": "MIT",
-      "previewPress": "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R0.mp3",
-      "previewRelease": "data/audio/mechvibes-mit/packs/mxblack-travel/release/GENERIC.mp3",
-      "switch_families": ["linear"],
-      "is_silent_compatible": true,
-      "tags": ["linear", "deep", "muted", "full-travel"],
-      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
-      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
-      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
-      "summary": "Heavier full-travel linear set with more body than top-end brightness.",
-      "adapter": {
-        "type": "mechvibes-v2-press-release-pack",
-        "config_path": "data/audio/mechvibes-mit/packs/mxblack-travel/config.json",
-        "press_variants": [
-          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R0.mp3",
-          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R1.mp3",
-          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R2.mp3",
-          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R3.mp3",
-          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R4.mp3"
-        ],
-        "release_variants": [
-          "data/audio/mechvibes-mit/packs/mxblack-travel/release/GENERIC.mp3"
-        ]
-      }
-    },
-    {
       "id": "mechvibes-v2-cream-travel",
       "name": "Full Creamy Goodness",
       "source_bundle": "mechvibes-mit",
@@ -316,9 +467,17 @@
       "license_spdx": "MIT",
       "previewPress": "data/audio/mechvibes-mit/packs/cream-travel/press/GENERIC_R0.mp3",
       "previewRelease": "data/audio/mechvibes-mit/packs/cream-travel/release/GENERIC.mp3",
-      "switch_families": ["linear", "tactile"],
+      "switch_families": [
+        "linear",
+        "tactile"
+      ],
       "is_silent_compatible": true,
-      "tags": ["linear", "thocky", "deep", "muted"],
+      "tags": [
+        "linear",
+        "thocky",
+        "deep",
+        "muted"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
@@ -348,9 +507,16 @@
       "license_spdx": "MIT",
       "previewPress": "data/audio/mechvibes-mit/packs/holy-pandas/GENERIC_R0.mp3",
       "previewRelease": "data/audio/mechvibes-mit/packs/holy-pandas/release/GENERIC.mp3",
-      "switch_families": ["tactile"],
+      "switch_families": [
+        "tactile"
+      ],
       "is_silent_compatible": false,
-      "tags": ["tactile", "thocky", "firm", "dense"],
+      "tags": [
+        "tactile",
+        "thocky",
+        "firm",
+        "dense"
+      ],
       "notice_path": "data/audio/mechvibes-mit/LICENSES/holy-pandas-MIT.txt",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/holy-pandas-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/holy-pandas-MIT.txt",
@@ -372,6 +538,208 @@
       }
     },
     {
+      "id": "mechvibes-v2-mxblack-travel",
+      "name": "MX Black / Full Travel",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "MX Black - Full Travel",
+      "source_type": "mechvibes-v2-press-release-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R0.mp3",
+      "previewRelease": "data/audio/mechvibes-mit/packs/mxblack-travel/release/GENERIC.mp3",
+      "switch_families": [
+        "linear"
+      ],
+      "is_silent_compatible": true,
+      "tags": [
+        "linear",
+        "deep",
+        "muted",
+        "full-travel"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Heavier full-travel linear set with more body than top-end brightness.",
+      "adapter": {
+        "type": "mechvibes-v2-press-release-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/mxblack-travel/config.json",
+        "press_variants": [
+          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R0.mp3",
+          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R1.mp3",
+          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R2.mp3",
+          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R3.mp3",
+          "data/audio/mechvibes-mit/packs/mxblack-travel/press/GENERIC_R4.mp3"
+        ],
+        "release_variants": [
+          "data/audio/mechvibes-mit/packs/mxblack-travel/release/GENERIC.mp3"
+        ]
+      }
+    },
+    {
+      "id": "mechvibes-v2-mxblue-travel",
+      "name": "MX Blue / Full Travel",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "MX Blue - Full Travel",
+      "source_type": "mechvibes-v2-press-release-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R0.mp3",
+      "previewRelease": "data/audio/mechvibes-mit/packs/mxblue-travel/release/GENERIC.mp3",
+      "switch_families": [
+        "clicky"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "clicky",
+        "bright",
+        "sharp",
+        "full-travel"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Overt full-travel click pack with light press variation and a clear top-out.",
+      "adapter": {
+        "type": "mechvibes-v2-press-release-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/mxblue-travel/config.json",
+        "press_variants": [
+          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R0.mp3",
+          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R1.mp3",
+          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R2.mp3",
+          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R3.mp3",
+          "data/audio/mechvibes-mit/packs/mxblue-travel/press/GENERIC_R4.mp3"
+        ],
+        "release_variants": [
+          "data/audio/mechvibes-mit/packs/mxblue-travel/release/GENERIC.mp3"
+        ]
+      }
+    },
+    {
+      "id": "mechvibes-v2-mxbrown-travel",
+      "name": "MX Brown / Full Travel",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "MX Brown - Full Travel",
+      "source_type": "mechvibes-v2-press-release-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R0.mp3",
+      "previewRelease": "data/audio/mechvibes-mit/packs/mxbrown-travel/release/GENERIC.mp3",
+      "switch_families": [
+        "tactile"
+      ],
+      "is_silent_compatible": false,
+      "tags": [
+        "tactile",
+        "firm",
+        "mid",
+        "full-travel"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Balanced tactile full-travel set with modest press variation and a neutral release.",
+      "adapter": {
+        "type": "mechvibes-v2-press-release-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/mxbrown-travel/config.json",
+        "press_variants": [
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R0.mp3",
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R1.mp3",
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R2.mp3",
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R3.mp3",
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/press/GENERIC_R4.mp3"
+        ],
+        "release_variants": [
+          "data/audio/mechvibes-mit/packs/mxbrown-travel/release/GENERIC.mp3"
+        ]
+      }
+    },
+    {
+      "id": "mechvibes-file-nk-cream",
+      "name": "NK Cream",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "NK Cream (original by Ryan)",
+      "source_type": "mechvibes-file-map-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/nk-cream/space.wav",
+      "previewRelease": "data/audio/mechvibes-mit/packs/nk-cream/space.wav",
+      "switch_families": [
+        "linear"
+      ],
+      "is_silent_compatible": true,
+      "tags": [
+        "linear",
+        "thocky",
+        "deep",
+        "creamy"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Representative single-button mapping built from the vendored NK Cream per-key WAV pack.",
+      "adapter": {
+        "type": "mechvibes-v2-press-release-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/nk-cream/config.json",
+        "press_variants": [
+          "data/audio/mechvibes-mit/packs/nk-cream/space.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/enter.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/backspace.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/shift.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/tab.wav"
+        ],
+        "release_variants": [
+          "data/audio/mechvibes-mit/packs/nk-cream/space.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/enter.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/backspace.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/shift.wav",
+          "data/audio/mechvibes-mit/packs/nk-cream/tab.wav"
+        ]
+      }
+    },
+    {
+      "id": "mechvibes-v1-topre-purple-hybrid-pbt",
+      "name": "Topre Purple Hybrid / PBT",
+      "source_bundle": "mechvibes-mit",
+      "source_name": "Topre Purple Hybrid - PBT keycaps",
+      "source_type": "mechvibes-v1-slice-pack",
+      "license_spdx": "MIT",
+      "previewPress": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+      "previewRelease": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+      "switch_families": [
+        "tactile"
+      ],
+      "is_silent_compatible": true,
+      "tags": [
+        "tactile",
+        "deep",
+        "rounded",
+        "muted"
+      ],
+      "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
+      "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
+      "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
+      "source_manifest_path": "data/audio/mechvibes-mit/manifest.json",
+      "summary": "Rounded tactile slice with deeper body and restrained brightness.",
+      "adapter": {
+        "type": "mechvibes-v1-slice-pack",
+        "config_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/config.json",
+        "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+        "press": {
+          "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 87213,
+          "duration_ms": 181
+        },
+        "release": {
+          "asset_path": "data/audio/mechvibes-mit/packs/topre-purple-hybrid-pbt/sound.ogg",
+          "representative_keycode": "57",
+          "offset_ms": 87213,
+          "duration_ms": 181
+        }
+      }
+    },
+    {
       "id": "mechvibes-v2-turquoise",
       "name": "Turquoise / Full Travel",
       "source_bundle": "mechvibes-mit",
@@ -380,9 +748,17 @@
       "license_spdx": "MIT",
       "previewPress": "data/audio/mechvibes-mit/packs/turquoise/press/GENERIC_R0.mp3",
       "previewRelease": "data/audio/mechvibes-mit/packs/turquoise/release/GENERIC.mp3",
-      "switch_families": ["clicky", "tactile"],
+      "switch_families": [
+        "clicky",
+        "tactile"
+      ],
       "is_silent_compatible": false,
-      "tags": ["clicky", "tactile", "sharp", "thocky"],
+      "tags": [
+        "clicky",
+        "tactile",
+        "sharp",
+        "thocky"
+      ],
       "notice_path": "data/audio/mechvibes-mit/THIRD_PARTY_NOTICES.md",
       "origin_path": "data/audio/mechvibes-mit/ORIGINS/Mechvibes-README.md",
       "license_path": "data/audio/mechvibes-mit/LICENSES/Mechvibes-MIT.txt",
@@ -400,34 +776,6 @@
         ],
         "release_variants": [
           "data/audio/mechvibes-mit/packs/turquoise/release/GENERIC.mp3"
-        ]
-      }
-    },
-    {
-      "id": "bucklespring-gpl-canonical-31",
-      "name": "Bucklespring Canonical Pair",
-      "source_bundle": "bucklespring-gpl",
-      "source_name": "bucklespring fallback sample 0x31",
-      "source_type": "bucklespring-wav-pair",
-      "license_spdx": "GPL-2.0",
-      "previewPress": "data/audio/bucklespring-gpl/wav/31-1.wav",
-      "previewRelease": "data/audio/bucklespring-gpl/wav/31-0.wav",
-      "switch_families": ["clicky"],
-      "is_silent_compatible": false,
-      "tags": ["buckling-spring", "clicky", "bright", "sharp"],
-      "notice_path": "data/audio/bucklespring-gpl/THIRD_PARTY_NOTICES.md",
-      "origin_path": "data/audio/bucklespring-gpl/ORIGINS/bucklespring-README.md",
-      "license_path": "data/audio/bucklespring-gpl/LICENSES/bucklespring-GPL-2.0.txt",
-      "source_manifest_path": "data/audio/bucklespring-gpl/manifest.json",
-      "summary": "Curated single-button bucklespring mapping using the upstream 0x31 fallback press and release pair.",
-      "adapter": {
-        "type": "bucklespring-wav-pair",
-        "curated_keycodes": ["31"],
-        "press_variants": [
-          "data/audio/bucklespring-gpl/wav/31-1.wav"
-        ],
-        "release_variants": [
-          "data/audio/bucklespring-gpl/wav/31-0.wav"
         ]
       }
     }

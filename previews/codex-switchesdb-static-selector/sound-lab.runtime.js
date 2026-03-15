@@ -3,8 +3,6 @@
   var META_ID = "soundLabMeta";
   var CATALOG_URL = "data/audio/catalog.json";
   var MATCHING_URL = "data/audio/matching.json";
-  var RESULT_LIMIT = 18;
-
   var root = document.getElementById(ROOT_ID);
   var meta = document.getElementById(META_ID);
   if (!root) return;
@@ -77,6 +75,7 @@
   function formatSourceType(type) {
     if (type === "mechvibes-v1-slice-pack") return "Mechvibes v1 slice pack";
     if (type === "mechvibes-v2-press-release-pack") return "Mechvibes v2 press/release pack";
+    if (type === "mechvibes-file-map-pack") return "Mechvibes representative file pack";
     if (type === "bucklespring-wav-pair") return "bucklespring WAV pair";
     return "Local adapter";
   }
@@ -357,9 +356,9 @@
 
   function renderResults(items) {
     if (!items.length) {
-      return '<p class="sound-lab-empty">No local sounds match the current search and source filter.</p>';
+      return '<p class="sound-lab-empty">No local sounds fit the current search and source filter.</p>';
     }
-    return items.slice(0, RESULT_LIMIT).map(function (item) {
+    return items.map(function (item) {
       var match = deriveEntryMatch(item);
       var classes = ["sound-lab-item"];
       if (item.id === state.selectedId) classes.push("is-selected");
@@ -538,7 +537,6 @@
   function renderApp() {
     var filtered = getFilteredItems();
     ensureSelectedItem(filtered);
-    var visibleCount = Math.min(filtered.length, RESULT_LIMIT);
     return (
       '<div class="sound-lab-app">' +
         '<div class="sound-lab-controls">' +
@@ -550,7 +548,7 @@
             '<div class="sound-lab-label">Source</div>' +
             '<div class="sound-lab-filter-row">' + renderChips(sourceOptions(), state.source, "source") + "</div>" +
           "</div>" +
-          '<div class="sound-lab-results-meta">Showing ' + escapeHtml(formatCount(visibleCount)) + " of " + escapeHtml(formatCount(filtered.length)) + " matches</div>" +
+          '<div class="sound-lab-results-meta">Showing ' + escapeHtml(formatCount(filtered.length)) + " of " + escapeHtml(formatCount(state.catalog.length)) + " local sounds</div>" +
           '<div class="sound-lab-list">' + renderResults(filtered) + "</div>" +
         "</div>" +
         renderDetail() +
