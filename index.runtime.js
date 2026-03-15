@@ -161,7 +161,7 @@
   var airshipBlueprints = [
     {
       palette: "classic",
-      x: 792,
+      x: 676,
       baseY: 32,
       width: 182,
       height: 98,
@@ -172,7 +172,7 @@
     },
     {
       palette: "sand",
-      x: 482,
+      x: 356,
       baseY: 78,
       width: 160,
       height: 88,
@@ -183,7 +183,7 @@
     },
     {
       palette: "plum",
-      x: 1080,
+      x: 882,
       baseY: 122,
       width: 142,
       height: 78,
@@ -194,7 +194,7 @@
     },
     {
       palette: "slate",
-      x: 1004,
+      x: -62,
       baseY: 18,
       width: 132,
       height: 72,
@@ -205,7 +205,7 @@
     },
     {
       palette: "classic",
-      x: 1048,
+      x: -98,
       baseY: 54,
       width: 126,
       height: 70,
@@ -216,7 +216,7 @@
     },
     {
       palette: "sand",
-      x: 1094,
+      x: -136,
       baseY: 96,
       width: 118,
       height: 66,
@@ -227,7 +227,7 @@
     },
     {
       palette: "plum",
-      x: 1142,
+      x: -174,
       baseY: 42,
       width: 122,
       height: 68,
@@ -1105,7 +1105,7 @@
     model.setAttribute("shadow-intensity", "0");
     model.setAttribute("environment-image", "neutral");
     model.setAttribute("exposure", "1.08");
-    model.setAttribute("orientation", "0deg 180deg 0deg");
+    model.setAttribute("orientation", "180deg 180deg 0deg");
     model.setAttribute("scale", "1.16 1.16 1.16");
     model.style.opacity = "1";
     var airship = {
@@ -1173,9 +1173,9 @@
     airshipClock += dt;
     for (var i = 0; i < airships.length; i++) {
       var airship = airships[i];
-      airship.x -= airship.speed * dt * 0.026 * motionScale;
-      if (airship.x < sceneViewBox.minX - airship.width * 0.72) {
-        airship.x = sceneViewBox.minX + sceneViewBox.width + airship.width * (0.9 + Math.random() * 0.7);
+      airship.x += airship.speed * dt * 0.026 * motionScale;
+      if (airship.x > sceneViewBox.minX + sceneViewBox.width + airship.width * 0.72) {
+        airship.x = sceneViewBox.minX - airship.width * (0.9 + Math.random() * 0.7);
       }
       var driftY = Math.sin(airshipClock * 0.00014 + airship.phase) * airship.floatY * floatScale;
       var tilt = Math.sin(airshipClock * 0.00009 + airship.phase) * airship.tilt * floatScale;
