@@ -1131,7 +1131,7 @@
     model.setAttribute("interaction-prompt", "none");
     model.setAttribute("shadow-intensity", "0");
     model.setAttribute("environment-image", "neutral");
-    model.setAttribute("exposure", "1.08");
+    model.setAttribute("exposure", config.special ? "0.92" : "1.08");
     model.setAttribute("orientation", "180deg 180deg 0deg");
     model.setAttribute("scale", "1.16 1.16 1.16");
     model.style.opacity = "1";
@@ -1148,6 +1148,8 @@
       floatY: config.floatY,
       tilt: config.tilt,
       special: !!config.special,
+      departing: false,
+      exitSpeedBoost: 1,
       palettePath: airshipPalettePaths[config.palette] || airshipPalettePaths.classic,
       textureToken: 0
     };
@@ -1196,11 +1198,32 @@
     while (fieldPressWindow.length && now - fieldPressWindow[0] > crimsonPressWindowMs) fieldPressWindow.shift();
   }
 
+  function hasCrimsonAirship() {
+    for (var i = 0; i < airships.length; i++) {
+      if (airships[i] && airships[i].special) return true;
+    }
+    return false;
+  }
+
+  function sendAirshipsOffscreen() {
+    var centerX = sceneViewBox.minX + sceneViewBox.width / 2;
+    for (var i = 0; i < airships.length; i++) {
+      var airship = airships[i];
+      if (!airship || airship.special) continue;
+      airship.departing = true;
+      airship.direction = airship.x < centerX ? -1 : 1;
+      airship.exitSpeedBoost = 4.1;
+    }
+  }
+
   function activateCrimsonAirship() {
     if (crimsonAirshipActive) return;
     crimsonAirshipActive = true;
-    clearAirships();
-    ensureAirships();
+    sendAirshipsOffscreen();
+    if (!hasCrimsonAirship()) {
+      var crimsonAirship = createAirshipNode(crimsonAirshipBlueprint);
+      if (crimsonAirship) airships.push(crimsonAirship);
+    }
     if (sceneStatus) {
       sceneStatus.textContent = "PRESS SURGE VERIFIED - RED FLAG AIRSHIP DEPLOYED";
       sceneStatus.classList.add("show");
@@ -1241,10 +1264,23 @@
     airshipClock += dt;
     for (var i = 0; i < airships.length; i++) {
       var airship = airships[i];
-      airship.x += airship.speed * airship.direction * dt * 0.026 * motionScale;
+      var speed = airship.speed * (airship.departing ? airship.exitSpeedBoost : 1);
+      airship.x += speed * airship.direction * dt * 0.026 * motionScale;
       if (airship.direction > 0 && airship.x > sceneViewBox.minX + sceneViewBox.width + airship.width * 0.72) {
+        if (airship.departing) {
+          if (airship.node && airship.node.parentNode) airship.node.parentNode.removeChild(airship.node);
+          airships.splice(i, 1);
+          i--;
+          continue;
+        }
         airship.x = sceneViewBox.minX - airship.width * (0.9 + Math.random() * 0.7);
       } else if (airship.direction < 0 && airship.x < sceneViewBox.minX - airship.width * 0.72) {
+        if (airship.departing) {
+          if (airship.node && airship.node.parentNode) airship.node.parentNode.removeChild(airship.node);
+          airships.splice(i, 1);
+          i--;
+          continue;
+        }
         airship.x = sceneViewBox.minX + sceneViewBox.width + airship.width * (0.9 + Math.random() * 0.7);
       }
       var driftY = Math.sin(airshipClock * 0.00014 + airship.phase) * airship.floatY * floatScale;
