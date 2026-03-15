@@ -1208,6 +1208,15 @@
     }
   }
 
+  function blinkCrimsonAirship() {
+    if (!crimsonAirshipActive) return;
+    for (var i = 0; i < airships.length; i++) {
+      var airship = airships[i];
+      if (!airship || !airship.special || !airship.node) continue;
+      transient("crimsonAirshipBlink", airship.node, "is-blinking", 540, true);
+    }
+  }
+
   function registerFieldPress(now) {
     fieldPressWindow.push(now);
     trimFieldPressWindow(now);
@@ -1798,6 +1807,7 @@
     if (source === "pedestal" && isDocked) {
       interruptReggieQuote();
       registerFieldPress(now);
+      if (crimsonAirshipActive) blinkCrimsonAirship();
     }
     if (source === "pedestal" && isDocked && sceneStatus) {
       fieldPressCount++;
