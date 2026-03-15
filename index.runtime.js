@@ -152,16 +152,16 @@
   var airshipPhase = Math.random() * Math.PI * 2;
   var airshipConfigs = [
     {
-      hull: "url(#airshipRoseG)",
-      band: "#b85f6f",
-      accent: "#f6ddd4",
-      tail: "#985667",
-      fin: "#aa6273",
-      gondola: "#725240",
-      window: "#ffe5b0",
-      brace: "#88604e",
-      prop: "rgba(136,72,84,0.45)",
-      seam: "rgba(98,58,66,0.26)",
+      hull: "#f3f1f5",
+      band: "#c73c49",
+      accent: "#ffffff",
+      tail: "#6d2733",
+      fin: "#7f323d",
+      gondola: "#edf0f4",
+      window: "#94d1ff",
+      brace: "#a4a9b0",
+      prop: "rgba(118,124,136,0.45)",
+      seam: "rgba(92,94,103,0.18)",
       scale: 0.96,
       baseY: 44,
       speed: 0.62,
@@ -170,20 +170,19 @@
       swayX: 7,
       swayY: 4.4,
       tilt: 1.7,
-      flip: 1,
       reverse: false
     },
     {
-      hull: "url(#airshipSandG)",
-      band: "#8e6a4b",
-      accent: "#efe0b4",
-      tail: "#7b5738",
-      fin: "#916948",
-      gondola: "#624838",
-      window: "#f6df9d",
-      brace: "#84614a",
-      prop: "rgba(111,84,58,0.4)",
-      seam: "rgba(92,72,47,0.24)",
+      hull: "#f2ede6",
+      band: "#c43a47",
+      accent: "#fbfaf7",
+      tail: "#6a2a35",
+      fin: "#7b313d",
+      gondola: "#f0f1f3",
+      window: "#8ecfff",
+      brace: "#a6abb1",
+      prop: "rgba(118,124,136,0.42)",
+      seam: "rgba(96,96,104,0.18)",
       scale: 1.03,
       baseY: 98,
       speed: 0.48,
@@ -192,20 +191,19 @@
       swayX: 10,
       swayY: 5.4,
       tilt: 1.25,
-      flip: -1,
       reverse: true
     },
     {
-      hull: "url(#airshipIvoryG)",
-      band: "#b45d6f",
-      accent: "#fbf6ee",
-      tail: "#a55968",
-      fin: "#b96e80",
-      gondola: "#6e534a",
-      window: "#ffe9bd",
-      brace: "#8d6b5f",
-      prop: "rgba(136,84,94,0.38)",
-      seam: "rgba(121,86,97,0.22)",
+      hull: "#f6f3ef",
+      band: "#c83f4c",
+      accent: "#ffffff",
+      tail: "#722934",
+      fin: "#82313d",
+      gondola: "#eef1f4",
+      window: "#97d4ff",
+      brace: "#a5aab2",
+      prop: "rgba(118,124,136,0.4)",
+      seam: "rgba(96,96,104,0.18)",
       scale: 0.82,
       baseY: 132,
       speed: 0.56,
@@ -214,7 +212,6 @@
       swayX: 12,
       swayY: 6.2,
       tilt: 2.1,
-      flip: 1,
       reverse: false
     }
   ];
@@ -1053,127 +1050,121 @@
     var craft = createSceneNode("g", {});
 
     craft.appendChild(createSceneNode("path", {
-      d: "M-68,0 C-61,-16 -28,-24 20,-20 C46,-18 63,-8 72,0 C63,8 46,18 20,20 C-28,24 -61,16 -68,0 Z",
+      d: "M-84,0 L-70,-11 L-50,-15 L8,-17 L50,-16 L68,-14 L79,-9 L86,-3 L86,3 L79,9 L68,14 L50,16 L8,17 L-50,15 L-70,11 Z",
       fill: style.hull,
       stroke: style.seam,
       "stroke-width": "1.2"
     }));
     craft.appendChild(createSceneNode("path", {
-      d: "M-34,-12 C-8,-18 28,-15 50,-6 C28,-10 -7,-10 -34,-12 Z",
+      d: "M-55,-11 L6,-14 L60,-12 L72,-8 L30,-9 L-34,-8 Z",
       fill: style.accent,
-      opacity: "0.48"
+      opacity: "0.42"
     }));
     craft.appendChild(createSceneNode("path", {
-      d: "M-68,0 C-62,-13 -52,-17 -42,-16 C-49,-8 -49,8 -42,16 C-52,17 -62,13 -68,0 Z",
+      d: "M-60,-12 L-52,-14 L-49,14 L-57,12 Z",
       fill: style.band,
-      opacity: "0.34"
-    }));
-    craft.appendChild(createSceneNode("ellipse", {
-      cx: "-24",
-      cy: "0",
-      rx: "10",
-      ry: "15",
-      fill: "none",
-      stroke: style.seam,
-      "stroke-width": "1.8"
-    }));
-    craft.appendChild(createSceneNode("ellipse", {
-      cx: "6",
-      cy: "0",
-      rx: "11",
-      ry: "16",
-      fill: "none",
-      stroke: style.seam,
-      "stroke-width": "1.8"
-    }));
-    craft.appendChild(createSceneNode("ellipse", {
-      cx: "34",
-      cy: "0",
-      rx: "9",
-      ry: "15.5",
-      fill: "none",
-      stroke: style.band,
-      "stroke-width": "4.8"
+      opacity: "0.96"
     }));
     craft.appendChild(createSceneNode("path", {
-      d: "M54,-7 L69,-16 L82,-14 L76,-3 L76,3 L82,14 L69,16 L54,7 Z",
+      d: "M-8,-16 L1,-17 L3,17 L-6,16 Z",
+      stroke: style.band,
+      fill: style.band,
+      opacity: "0.96"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M-7,15 L44,15 L24,28 L-15,28 Z",
+      fill: style.band,
+      opacity: "0.94"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M66,-13 L86,-15 L100,-12 L107,-5 L107,5 L100,12 L86,15 L66,13 Z",
       fill: style.tail,
       stroke: style.seam,
       "stroke-width": "1"
     }));
     craft.appendChild(createSceneNode("path", {
-      d: "M56,-8 L67,-30 L78,-27 L72,-11 Z",
+      d: "M86,-10 L102,-34 L118,-34 L110,-10 Z",
       fill: style.fin,
       opacity: "0.94"
     }));
     craft.appendChild(createSceneNode("path", {
-      d: "M56,8 L67,30 L78,27 L72,11 Z",
+      d: "M93,-2 L150,-7 L150,-2 L112,0 L150,2 L150,7 L93,2 Z",
       fill: style.fin,
       opacity: "0.94"
     }));
-    craft.appendChild(createSceneNode("rect", {
-      x: "-12",
-      y: "14",
-      width: "26",
-      height: "9",
-      rx: "3",
+    craft.appendChild(createSceneNode("path", {
+      d: "M20,18 L55,18 L60,35 L14,35 Z",
       fill: style.gondola
     }));
-    craft.appendChild(createSceneNode("rect", {
-      x: "-1",
-      y: "16.5",
-      width: "6",
-      height: "2.6",
-      rx: "1.1",
+    craft.appendChild(createSceneNode("path", {
+      d: "M18,17 L57,17",
+      stroke: style.seam,
+      "stroke-width": "1"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M23,22 L50,22 L44,32 L19,32 Z",
       fill: style.window,
       opacity: "0.92"
     }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M12,17 L18,17 L12,31 L6,31 Z",
+      stroke: style.brace,
+      fill: style.brace
+    }));
     craft.appendChild(createSceneNode("line", {
-      x1: "-8",
-      y1: "14",
-      x2: "-14",
+      x1: "86",
+      y1: "-7",
+      x2: "86",
+      y2: "7",
+      stroke: style.seam,
+      "stroke-width": "0.9",
+      opacity: "0.45"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "28",
+      y1: "18",
+      x2: "24",
+      y2: "7",
+      stroke: style.brace,
+      "stroke-width": "1.4",
+      "stroke-linecap": "round"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "42",
+      y1: "18",
+      x2: "36",
       y2: "6",
       stroke: style.brace,
-      "stroke-width": "1.6",
+      "stroke-width": "1.4",
       "stroke-linecap": "round"
     }));
     craft.appendChild(createSceneNode("line", {
-      x1: "10",
-      y1: "14",
-      x2: "2",
-      y2: "5",
-      stroke: style.brace,
-      "stroke-width": "1.6",
-      "stroke-linecap": "round"
-    }));
-    craft.appendChild(createSceneNode("line", {
-      x1: "82",
+      x1: "152",
       y1: "-7",
-      x2: "82",
+      x2: "152",
       y2: "7",
       stroke: style.prop,
       "stroke-width": "1.3",
       "stroke-linecap": "round"
     }));
     craft.appendChild(createSceneNode("line", {
-      x1: "78",
+      x1: "147",
       y1: "0",
-      x2: "86",
+      x2: "157",
       y2: "0",
       stroke: style.prop,
       "stroke-width": "1.3",
       "stroke-linecap": "round"
     }));
     craft.appendChild(createSceneNode("circle", {
-      cx: "82",
+      cx: "152",
       cy: "0",
-      r: "4.2",
+      r: "4.6",
       fill: "rgba(255,255,255,0.18)"
     }));
 
     group.appendChild(craft);
     group._airshipCraft = craft;
-    group._airshipFlip = style.flip === -1 ? -1 : 1;
     return group;
   }
 
@@ -1186,7 +1177,7 @@
       airships.push({
         node: node,
         craft: node._airshipCraft || null,
-        flip: node._airshipFlip || 1,
+        flip: config.reverse ? 1 : -1,
         scale: config.scale,
         baseY: config.baseY,
         speed: config.speed,
