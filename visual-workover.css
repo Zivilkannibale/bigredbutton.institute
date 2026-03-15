@@ -2537,12 +2537,31 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
   }
 }
 
-@media (min-width: 1200px) and (min-height: 960px) {
+@media (min-width: 1200px) and (min-height: 800px) {
   body.visual-workover .hero {
-    min-height: calc(100svh - 1.9rem);
+    min-height: calc(100svh - 0.35rem);
+    min-height: calc(100dvh - 0.35rem);
   }
 
   body.visual-workover .field-section {
     margin-top: 0.96rem;
   }
+}
+
+body.visual-workover .publications-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.93), rgba(247, 243, 235, 0.95));
+  box-shadow: 8px 8px 0 rgba(5, 6, 8, 0.07);
+}
+
+body.visual-workover .publications-panel h2,
+body.visual-workover .publications-panel strong {
+  color: var(--ink);
+}
+
+body.visual-workover .publications-panel p {
+  color: var(--muted);
+}
+
+body.visual-workover .publications-panel h2::after {
+  background: linear-gradient(90deg, var(--red) 0 62%, var(--steel) 62% 100%);
 }
