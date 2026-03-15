@@ -13,6 +13,9 @@
   var maxBurst = 0;
   var fieldPressCount = 0;
   var entropyVal = 0;
+  var telemetryRatePerMinute = 0;
+  var telemetryAvgIntervalMs = null;
+  var telemetryEntropy = null;
   var burstWindowSec = 30;
   var vizReady = false;
   var currentDockProgress = 0;
@@ -617,6 +620,28 @@
     return best;
   }
 
+  function getTelemetrySnapshot() {
+    return {
+      verifiedPresses: count,
+      ratePerMinute: telemetryRatePerMinute,
+      avgIntervalMs: telemetryAvgIntervalMs,
+      maxBurst: maxBurst,
+      entropy: telemetryEntropy,
+      waveform: waveData.slice(-96)
+    };
+  }
+
+  function publishTelemetrySnapshot() {
+    var snapshot = getTelemetrySnapshot();
+    window.BRB = window.BRB || {};
+    window.BRB.telemetry = snapshot;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:telemetry-update", {
+        detail: snapshot
+      }));
+    }
+  }
+
   function updateStats() {
     var now = Date.now();
     var recent = 0;
@@ -636,6 +661,9 @@
     if (burst > maxBurst) maxBurst = burst;
     var rateValue = recent.toFixed(1);
     var entropyValue = entropyVal > 0 ? entropyVal.toFixed(2) : "\u2014";
+    telemetryRatePerMinute = Number(rateValue);
+    telemetryAvgIntervalMs = avg === "\u2014" ? null : Number(avg);
+    telemetryEntropy = entropyValue === "\u2014" ? null : Number(entropyValue);
     if (statRate) statRate.textContent = rateValue;
     if (statEntropy) statEntropy.textContent = entropyValue;
     if (statAvg) statAvg.textContent = avg;
@@ -644,6 +672,7 @@
     if (mdEntropy) mdEntropy.textContent = entropyValue;
     if (mdAvg) mdAvg.textContent = avg;
     if (mdBurst) mdBurst.textContent = maxBurst;
+    publishTelemetrySnapshot();
   }
 
   function updateFloatAnchor() {
@@ -1365,12 +1394,14 @@
     var freq = 1.05 + norm * 0.5;
     var decayBase = 0.34 - norm * 0.08;
     waveData.push(peak);
+    publishTelemetrySnapshot();
     setTimeout(function () {
       for (var i = 0; i < tailCount; i++) {
         var step = i + 1;
         waveData.push(Math.sin(step * freq) * Math.exp(-step * decayBase) * peak * 0.72);
       }
       trimData();
+      publishTelemetrySnapshot();
     }, 30);
   }
 
@@ -1643,7 +1674,9 @@
   window.BRB.setSwitchProfile = setActiveSwitchProfile;
   window.BRB.clearSwitchProfile = function () { return setActiveSwitchProfile(null); };
   window.BRB.getEffectivePressMs = getEffectiveHoldMs;
+  window.BRB.getTelemetrySnapshot = getTelemetrySnapshot;
   window.BRB.activeSwitchProfile = activeSwitchProfile;
+  window.BRB.telemetry = getTelemetrySnapshot();
 
   initPedestalFrames();
   syncSwitchProfileStyles();

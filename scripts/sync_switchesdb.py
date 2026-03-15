@@ -25,7 +25,7 @@ except ImportError as exc:  # pragma: no cover - exercised in runtime environmen
     ) from exc
 
 
-SCRIPT_VERSION = 1
+SCRIPT_VERSION = 2
 DEFAULT_METADATA_URL = "https://www.switchesdb.com/data/metadata.edn"
 DEFAULT_SITE_URL = "https://www.switchesdb.com/"
 DEFAULT_OUTPUT_DIR = Path("data/switchesdb")
@@ -295,6 +295,25 @@ def round_value(value: float, digits: int = 3) -> float:
     return round(float(value), digits)
 
 
+def sample_curve_points(points: list[CurvePoint], max_points: int = 40) -> list[list[float]]:
+    if not points:
+        return []
+    ordered = sorted(points, key=lambda point: (point.displacement, point.force))
+    if len(ordered) <= max_points:
+        indices = list(range(len(ordered)))
+    else:
+        indices = sorted(
+            {
+                round(i * (len(ordered) - 1) / (max_points - 1))
+                for i in range(max_points)
+            }
+        )
+    return [
+        [round_value(ordered[index].displacement, 3), round_value(ordered[index].force, 3)]
+        for index in indices
+    ]
+
+
 def derive_metrics(item: CatalogItem, points: list[CurvePoint]) -> dict[str, Any]:
     downstroke = sorted(
         [point for point in points if point.stroke == "down"],
@@ -302,6 +321,10 @@ def derive_metrics(item: CatalogItem, points: list[CurvePoint]) -> dict[str, Any
     )
     if not downstroke:
         downstroke = sorted(points, key=lambda point: (point.displacement, point.force))
+    upstroke = sorted(
+        [point for point in points if point.stroke != "down"],
+        key=lambda point: (point.displacement, point.force),
+    )
 
     total_travel_mm = max(point.displacement for point in downstroke)
     peak_point = max(downstroke, key=lambda point: point.force)
@@ -385,6 +408,12 @@ def derive_metrics(item: CatalogItem, points: list[CurvePoint]) -> dict[str, Any
         "telemetryProfile": {
             "wavePeak": wave_peak,
             "waveTail": wave_tail,
+        },
+        "curve": {
+            "down": sample_curve_points(downstroke),
+            "up": sample_curve_points(upstroke),
+            "maxForceGf": round_value(max(point.force for point in points), 3),
+            "maxTravelMm": round_value(max(point.displacement for point in points), 3),
         },
         "metrics": {
             "startForceGf": round_value(start_force_gf, 3),
