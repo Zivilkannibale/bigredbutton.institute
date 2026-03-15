@@ -2536,3 +2536,513 @@ body.visual-workover .hero-latour__page .hero-latour__slice--quote {
     width: 128%;
   }
 }
+
+/* Iteration five: dossier framing and editorial plate labels */
+body.visual-workover {
+  --plate-label-bg: #06070a;
+  --plate-label-fg: #f2eee4;
+  --plate-grid: rgba(5, 6, 8, 0.055);
+  --plate-grid-soft: rgba(5, 6, 8, 0.032);
+  --plate-rule: rgba(5, 6, 8, 0.16);
+  background:
+    radial-gradient(500px 500px at 84% 13%, rgba(156, 181, 209, 0.19) 0 42%, rgba(156, 181, 209, 0) 43%),
+    radial-gradient(240px 240px at 10% 84%, rgba(214, 29, 35, 0.08) 0 30%, rgba(214, 29, 35, 0) 31%),
+    linear-gradient(90deg, var(--plate-grid) 0 1px, transparent 1px 82px),
+    linear-gradient(180deg, var(--plate-grid-soft) 0 1px, transparent 1px 38px),
+    linear-gradient(180deg, #f7f2e7 0%, #ece5d8 100%);
+}
+
+body.visual-workover h1,
+body.visual-workover .field-header h2,
+body.visual-workover .panel h2,
+body.visual-workover .video-copy h2,
+body.visual-workover .division h3,
+body.visual-workover .method h4,
+body.visual-workover .press-column h2 {
+  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+body.visual-workover h1 {
+  max-width: 9.2ch;
+  letter-spacing: 0.01em;
+}
+
+body.visual-workover .eyebrow {
+  padding: 0.22rem 0.56rem;
+  background: #fbf7ef;
+  color: var(--ink);
+  box-shadow: 4px 4px 0 rgba(214, 29, 35, 0.22);
+}
+
+body.visual-workover .eyebrow::before {
+  content: "//";
+  margin-right: 0.42rem;
+  color: var(--red);
+}
+
+body.visual-workover .hero,
+body.visual-workover .field-section,
+body.visual-workover .panel,
+body.visual-workover .footer {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 6px 6px 0 rgba(5, 6, 8, 0.08);
+}
+
+body.visual-workover .hero[data-plate],
+body.visual-workover .field-section[data-plate],
+body.visual-workover .panel[data-plate],
+body.visual-workover .footer[data-plate] {
+  padding-top: 2.35rem;
+}
+
+body.visual-workover .hero[data-plate]::before,
+body.visual-workover .field-section[data-plate]::before,
+body.visual-workover .panel[data-plate]::before,
+body.visual-workover .footer[data-plate]::before {
+  content: attr(data-index) " / " attr(data-plate);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0.26rem 0.72rem 0.2rem;
+  border-right: 2px solid var(--red);
+  border-bottom: 2px solid var(--ink);
+  background: var(--plate-label-bg);
+  color: var(--plate-label-fg);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .hero[data-plate]::after,
+body.visual-workover .field-section[data-plate]::after,
+body.visual-workover .panel[data-plate]::after,
+body.visual-workover .footer[data-plate]::after {
+  content: "";
+  position: absolute;
+  top: 0.82rem;
+  right: 0.86rem;
+  width: 36px;
+  height: 36px;
+  z-index: 2;
+  border: 1px solid rgba(5, 6, 8, 0.2);
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(5, 6, 8, 0.3) 48% 52%, transparent 52% 100%),
+    linear-gradient(180deg, transparent 0 48%, rgba(5, 6, 8, 0.3) 48% 52%, transparent 52% 100%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+body.visual-workover .hero[data-plate],
+body.visual-workover .panel[data-plate] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0) 4.4rem),
+    linear-gradient(90deg, rgba(5, 6, 8, 0.045) 0 1px, transparent 1px 86px),
+    linear-gradient(180deg, #fbf8f0 0%, #f1ebde 100%);
+}
+
+body.visual-workover .field-section[data-plate] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0) 5rem),
+    linear-gradient(90deg, rgba(156, 181, 209, 0.16) 0 11%, rgba(255, 255, 255, 0) 11% 100%),
+    linear-gradient(180deg, #f3ede0 0%, #e7dfd2 100%);
+}
+
+body.visual-workover .footer[data-plate] {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 4rem),
+    linear-gradient(90deg, rgba(244, 240, 230, 0.08) 0 1px, transparent 1px 72px),
+    linear-gradient(180deg, #08090b 0%, #101216 100%);
+}
+
+body.visual-workover .footer[data-plate]::before {
+  background: #f2eee4;
+  color: #050608;
+  border-right-color: var(--red);
+  border-bottom-color: #f2eee4;
+}
+
+body.visual-workover .footer[data-plate]::after {
+  border-color: rgba(244, 240, 230, 0.24);
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(244, 240, 230, 0.36) 48% 52%, transparent 52% 100%),
+    linear-gradient(180deg, transparent 0 48%, rgba(244, 240, 230, 0.36) 48% 52%, transparent 52% 100%);
+}
+
+body.visual-workover .hero-top {
+  gap: 0.96rem;
+}
+
+body.visual-workover .hero-intro {
+  padding-right: 1.12rem;
+  border-right: 1px solid var(--plate-rule);
+}
+
+body.visual-workover .subhead {
+  max-width: 32ch;
+  color: var(--red);
+}
+
+body.visual-workover .hero-mission {
+  padding-top: 0.86rem;
+  border-top: 1px solid var(--plate-rule);
+}
+
+body.visual-workover .hero-mission p {
+  max-width: 58ch;
+}
+
+body.visual-workover .hero-latour {
+  background: linear-gradient(180deg, #d7e0ea 0%, #c6d2df 100%);
+  box-shadow: 6px 6px 0 rgba(5, 6, 8, 0.12);
+}
+
+body.visual-workover .hero-latour::after {
+  display: none;
+}
+
+body.visual-workover .hero-latour__page {
+  padding-top: calc(var(--comic-shell-gap) + 1.5rem);
+  background:
+    linear-gradient(180deg, rgba(156, 181, 209, 0.13), rgba(156, 181, 209, 0) 1.28rem),
+    #fbf7ef;
+}
+
+body.visual-workover .hero-latour__page::before {
+  content: "Fig. 01 / Latour / Alarm Protocol";
+  position: absolute;
+  top: 0.42rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(5, 6, 8, 0.16);
+  color: #5f5a4f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .field-header {
+  display: grid;
+  grid-template-columns: minmax(0, 0.76fr) minmax(18rem, 1fr);
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 0.88rem;
+}
+
+body.visual-workover .field-header h2 {
+  max-width: 8.8ch;
+  margin: 0;
+}
+
+body.visual-workover .field-header p {
+  margin: 0;
+  max-width: none;
+  padding-bottom: 0.16rem;
+}
+
+body.visual-workover .scene-wrap,
+body.visual-workover .mini-dashboard {
+  position: relative;
+}
+
+body.visual-workover .scene-wrap {
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(5, 6, 8, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 1.8rem),
+    linear-gradient(180deg, #cfdae5 0%, #c1cedd 100%);
+}
+
+body.visual-workover .scene-wrap[data-plate]::before,
+body.visual-workover .mini-dashboard[data-plate]::before {
+  content: attr(data-plate);
+  position: absolute;
+  top: 0.58rem;
+  left: 0.64rem;
+  z-index: 3;
+  padding: 0.14rem 0.4rem 0.12rem;
+  color: rgba(5, 6, 8, 0.62);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+body.visual-workover .scene-wrap[data-plate]::before {
+  background: rgba(248, 244, 237, 0.96);
+  border: 1px solid rgba(5, 6, 8, 0.12);
+}
+
+body.visual-workover .scene-wrap[data-plate]::after,
+body.visual-workover .mini-dashboard[data-plate]::after {
+  content: "";
+  position: absolute;
+  top: 0.52rem;
+  right: 0.58rem;
+  width: 24px;
+  height: 24px;
+  z-index: 2;
+  border: 1px solid rgba(5, 6, 8, 0.18);
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(5, 6, 8, 0.28) 48% 52%, transparent 52% 100%),
+    linear-gradient(180deg, transparent 0 48%, rgba(5, 6, 8, 0.28) 48% 52%, transparent 52% 100%);
+  pointer-events: none;
+}
+
+body.visual-workover .street-svg {
+  filter: saturate(0.78) contrast(1.06);
+}
+
+body.visual-workover .bemi-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.78rem;
+  padding: 0.48rem 0.62rem 0.46rem 0.82rem;
+  border: 2px solid var(--ink);
+  background:
+    linear-gradient(90deg, rgba(214, 29, 35, 0.16) 0 12px, rgba(255, 255, 255, 0) 12px 100%),
+    rgba(248, 244, 237, 0.78);
+  color: #4d473f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .bemi-val {
+  min-width: 5.5ch;
+  padding: 0.16rem 0.44rem;
+  border: 1px solid #050608;
+  background: #050608;
+  color: #f2eee4;
+  text-align: right;
+}
+
+body.visual-workover .field-caption {
+  margin-top: 0.5rem;
+  color: #5c584e;
+}
+
+body.visual-workover .mini-dashboard {
+  padding-top: 2rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 1.7rem),
+    linear-gradient(90deg, rgba(244, 240, 230, 0.06) 0 1px, transparent 1px 72px),
+    linear-gradient(180deg, #101115 0%, #050608 100%);
+}
+
+body.visual-workover .mini-dashboard[data-plate]::before {
+  background: rgba(5, 6, 8, 0.82);
+  border: 1px solid rgba(244, 240, 230, 0.14);
+  color: rgba(244, 240, 230, 0.72);
+}
+
+body.visual-workover .mini-dashboard[data-plate]::after {
+  border-color: rgba(244, 240, 230, 0.2);
+  background:
+    linear-gradient(90deg, transparent 0 48%, rgba(244, 240, 230, 0.28) 48% 52%, transparent 52% 100%),
+    linear-gradient(180deg, transparent 0 48%, rgba(244, 240, 230, 0.28) 48% 52%, transparent 52% 100%);
+}
+
+body.visual-workover .mini-dash-header {
+  margin-bottom: 0.68rem;
+  padding-bottom: 0.62rem;
+  border-bottom: 1px solid rgba(244, 240, 230, 0.12);
+}
+
+body.visual-workover .mini-dash-header h3 {
+  color: rgba(244, 240, 230, 0.78);
+}
+
+body.visual-workover .mini-dash-stats {
+  gap: 0.46rem;
+}
+
+body.visual-workover .md-stat {
+  min-height: 0;
+  padding: 0.54rem 0 0 0;
+  border-top: 1px solid rgba(244, 240, 230, 0.12);
+}
+
+body.visual-workover .md-stat-val {
+  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+body.visual-workover .mini-viz-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 1.2rem),
+    rgba(255, 255, 255, 0.03);
+}
+
+body.visual-workover .mini-viz-card h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+body.visual-workover .mini-viz-card h4::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background: var(--red);
+  flex: 0 0 auto;
+}
+
+body.visual-workover .stack {
+  gap: 1rem;
+}
+
+body.visual-workover .panel {
+  padding-top: 2.18rem;
+}
+
+body.visual-workover .panel h2 {
+  margin-bottom: 0.82rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(5, 6, 8, 0.14);
+}
+
+body.visual-workover .panel h2::after,
+body.visual-workover .publications-panel h2::after {
+  display: none;
+}
+
+body.visual-workover .video-copy,
+body.visual-workover .division,
+body.visual-workover .method,
+body.visual-workover .participate-panel .panel-body,
+body.visual-workover .publications-panel .panel-body {
+  background:
+    linear-gradient(180deg, rgba(156, 181, 209, 0.08), rgba(156, 181, 209, 0) 1.2rem),
+    #fffdf7;
+}
+
+body.visual-workover .video-copy,
+body.visual-workover .participate-panel .panel-body,
+body.visual-workover .publications-panel .panel-body {
+  border-top: 1px solid rgba(5, 6, 8, 0.14);
+}
+
+body.visual-workover .division:nth-child(3n + 2) {
+  background:
+    linear-gradient(180deg, rgba(214, 29, 35, 0.12), rgba(214, 29, 35, 0) 1.4rem),
+    #0d0e10;
+}
+
+body.visual-workover .division-grid {
+  gap: 0.68rem;
+}
+
+body.visual-workover .methods-wrap {
+  background:
+    linear-gradient(180deg, rgba(244, 240, 230, 0.05), rgba(244, 240, 230, 0) 1.5rem),
+    linear-gradient(180deg, #111214 0%, #17181b 100%);
+}
+
+body.visual-workover .method {
+  background:
+    linear-gradient(180deg, rgba(214, 29, 35, 0.06), rgba(214, 29, 35, 0) 1rem),
+    #fffdf7;
+}
+
+body.visual-workover .callout {
+  border-top: 2px solid var(--ink);
+  border-left: 10px solid var(--red);
+  background:
+    linear-gradient(180deg, rgba(244, 240, 230, 0.06), rgba(244, 240, 230, 0) 1.2rem),
+    #0f1013;
+}
+
+@media (max-width: 980px) {
+  body.visual-workover .hero-intro {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  body.visual-workover .hero[data-plate],
+  body.visual-workover .field-section[data-plate],
+  body.visual-workover .panel[data-plate],
+  body.visual-workover .footer[data-plate] {
+    padding-top: 2.15rem;
+  }
+
+  body.visual-workover .field-header {
+    grid-template-columns: 1fr;
+    gap: 0.46rem;
+  }
+
+  body.visual-workover .field-header h2 {
+    max-width: none;
+  }
+
+  body.visual-workover .hero-latour__page {
+    padding-top: calc(var(--comic-shell-gap) + 1.34rem);
+  }
+}
+
+@media (max-width: 700px) {
+  body.visual-workover .hero[data-plate]::before,
+  body.visual-workover .field-section[data-plate]::before,
+  body.visual-workover .panel[data-plate]::before,
+  body.visual-workover .footer[data-plate]::before {
+    min-height: 1.34rem;
+    padding: 0.2rem 0.52rem 0.16rem;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+  }
+
+  body.visual-workover .hero[data-plate]::after,
+  body.visual-workover .field-section[data-plate]::after,
+  body.visual-workover .panel[data-plate]::after,
+  body.visual-workover .footer[data-plate]::after {
+    top: 0.68rem;
+    right: 0.66rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  body.visual-workover .hero[data-plate],
+  body.visual-workover .field-section[data-plate],
+  body.visual-workover .panel[data-plate],
+  body.visual-workover .footer[data-plate] {
+    padding-top: 1.92rem;
+  }
+
+  body.visual-workover .hero-latour__page::before,
+  body.visual-workover .scene-wrap[data-plate]::before,
+  body.visual-workover .mini-dashboard[data-plate]::before {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+  }
+
+  body.visual-workover .scene-wrap[data-plate]::after,
+  body.visual-workover .mini-dashboard[data-plate]::after {
+    width: 20px;
+    height: 20px;
+  }
+
+  body.visual-workover .bemi-bar {
+    padding-left: 0.72rem;
+    font-size: 0.62rem;
+  }
+
+  body.visual-workover .mini-dashboard {
+    padding-top: 1.82rem;
+  }
+}
