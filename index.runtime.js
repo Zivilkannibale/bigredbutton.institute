@@ -1312,15 +1312,16 @@
   var buttonActive = false;
   var buttonDownAt = 0;
   var buttonReleaseTimer = null;
-  var lastButtonHandledAt = 0;
   var pedestalActive = false;
   var pedestalDownAt = 0;
   var pedestalReleaseTimer = null;
   var activePointerId = null;
   var pedestalPointerId = null;
+  var buttonTouchId = null;
   var lastTouchStart = 0;
   var pedestalLastTouchStart = 0;
   var pedestalTouchId = null;
+  var minimumPressDurationMs = 48;
 
   function finalizeButton(cancelled) {
     if (!buttonActive) return;
@@ -1330,10 +1331,7 @@
     }
     buttonActive = false;
     if (btn) btn.classList.remove("is-pressed");
-    if (!cancelled) {
-      lastButtonHandledAt = Date.now();
-      handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
-    }
+    if (!cancelled) handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
   }
 
   function beginButton() {
@@ -1356,7 +1354,7 @@
       return;
     }
     var elapsed = Date.now() - buttonDownAt;
-    if (elapsed >= 90) {
+    if (elapsed >= minimumPressDurationMs) {
       finalizeButton(false);
       return;
     }
@@ -1364,7 +1362,7 @@
     buttonReleaseTimer = setTimeout(function () {
       buttonReleaseTimer = null;
       finalizeButton(false);
-    }, 90 - elapsed);
+    }, minimumPressDurationMs - elapsed);
   }
 
   function triggerExternalPress(holdMs, source) {
@@ -1418,7 +1416,7 @@
       return;
     }
     var elapsed = Date.now() - pedestalDownAt;
-    if (elapsed >= 48) {
+    if (elapsed >= minimumPressDurationMs) {
       finalizePedestal(false);
       return;
     }
@@ -1426,7 +1424,7 @@
     pedestalReleaseTimer = setTimeout(function () {
       pedestalReleaseTimer = null;
       finalizePedestal(false);
-    }, 48 - elapsed);
+    }, minimumPressDurationMs - elapsed);
   }
 
   window.BRB = window.BRB || {};
@@ -1550,25 +1548,30 @@
         activePointerId = null;
         endButton(true);
       });
+    } else {
+      btn.addEventListener("touchstart", function (e) {
+        lastTouchStart = Date.now();
+        e.preventDefault();
+        if (!e.changedTouches || !e.changedTouches.length) return;
+        buttonTouchId = e.changedTouches[0].identifier;
+        beginButton();
+      }, { passive: false });
+      btn.addEventListener("touchend", function (e) {
+        if (buttonTouchId === null) return;
+        e.preventDefault();
+        endButton(false);
+        buttonTouchId = null;
+      }, { passive: false });
+      btn.addEventListener("touchcancel", function () {
+        endButton(true);
+        buttonTouchId = null;
+      });
+      btn.addEventListener("click", function () {
+        if (Date.now() - lastTouchStart < 700) return;
+        beginButton();
+        endButton(false);
+      });
     }
-    btn.addEventListener("touchstart", function (e) {
-      lastTouchStart = Date.now();
-      e.preventDefault();
-      beginButton();
-    }, { passive: false });
-    btn.addEventListener("touchend", function (e) {
-      e.preventDefault();
-      endButton(false);
-    }, { passive: false });
-    btn.addEventListener("touchcancel", function () {
-      endButton(true);
-    });
-    btn.addEventListener("click", function () {
-      if (Date.now() - lastTouchStart < 700) return;
-      if (Date.now() - lastButtonHandledAt < 250) return;
-      if (!buttonActive) beginButton();
-      endButton(false);
-    });
     btn.addEventListener("keydown", function (e) {
       if (!e.repeat && (e.key === "Enter" || e.key === " ")) {
         e.preventDefault();
@@ -1580,6 +1583,9 @@
         e.preventDefault();
         endButton(false);
       }
+    });
+    btn.addEventListener("blur", function () {
+      endButton(true);
     });
   }
 
