@@ -1401,6 +1401,7 @@
 
   function handlePress(holdMs, source) {
     var now = Date.now();
+    var effectiveHoldMs = getEffectiveHoldMs(holdMs);
     count++;
     pressTimestamps.push(now);
     if (pressTimestamps.length > 1) intervals.push(now - pressTimestamps[pressTimestamps.length - 2]);
@@ -1423,7 +1424,7 @@
     var origin = source === "pedestal" ? getPedestalCenter() : getButtonCenter();
     spawnParticles(origin.x, origin.y, source === "pedestal" ? 10 : 14);
     addBurstSample(now);
-    injectWaveFromHold(holdMs);
+    injectWaveFromHold(effectiveHoldMs);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
     if (isDocked) spawnCrowdPerson();
@@ -1452,6 +1453,81 @@
   var pedestalLastTouchStart = 0;
   var pedestalTouchId = null;
   var minimumPressDurationMs = 48;
+  var activeSwitchProfile = null;
+
+  function getSwitchProfileNumber(sectionName, key, fallback) {
+    var section = activeSwitchProfile && activeSwitchProfile[sectionName];
+    var value = section ? Number(section[key]) : NaN;
+    return isFinite(value) ? value : fallback;
+  }
+
+  function getEffectiveHoldMs(holdMs) {
+    var ms = clamp(Number(holdMs) || 120, 40, 1600);
+    if (!activeSwitchProfile) return ms;
+    var profileMs = getSwitchProfileNumber("animationProfile", "pressDurationMs", ms);
+    return clamp(profileMs + (ms - 120) * 0.55, 40, 1600);
+  }
+
+  function getPedestalPressDuration(defaultMs) {
+    return clamp(Math.round(getSwitchProfileNumber("animationProfile", "pressDurationMs", defaultMs)), 48, 240);
+  }
+
+  function getPedestalReturnDuration(defaultMs) {
+    return clamp(Math.round(getSwitchProfileNumber("animationProfile", "returnDurationMs", defaultMs)), 48, 260);
+  }
+
+  function syncSwitchProfileStyles() {
+    var root = document.documentElement;
+    var body = document.body;
+    var props = [
+      "--brb-switch-press-ms",
+      "--brb-switch-return-ms",
+      "--brb-switch-hover-shift",
+      "--brb-switch-press-shift",
+      "--brb-switch-press-scale",
+      "--brb-switch-pedestal-saturate",
+      "--brb-switch-pedestal-brightness"
+    ];
+    var i;
+    if (!root) return;
+    if (!activeSwitchProfile) {
+      for (i = 0; i < props.length; i++) root.style.removeProperty(props[i]);
+      if (body) {
+        body.classList.remove("switch-profile-active");
+        body.removeAttribute("data-switch-family");
+      }
+      return;
+    }
+    var animation = activeSwitchProfile.animationProfile || {};
+    var sound = activeSwitchProfile.soundProfile || {};
+    var travelDepth = clamp(Number(animation.travelDepth) || 0.72, 0.55, 0.94);
+    var clickiness = clamp(Number(sound.clickiness) || 0.12, 0, 1);
+    var pressDuration = getPedestalPressDuration(120);
+    var returnDuration = getPedestalReturnDuration(92);
+    root.style.setProperty("--brb-switch-press-ms", pressDuration + "ms");
+    root.style.setProperty("--brb-switch-return-ms", returnDuration + "ms");
+    root.style.setProperty("--brb-switch-hover-shift", (1.2 + clickiness * 1.6).toFixed(2) + "px");
+    root.style.setProperty("--brb-switch-press-shift", (1.6 + travelDepth * 2.6).toFixed(2) + "px");
+    root.style.setProperty("--brb-switch-press-scale", clamp(0.992 - travelDepth * 0.04 - clickiness * 0.015, 0.935, 0.986).toFixed(3));
+    root.style.setProperty("--brb-switch-pedestal-saturate", (1.01 + clickiness * 0.22).toFixed(3));
+    root.style.setProperty("--brb-switch-pedestal-brightness", (0.985 - clickiness * 0.03).toFixed(3));
+    if (body) {
+      body.classList.add("switch-profile-active");
+      body.setAttribute("data-switch-family", activeSwitchProfile.family || "linear");
+    }
+  }
+
+  function setActiveSwitchProfile(profile) {
+    activeSwitchProfile = profile && typeof profile === "object" ? profile : null;
+    syncSwitchProfileStyles();
+    if (window.BRB) window.BRB.activeSwitchProfile = activeSwitchProfile;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:switch-profile-change", {
+        detail: { profile: activeSwitchProfile }
+      }));
+    }
+    return activeSwitchProfile;
+  }
 
   function finalizeButton(cancelled) {
     if (!buttonActive) return;
@@ -1516,9 +1592,13 @@
     }
     pedestalActive = false;
     if (pedestalControl) pedestalControl.classList.remove("is-pressed");
-    animatePedestalFrames(pedestalFrames.length ? pedestalFrames.length - 1 : 0, cancelled ? 96 : 124, function () {
-      setPedestalFrame(0);
-    });
+    animatePedestalFrames(
+      pedestalFrames.length ? pedestalFrames.length - 1 : 0,
+      cancelled ? getPedestalReturnDuration(96) : getPedestalReturnDuration(124),
+      function () {
+        setPedestalFrame(0);
+      }
+    );
     if (!cancelled) {
       runPedestalEffects();
       triggerExternalPress(clamp(Date.now() - pedestalDownAt, 40, 1600), "pedestal");
@@ -1536,7 +1616,7 @@
     pedestalActive = true;
     pedestalDownAt = Date.now();
     pedestalControl.classList.add("is-pressed");
-    animatePedestalFrames(pedestalPressPeakFrame, 92);
+    animatePedestalFrames(pedestalPressPeakFrame, getPedestalPressDuration(92));
   }
 
   function endPedestal(cancelled) {
@@ -1559,8 +1639,14 @@
 
   window.BRB = window.BRB || {};
   window.BRB.triggerPress = triggerExternalPress;
+  window.BRB.getSwitchProfile = function () { return activeSwitchProfile; };
+  window.BRB.setSwitchProfile = setActiveSwitchProfile;
+  window.BRB.clearSwitchProfile = function () { return setActiveSwitchProfile(null); };
+  window.BRB.getEffectivePressMs = getEffectiveHoldMs;
+  window.BRB.activeSwitchProfile = activeSwitchProfile;
 
   initPedestalFrames();
+  syncSwitchProfileStyles();
   collectRedWords();
   updateReggieBubbleLayout();
   initAmbient();

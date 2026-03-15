@@ -3,6 +3,8 @@
 .codex-artifacts/
 /button-mechanics-lab/
 /test-results/
+__pycache__/
+*.pyc
 *.aux
 *.bbl
 *.blg

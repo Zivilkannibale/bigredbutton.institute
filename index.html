@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="visual-workover.css?v=20260315e">
+  <link rel="stylesheet" href="switch-lab.css?v=20260315a">
 </head>
 <body class="visual-workover">
   <canvas id="ambientCanvas"></canvas>
@@ -168,6 +169,20 @@
     </section>
 
     <main class="stack">
+      <section class="panel reveal switch-lab-panel" id="switchLabPanel" aria-labelledby="switchLabTitle">
+        <div class="switch-lab-panel__head">
+          <div class="switch-lab-panel__copy">
+            <p class="mono switch-lab-panel__kicker">Switch Lab</p>
+            <h2 id="switchLabTitle">Measured Switch Profiles for the BRB Button</h2>
+            <p>Select a switch profile derived from SwitchesDB and apply it to the BRB press feel without leaving this site.</p>
+          </div>
+          <div class="switch-lab-panel__meta" id="switchLabMeta">Loading switch catalog...</div>
+        </div>
+        <div class="switch-lab-root" id="switchLabRoot" data-state="loading">
+          <p class="switch-lab-loading">Loading switch profiles from the local BRB sync cache.</p>
+        </div>
+      </section>
+
       <section class="panel reveal study-demo-panel" aria-labelledby="studyDemoTitle">
         <span class="eyebrow">Study Demo</span>
         <div class="video-feature">
@@ -1121,6 +1136,7 @@
   })();
   </script>
   <script src="index.runtime.js?v=20260315j"></script>
+  <script src="switch-lab.runtime.js?v=20260315a"></script>
 </body>
 </html>
 
