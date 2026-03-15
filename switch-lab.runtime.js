@@ -29,6 +29,7 @@
     telemetry: defaultTelemetry()
   };
   var telemetryEntropyParticles = [];
+  var telemetryEntropyChaos = 0;
   var telemetryVisualRaf = null;
 
   function defaultTelemetry() {
@@ -548,7 +549,9 @@
     }
     ctx.clearRect(0, 0, width, height);
     var entropyValue = state.telemetry.entropy == null ? 0 : Number(state.telemetry.entropy) || 0;
-    var chaos = Math.min(entropyValue / 3, 1);
+    var targetChaos = Math.min(entropyValue / 3, 1);
+    telemetryEntropyChaos += (targetChaos - telemetryEntropyChaos) * 0.06;
+    var chaos = telemetryEntropyChaos;
     var inset = 6;
     ctx.save();
     ctx.beginPath();
@@ -556,12 +559,12 @@
     ctx.clip();
     for (var i = 0; i < telemetryEntropyParticles.length; i++) {
       var p = telemetryEntropyParticles[i];
-      p.vx += (Math.random() - 0.5) * chaos * 1.4;
-      p.vy += (Math.random() - 0.5) * chaos * 1.4;
-      p.vx *= 0.92;
-      p.vy *= 0.92;
-      p.vx += (width / 2 - p.x) * 0.001;
-      p.vy += (height / 2 - p.y) * 0.001;
+      p.vx += (Math.random() - 0.5) * chaos * 0.72;
+      p.vy += (Math.random() - 0.5) * chaos * 0.72;
+      p.vx *= 0.94;
+      p.vy *= 0.94;
+      p.vx += (width / 2 - p.x) * 0.00075;
+      p.vy += (height / 2 - p.y) * 0.00075;
       p.x += p.vx;
       p.y += p.vy;
       p.x = clampNumber(p.x, inset + p.r, width - inset - p.r);
@@ -571,9 +574,9 @@
         var dx = q.x - p.x;
         var dy = q.y - p.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var maxDist = 42 + chaos * 26;
+        var maxDist = 38 + chaos * 18;
         if (dist < maxDist) {
-          ctx.strokeStyle = "rgba(255,92,74," + ((1 - dist / maxDist) * 0.22) + ")";
+          ctx.strokeStyle = "rgba(255,92,74," + ((1 - dist / maxDist) * 0.18) + ")";
           ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
@@ -583,7 +586,7 @@
       }
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r + chaos * 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,92,74," + (0.22 + chaos * 0.46) + ")";
+      ctx.fillStyle = "rgba(255,92,74," + (0.18 + chaos * 0.34) + ")";
       ctx.fill();
     }
     ctx.restore();

@@ -157,6 +157,7 @@
   var pedestalPressPeakFrame = 0;
   var pedestalAspectRatio = 140 / 320;
   var pedestalMotionValue = 0;
+  var waveInjectionQueue = [];
   var lastWaveSampleAt = 0;
   var lastPedestalLoopAt = 0;
   var sceneAttractionActive = false;
@@ -1302,7 +1303,7 @@
     var dt = clamp(now - lastPedestalLoopAt, 8, 48);
     lastPedestalLoopAt = now;
     if (!lastWaveSampleAt || now - lastWaveSampleAt >= 32) {
-      waveData.push(pedestalMotionValue);
+      waveData.push(consumeWaveSample());
       trimData();
       lastWaveSampleAt = now;
     }
@@ -1395,17 +1396,22 @@
     burstBins[index] += 1;
   }
 
-  function queueWaveSamples(samples, stepMs, publishAtEnd) {
+  function queueWaveSamples(samples) {
     if (!samples || !samples.length) return;
-    for (var i = 0; i < samples.length; i++) {
-      (function (sample, isLast, delay) {
-        setTimeout(function () {
-          waveData.push(sample);
-          trimData();
-          if (isLast && publishAtEnd) publishTelemetrySnapshot();
-        }, delay);
-      })(samples[i], i === samples.length - 1, i * stepMs);
+    var limit = 42;
+    var usable = Math.min(samples.length, limit);
+    while (waveInjectionQueue.length < usable) waveInjectionQueue.push(0);
+    for (var i = 0; i < usable; i++) {
+      var mixed = (Number(waveInjectionQueue[i]) || 0) + (Number(samples[i]) || 0);
+      waveInjectionQueue[i] = clamp(mixed, -2.5, 2.5);
     }
+    if (waveInjectionQueue.length > limit) waveInjectionQueue.length = limit;
+  }
+
+  function consumeWaveSample() {
+    var injected = 0;
+    if (waveInjectionQueue.length) injected = Number(waveInjectionQueue.shift()) || 0;
+    return clamp(pedestalMotionValue + injected, -2.5, 2.5);
   }
 
   function injectWaveFromHold(holdMs) {
@@ -1443,7 +1449,7 @@
       if (family === "clicky" && step < 4) sample += peak * 0.05;
       queuedSamples.push(sample);
     }
-    queueWaveSamples(queuedSamples, 22, true);
+    queueWaveSamples(queuedSamples);
   }
 
   function runPedestalEffects() {
