@@ -1922,11 +1922,12 @@ body.visual-workover .scene-dock-halo {
   background:
     radial-gradient(
       circle at center,
-      rgba(214, 29, 35, 0) 39%,
-      rgba(214, 29, 35, 0.56) 52%,
-      rgba(214, 29, 35, 0.3) 61%,
-      rgba(214, 29, 35, 0.14) 73%,
-      rgba(214, 29, 35, 0.05) 83%,
+      rgba(214, 29, 35, 0) 0 49%,
+      rgba(214, 29, 35, 0.82) 49.8%,
+      rgba(214, 29, 35, 0.64) 56%,
+      rgba(214, 29, 35, 0.34) 67%,
+      rgba(214, 29, 35, 0.15) 77%,
+      rgba(214, 29, 35, 0.05) 86%,
       rgba(214, 29, 35, 0) 100%
     );
   opacity: 0;
@@ -1943,9 +1944,9 @@ body.visual-workover .scene-dock-halo::after {
   background:
     radial-gradient(
       circle at center,
-      rgba(214, 29, 35, 0) 42%,
-      rgba(214, 29, 35, 0.64) 55%,
-      rgba(214, 29, 35, 0.22) 69%,
+      rgba(214, 29, 35, 0) 0 50%,
+      rgba(214, 29, 35, 0.78) 50.8%,
+      rgba(214, 29, 35, 0.3) 64%,
       rgba(214, 29, 35, 0) 100%
     );
   opacity: 0;
