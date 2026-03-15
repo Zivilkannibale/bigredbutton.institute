@@ -774,7 +774,7 @@
     if (!absolute) return;
     var diameter = clamp(absolute.height * 0.72, 60, 88);
     var centerX = absolute.left + absolute.width * 0.5;
-    var centerY = absolute.top + absolute.height * 0.52;
+    var centerY = absolute.top + absolute.height * 0.6;
     sceneDockHalo.style.left = centerX.toFixed(1) + "px";
     sceneDockHalo.style.top = centerY.toFixed(1) + "px";
     sceneDockHalo.style.width = diameter.toFixed(1) + "px";
