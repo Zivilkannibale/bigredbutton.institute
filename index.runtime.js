@@ -70,10 +70,24 @@
   var pedestalScrollHint = document.getElementById("pedestalScrollHint");
   var sceneWrap = document.getElementById("sceneWrap");
   var sceneSvg = sceneWrap && sceneWrap.querySelector("svg.street-svg");
+  var sceneViewBox = sceneSvg && sceneSvg.viewBox && sceneSvg.viewBox.baseVal
+    ? {
+        minX: sceneSvg.viewBox.baseVal.x,
+        minY: sceneSvg.viewBox.baseVal.y,
+        width: sceneSvg.viewBox.baseVal.width || 960,
+        height: sceneSvg.viewBox.baseVal.height || 420
+      }
+    : {
+        minX: 0,
+        minY: 0,
+        width: 960,
+        height: 420
+      };
   var sceneDockHalo = document.getElementById("sceneDockHalo");
   var sceneStatus = document.getElementById("sceneStatus");
   var fieldCaption = document.getElementById("fieldCaption");
   var miniDash = document.getElementById("miniDash");
+  var airshipLayer = document.getElementById("airshipLayer");
   var landingSpot = document.getElementById("landingSpot");
   var person1 = document.getElementById("person1");
   var person2 = document.getElementById("person2");
@@ -133,6 +147,76 @@
     { skin: "#d0b898", shirt: "#6a8a5a", limbs: "#4a4a5a", hair: "#5d4b36", hairRx: "4.5", hairRy: "2.5", hairCx: "0", hairCy: "-25", scale: 0.92 },
     { skin: "#d8c0a0", shirt: "#8a5a6a", limbs: "#5a4a5a", hair: "#6a4632", hairRx: "4", hairRy: "2.3", hairCx: "0", hairCy: "-25", scale: 0.9 },
     { skin: "#c8b090", shirt: "#5a6a8a", limbs: "#3a4a5a", hair: "#4a3424", hairRx: "4.5", hairRy: "2.5", hairCx: "0", hairCy: "-26", scale: 0.93 }
+  ];
+  var airships = [];
+  var airshipPhase = Math.random() * Math.PI * 2;
+  var airshipConfigs = [
+    {
+      hull: "url(#airshipRoseG)",
+      band: "#b85f6f",
+      accent: "#f6ddd4",
+      tail: "#985667",
+      fin: "#aa6273",
+      gondola: "#725240",
+      window: "#ffe5b0",
+      brace: "#88604e",
+      prop: "rgba(136,72,84,0.45)",
+      seam: "rgba(98,58,66,0.26)",
+      scale: 0.96,
+      baseY: 44,
+      speed: 0.62,
+      xOffset: 300,
+      phase: 0.2,
+      swayX: 7,
+      swayY: 4.4,
+      tilt: 1.7,
+      flip: 1,
+      reverse: false
+    },
+    {
+      hull: "url(#airshipSandG)",
+      band: "#8e6a4b",
+      accent: "#efe0b4",
+      tail: "#7b5738",
+      fin: "#916948",
+      gondola: "#624838",
+      window: "#f6df9d",
+      brace: "#84614a",
+      prop: "rgba(111,84,58,0.4)",
+      seam: "rgba(92,72,47,0.24)",
+      scale: 1.03,
+      baseY: 98,
+      speed: 0.48,
+      xOffset: 360,
+      phase: 1.9,
+      swayX: 10,
+      swayY: 5.4,
+      tilt: 1.25,
+      flip: -1,
+      reverse: true
+    },
+    {
+      hull: "url(#airshipIvoryG)",
+      band: "#b45d6f",
+      accent: "#fbf6ee",
+      tail: "#a55968",
+      fin: "#b96e80",
+      gondola: "#6e534a",
+      window: "#ffe9bd",
+      brace: "#8d6b5f",
+      prop: "rgba(136,84,94,0.38)",
+      seam: "rgba(121,86,97,0.22)",
+      scale: 0.82,
+      baseY: 132,
+      speed: 0.56,
+      xOffset: 540,
+      phase: 3.25,
+      swayX: 12,
+      swayY: 6.2,
+      tilt: 2.1,
+      flip: 1,
+      reverse: false
+    }
   ];
   var floatState = {
     baseX: 78,
@@ -770,14 +854,16 @@
   function getSceneMapping() {
     if (!sceneWrap) return null;
     var rect = sceneWrap.getBoundingClientRect();
-    var sx = rect.width / 960;
-    var sy = rect.height / 420;
+    var sx = rect.width / sceneViewBox.width;
+    var sy = rect.height / sceneViewBox.height;
     var scale = Math.max(sx, sy);
     return {
       rect: rect,
       scale: scale,
-      offX: (rect.width - 960 * scale) / 2,
-      offY: (rect.height - 420 * scale) / 2
+      minX: sceneViewBox.minX,
+      minY: sceneViewBox.minY,
+      offX: (rect.width - sceneViewBox.width * scale) / 2,
+      offY: (rect.height - sceneViewBox.height * scale) / 2
     };
   }
 
@@ -787,8 +873,8 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      x: map.rect.left + map.offX + dockTargetX * map.scale - width / 2,
-      y: map.rect.top + map.offY + dockTargetY * map.scale - height,
+      x: map.rect.left + map.offX + (dockTargetX - map.minX) * map.scale - width / 2,
+      y: map.rect.top + map.offY + (dockTargetY - map.minY) * map.scale - height,
       width: width,
       height: height
     };
@@ -800,8 +886,8 @@
     var height = 34 * map.scale;
     var width = height * pedestalAspectRatio;
     return {
-      left: map.offX + dockTargetX * map.scale - width / 2,
-      top: map.offY + dockTargetY * map.scale - height,
+      left: map.offX + (dockTargetX - map.minX) * map.scale - width / 2,
+      top: map.offY + (dockTargetY - map.minY) * map.scale - height,
       width: width,
       height: height
     };
@@ -957,6 +1043,184 @@
     group.appendChild(createSceneNode("line", { x1: "5", y1: "-14", x2: "8", y2: "-4", stroke: style.shirt, "stroke-width": "2.5", "stroke-linecap": "round" }));
     if (style.bag) group.appendChild(createSceneNode("rect", { x: "4", y: "-12", width: "5", height: "8", rx: ".5", fill: style.bag }));
     return group;
+  }
+
+  function createAirshipNode(style) {
+    var group = createSceneNode("g", {
+      "pointer-events": "none",
+      opacity: "0.96"
+    });
+    var craft = createSceneNode("g", {});
+
+    craft.appendChild(createSceneNode("path", {
+      d: "M-68,0 C-61,-16 -28,-24 20,-20 C46,-18 63,-8 72,0 C63,8 46,18 20,20 C-28,24 -61,16 -68,0 Z",
+      fill: style.hull,
+      stroke: style.seam,
+      "stroke-width": "1.2"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M-34,-12 C-8,-18 28,-15 50,-6 C28,-10 -7,-10 -34,-12 Z",
+      fill: style.accent,
+      opacity: "0.48"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M-68,0 C-62,-13 -52,-17 -42,-16 C-49,-8 -49,8 -42,16 C-52,17 -62,13 -68,0 Z",
+      fill: style.band,
+      opacity: "0.34"
+    }));
+    craft.appendChild(createSceneNode("ellipse", {
+      cx: "-24",
+      cy: "0",
+      rx: "10",
+      ry: "15",
+      fill: "none",
+      stroke: style.seam,
+      "stroke-width": "1.8"
+    }));
+    craft.appendChild(createSceneNode("ellipse", {
+      cx: "6",
+      cy: "0",
+      rx: "11",
+      ry: "16",
+      fill: "none",
+      stroke: style.seam,
+      "stroke-width": "1.8"
+    }));
+    craft.appendChild(createSceneNode("ellipse", {
+      cx: "34",
+      cy: "0",
+      rx: "9",
+      ry: "15.5",
+      fill: "none",
+      stroke: style.band,
+      "stroke-width": "4.8"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M54,-7 L69,-16 L82,-14 L76,-3 L76,3 L82,14 L69,16 L54,7 Z",
+      fill: style.tail,
+      stroke: style.seam,
+      "stroke-width": "1"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M56,-8 L67,-30 L78,-27 L72,-11 Z",
+      fill: style.fin,
+      opacity: "0.94"
+    }));
+    craft.appendChild(createSceneNode("path", {
+      d: "M56,8 L67,30 L78,27 L72,11 Z",
+      fill: style.fin,
+      opacity: "0.94"
+    }));
+    craft.appendChild(createSceneNode("rect", {
+      x: "-12",
+      y: "14",
+      width: "26",
+      height: "9",
+      rx: "3",
+      fill: style.gondola
+    }));
+    craft.appendChild(createSceneNode("rect", {
+      x: "-1",
+      y: "16.5",
+      width: "6",
+      height: "2.6",
+      rx: "1.1",
+      fill: style.window,
+      opacity: "0.92"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "-8",
+      y1: "14",
+      x2: "-14",
+      y2: "6",
+      stroke: style.brace,
+      "stroke-width": "1.6",
+      "stroke-linecap": "round"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "10",
+      y1: "14",
+      x2: "2",
+      y2: "5",
+      stroke: style.brace,
+      "stroke-width": "1.6",
+      "stroke-linecap": "round"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "82",
+      y1: "-7",
+      x2: "82",
+      y2: "7",
+      stroke: style.prop,
+      "stroke-width": "1.3",
+      "stroke-linecap": "round"
+    }));
+    craft.appendChild(createSceneNode("line", {
+      x1: "78",
+      y1: "0",
+      x2: "86",
+      y2: "0",
+      stroke: style.prop,
+      "stroke-width": "1.3",
+      "stroke-linecap": "round"
+    }));
+    craft.appendChild(createSceneNode("circle", {
+      cx: "82",
+      cy: "0",
+      r: "4.2",
+      fill: "rgba(255,255,255,0.18)"
+    }));
+
+    group.appendChild(craft);
+    group._airshipCraft = craft;
+    group._airshipFlip = style.flip === -1 ? -1 : 1;
+    return group;
+  }
+
+  function ensureAirships() {
+    if (!airshipLayer || airships.length) return;
+    for (var i = 0; i < airshipConfigs.length; i++) {
+      var config = airshipConfigs[i];
+      var node = createAirshipNode(config);
+      airshipLayer.appendChild(node);
+      airships.push({
+        node: node,
+        craft: node._airshipCraft || null,
+        flip: node._airshipFlip || 1,
+        scale: config.scale,
+        baseY: config.baseY,
+        speed: config.speed,
+        xOffset: config.xOffset,
+        phase: config.phase,
+        swayX: config.swayX,
+        swayY: config.swayY,
+        tilt: config.tilt,
+        reverse: !!config.reverse
+      });
+    }
+  }
+
+  function updateAirships() {
+    if (!airships.length) return;
+    var motionScale = reducedMotion ? 0.22 : 1;
+    var swayScale = reducedMotion ? 0.28 : 1;
+    var loopWidth = sceneViewBox.width + 320;
+    airshipPhase += reducedMotion ? 0.004 : 0.012;
+    for (var i = 0; i < airships.length; i++) {
+      var airship = airships[i];
+      var travel = (walkPhase * airship.speed * motionScale + airship.xOffset) % loopWidth;
+      var baseX = airship.reverse ? sceneViewBox.width + 150 - travel : travel - 160;
+      var swayX = Math.sin(airshipPhase * 0.9 + airship.phase) * airship.swayX * swayScale;
+      var swayY = Math.sin(airshipPhase * 1.4 + airship.phase) * airship.swayY * swayScale;
+      var tilt = Math.sin(airshipPhase * 1.1 + airship.phase) * airship.tilt * swayScale;
+      airship.node.setAttribute("transform", "translate(" + (baseX + swayX).toFixed(1) + "," + (airship.baseY + swayY).toFixed(1) + ")");
+      if (airship.craft) {
+        airship.craft.setAttribute(
+          "transform",
+          "rotate(" + tilt.toFixed(2) + ") scale(" + (airship.scale * airship.flip).toFixed(2) + "," + airship.scale.toFixed(2) + ")"
+        );
+      }
+    }
   }
 
   function resetCrowdPeople() {
@@ -1289,6 +1553,7 @@
 
   function walkPeople() {
     walkPhase += 0.3;
+    updateAirships();
     if (person1) person1.setAttribute("transform", "translate(" + ((((walkPhase * 0.8) % 1060) - 50)) + ",332)");
     if (person3) person3.setAttribute("transform", "translate(" + (1010 - ((walkPhase * 0.5) % 1060)) + ",332)");
     if (person2 && !isDocked) person2.setAttribute("transform", "translate(" + curiosityHomeX + ",332)");
@@ -2051,6 +2316,8 @@
   syncSwitchProfileStyles();
   collectRedWords();
   updateReggieBubbleLayout();
+  ensureAirships();
+  updateAirships();
   initAmbient();
   resizeAmbient();
   resizeCanvases();
