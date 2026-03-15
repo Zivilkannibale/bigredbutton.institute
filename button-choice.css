@@ -57,7 +57,7 @@ body.visual-workover .button-choice-app {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
   gap: 0.9rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 body.visual-workover .button-choice-card {
@@ -65,6 +65,7 @@ body.visual-workover .button-choice-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.95));
   box-shadow: 8px 8px 0 rgba(5, 6, 8, 0.06);
   padding: 0.92rem;
+  height: 100%;
 }
 
 body.visual-workover .button-choice-card__title {
@@ -89,6 +90,7 @@ body.visual-workover .button-choice-card__note {
 
 body.visual-workover .button-choice-controls {
   display: grid;
+  grid-template-rows: auto auto 1fr;
   gap: 0.72rem;
 }
 
@@ -181,6 +183,7 @@ body.visual-workover .button-choice-toggle:focus-visible {
 
 body.visual-workover .button-choice-telemetry {
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 0.52rem;
   padding: 0.86rem 0.86rem 0.74rem;
 }
@@ -217,13 +220,17 @@ body.visual-workover .button-choice-stat__label {
 
 body.visual-workover .button-choice-wave {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
   gap: 0.24rem;
+  min-height: 0;
 }
 
 body.visual-workover .button-choice-wave canvas {
   display: block;
   width: 100%;
-  height: 112px;
+  height: 100%;
+  min-height: 112px;
   border: 1px solid rgba(26, 30, 40, 0.18);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.82));
 }
@@ -244,6 +251,7 @@ body.visual-workover .lab-deck[hidden] {
   body.visual-workover .button-choice-app,
   body.visual-workover .lab-deck {
     grid-template-columns: 1fr;
+    align-items: start;
   }
 
   body.visual-workover .button-choice-stats {
@@ -263,6 +271,7 @@ body.visual-workover .lab-deck[hidden] {
   }
 
   body.visual-workover .button-choice-wave canvas {
-    height: 96px;
+    height: auto;
+    min-height: 96px;
   }
 }
