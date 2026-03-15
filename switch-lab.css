@@ -526,31 +526,15 @@ body.visual-workover .switch-lab-telemetry__wave canvas {
 body.visual-workover .switch-lab-telemetry__entropy {
   display: grid;
   grid-template-rows: auto 1fr;
-  gap: 0.18rem;
+  gap: 0.22rem;
   min-height: 0;
 }
 
-body.visual-workover .switch-lab-telemetry__entropy-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.28rem;
-  min-width: 0;
-}
-
-body.visual-workover .switch-lab-telemetry__entropy-head .switch-lab-card__label {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-size: 0.54rem;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
+body.visual-workover .switch-lab-telemetry__entropy-stat {
+  padding: 0.22rem 0;
 }
 
 body.visual-workover .switch-lab-telemetry__entropy-value {
-  color: #f5f0e3;
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  font-size: clamp(0.96rem, 1.2vw, 1.18rem);
-  line-height: 1;
   white-space: nowrap;
 }
 
@@ -565,8 +549,8 @@ body.visual-workover .switch-lab-telemetry__entropy-field canvas {
   width: 100%;
   height: clamp(4.65rem, 5.45vw, 5.15rem);
   min-height: 0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+  border: 0;
+  background: transparent;
 }
 
 body.visual-workover .switch-lab-curve {

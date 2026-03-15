@@ -305,9 +305,9 @@
             "</div>" +
           "</div>" +
           '<div class="switch-lab-telemetry__entropy">' +
-            '<div class="switch-lab-telemetry__entropy-head">' +
-              '<div class="switch-lab-card__label">Entropy</div>' +
-              '<div class="switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</div>" +
+            '<div class="switch-lab-telemetry__stat switch-lab-telemetry__entropy-stat">' +
+              '<span class="switch-lab-telemetry__stat-value switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</span>" +
+              '<span class="switch-lab-telemetry__stat-label">Entropy</span>' +
             "</div>" +
             '<div class="switch-lab-telemetry__entropy-field">' +
               '<canvas id="switchLabTelemetryEntropyField" aria-label="BRB entropy field"></canvas>' +
@@ -714,8 +714,6 @@
     if (avgEl) avgEl.textContent = formatAvgInterval(state.telemetry.avgIntervalMs);
     if (burstEl) burstEl.textContent = String(state.telemetry.maxBurst || 0);
     if (entropyEl) entropyEl.textContent = formatEntropy(state.telemetry.entropy);
-    drawTelemetryWave();
-    drawTelemetryEntropyField();
   }
 
   function syncCurvePanel() {
