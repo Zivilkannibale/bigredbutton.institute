@@ -1,0 +1,2376 @@
+{
+  "generatedAt": "2026-03-15T17:45:51.503Z",
+  "states": [
+    {
+      "id": "recommended",
+      "label": "recommended analogue",
+      "description": "Closest local analogue for the current BRB switch selection."
+    },
+    {
+      "id": "compatible",
+      "label": "compatible alternative",
+      "description": "A usable manual choice with partial overlap in feel."
+    },
+    {
+      "id": "distant",
+      "label": "source available but no close match",
+      "description": "Local source exists, but the current switch profile does not align closely."
+    },
+    {
+      "id": "none",
+      "label": "no recommendation",
+      "description": "No honest local recommendation is available for the current switch selection."
+    }
+  ],
+  "heuristics": {
+    "recommended_threshold": 0.79,
+    "compatible_threshold": 0.55,
+    "source_threshold": 0.3,
+    "weights": {
+      "family": 0.4,
+      "clickiness": 0.28,
+      "thock": 0.2,
+      "attack": 0.12
+    },
+    "silent_penalty": 0.24,
+    "disclaimer": "Analogue-only heuristic derived from BRB switch family, silent flag, and soundProfile.attack/clickiness/thock. Nothing here is presented as a scientifically exact acoustic match."
+  },
+  "profiles": {
+    "mechvibes-v1-cherrymx-blue-abs": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.28,
+        "linear": 0.08
+      },
+      "clickiness_range": [
+        0.75,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.42
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Bright click-jacket analogue with low thock and clear top-out."
+    },
+    "mechvibes-v1-cherrymx-brown-abs": {
+      "family_targets": {
+        "clicky": 0.26,
+        "tactile": 1,
+        "linear": 0.24
+      },
+      "clickiness_range": [
+        0.25,
+        0.58
+      ],
+      "thock_range": [
+        0.28,
+        0.55
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Moderate tactile analogue with a restrained top-out."
+    },
+    "mechvibes-v1-cherrymx-red-pbt": {
+      "family_targets": {
+        "clicky": 0.08,
+        "tactile": 0.28,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.08,
+        0.24
+      ],
+      "thock_range": [
+        0.22,
+        0.46
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Lighter linear analogue with more brightness than body."
+    },
+    "mechvibes-v1-cherrymx-black-pbt": {
+      "family_targets": {
+        "clicky": 0.05,
+        "tactile": 0.24,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.06,
+        0.18
+      ],
+      "thock_range": [
+        0.38,
+        0.7
+      ],
+      "attack_values": [
+        "muted",
+        "firm"
+      ],
+      "summary": "Heavier linear analogue with a subdued top-end."
+    },
+    "mechvibes-v1-topre-purple-hybrid-pbt": {
+      "family_targets": {
+        "clicky": 0.08,
+        "tactile": 1,
+        "linear": 0.42
+      },
+      "clickiness_range": [
+        0.1,
+        0.3
+      ],
+      "thock_range": [
+        0.45,
+        0.8
+      ],
+      "attack_values": [
+        "muted",
+        "firm"
+      ],
+      "summary": "Rounded tactile analogue with deeper body and quieter top-out."
+    },
+    "mechvibes-v1-eg-oreo": {
+      "family_targets": {
+        "clicky": 0.4,
+        "tactile": 1,
+        "linear": 0.18
+      },
+      "clickiness_range": [
+        0.35,
+        0.65
+      ],
+      "thock_range": [
+        0.32,
+        0.58
+      ],
+      "attack_values": [
+        "firm",
+        "sharp"
+      ],
+      "summary": "Sharper tactile analogue for more vocal tactile profiles."
+    },
+    "mechvibes-v2-mxblue-travel": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.34,
+        "linear": 0.08
+      },
+      "clickiness_range": [
+        0.8,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.45
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Full-travel click analogue with explicit press variation."
+    },
+    "mechvibes-v2-mxbrown-travel": {
+      "family_targets": {
+        "clicky": 0.2,
+        "tactile": 1,
+        "linear": 0.28
+      },
+      "clickiness_range": [
+        0.2,
+        0.48
+      ],
+      "thock_range": [
+        0.32,
+        0.62
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Balanced tactile full-travel analogue."
+    },
+    "mechvibes-v2-mxblack-travel": {
+      "family_targets": {
+        "clicky": 0.04,
+        "tactile": 0.22,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.05,
+        0.15
+      ],
+      "thock_range": [
+        0.5,
+        0.85
+      ],
+      "attack_values": [
+        "muted",
+        "firm"
+      ],
+      "summary": "Heavy linear full-travel analogue with more low-end body."
+    },
+    "mechvibes-v2-cream-travel": {
+      "family_targets": {
+        "clicky": 0.05,
+        "tactile": 0.38,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.06,
+        0.18
+      ],
+      "thock_range": [
+        0.58,
+        0.92
+      ],
+      "attack_values": [
+        "muted",
+        "firm"
+      ],
+      "summary": "Deep linear analogue that also works as a muted tactile fallback."
+    },
+    "mechvibes-v2-holy-pandas": {
+      "family_targets": {
+        "clicky": 0.32,
+        "tactile": 1,
+        "linear": 0.12
+      },
+      "clickiness_range": [
+        0.32,
+        0.55
+      ],
+      "thock_range": [
+        0.5,
+        0.82
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Dense tactile analogue with strong body and limited sparkle."
+    },
+    "mechvibes-v2-turquoise": {
+      "family_targets": {
+        "clicky": 0.72,
+        "tactile": 1,
+        "linear": 0.12
+      },
+      "clickiness_range": [
+        0.45,
+        0.78
+      ],
+      "thock_range": [
+        0.4,
+        0.72
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Hybrid analogue for sharp tactile or click-adjacent profiles."
+    },
+    "mechvibes-v1-cherrymx-black-abs": {
+      "family_targets": {
+        "clicky": 0.06,
+        "tactile": 0.26,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.08,
+        0.2
+      ],
+      "thock_range": [
+        0.3,
+        0.58
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Firm linear analogue with more attack than the muted black-PBT variant."
+    },
+    "mechvibes-v1-cherrymx-blue-pbt": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.3,
+        "linear": 0.08
+      },
+      "clickiness_range": [
+        0.72,
+        1
+      ],
+      "thock_range": [
+        0.16,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Click-jacket analogue with slightly more body than the ABS blue variant."
+    },
+    "mechvibes-v1-cherrymx-brown-pbt": {
+      "family_targets": {
+        "clicky": 0.22,
+        "tactile": 1,
+        "linear": 0.26
+      },
+      "clickiness_range": [
+        0.2,
+        0.48
+      ],
+      "thock_range": [
+        0.38,
+        0.68
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Moderate tactile analogue with extra body compared with the ABS brown variant."
+    },
+    "mechvibes-v1-cherrymx-red-abs": {
+      "family_targets": {
+        "clicky": 0.08,
+        "tactile": 0.28,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.08,
+        0.24
+      ],
+      "thock_range": [
+        0.18,
+        0.38
+      ],
+      "attack_values": [
+        "firm"
+      ],
+      "summary": "Lighter linear analogue with a cleaner, brighter attack."
+    },
+    "mechvibes-v1-eg-crystal-purple": {
+      "family_targets": {
+        "clicky": 0.44,
+        "tactile": 1,
+        "linear": 0.16
+      },
+      "clickiness_range": [
+        0.4,
+        0.72
+      ],
+      "thock_range": [
+        0.28,
+        0.54
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Sharper tactile analogue for switch profiles that lean crisp instead of thocky."
+    },
+    "mechvibes-file-nk-cream": {
+      "family_targets": {
+        "clicky": 0.03,
+        "tactile": 0.22,
+        "linear": 1
+      },
+      "clickiness_range": [
+        0.02,
+        0.12
+      ],
+      "thock_range": [
+        0.62,
+        0.95
+      ],
+      "attack_values": [
+        "muted",
+        "firm"
+      ],
+      "summary": "Deep linear analogue built from the local NK Cream WAV mapping."
+    },
+    "bucklespring-gpl-esc-01": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-pair-02": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-03": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-04": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-05": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-06": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-07": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-08": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-09": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-0a": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-0b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-0c": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-0d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-backspace-0e": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-tab-0f": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-pair-10": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-11": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-12": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-13": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-14": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-15": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-16": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-17": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-18": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-19": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-1a": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-1b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-enter-1c": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-pair-1d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-1e": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-1f": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-20": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-21": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-22": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-23": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-24": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-25": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-26": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-27": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-28": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-grave-29": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-left-shift-2a": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-pair-2b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-2c": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-2d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-2e": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-2f": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-30": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-canonical-31": {
+      "family_targets": {
+        "clicky": 1,
+        "tactile": 0.45,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.9,
+        1
+      ],
+      "thock_range": [
+        0.1,
+        0.35
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring archetype with extreme click emphasis."
+    },
+    "bucklespring-gpl-pair-32": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-33": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-34": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-35": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-right-shift-36": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-pair-37": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-38": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-space-39": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-caps-3a": {
+      "family_targets": {
+        "clicky": 0.96,
+        "tactile": 0.42,
+        "linear": 0.03
+      },
+      "clickiness_range": [
+        0.86,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.36
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue that stays close to the bright, sharp canonical profile."
+    },
+    "bucklespring-gpl-pair-3b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-3c": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-3d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-3e": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-3f": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-40": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-41": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-42": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-43": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-44": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-45": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-46": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-cluster-47": {
+      "family_targets": {
+        "clicky": 0.92,
+        "tactile": 0.44,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.82,
+        1
+      ],
+      "thock_range": [
+        0.1,
+        0.4
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed by upstream keycode rather than a guessed semantic label."
+    },
+    "bucklespring-gpl-pair-48": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-49": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-4a": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-4b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-cluster-4c": {
+      "family_targets": {
+        "clicky": 0.92,
+        "tactile": 0.44,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.82,
+        1
+      ],
+      "thock_range": [
+        0.1,
+        0.4
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed by upstream keycode rather than a guessed semantic label."
+    },
+    "bucklespring-gpl-pair-4d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-4e": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-4f": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-50": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-51": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-52": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-53": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-iso-56": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-pair-57": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-58": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-5b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-kp-enter-60": {
+      "family_targets": {
+        "clicky": 0.9,
+        "tactile": 0.48,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.78,
+        0.96
+      ],
+      "thock_range": [
+        0.18,
+        0.46
+      ],
+      "attack_values": [
+        "sharp",
+        "firm"
+      ],
+      "summary": "Buckling-spring analogue with slightly more body than the canonical fallback pair."
+    },
+    "bucklespring-gpl-pair-61": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-62": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-63": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-64": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-66": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-67": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-68": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-69": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6a": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6b": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6c": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6e": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-6f": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-7d": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    },
+    "bucklespring-gpl-pair-ff": {
+      "family_targets": {
+        "clicky": 0.94,
+        "tactile": 0.43,
+        "linear": 0.02
+      },
+      "clickiness_range": [
+        0.84,
+        1
+      ],
+      "thock_range": [
+        0.12,
+        0.38
+      ],
+      "attack_values": [
+        "sharp"
+      ],
+      "summary": "Buckling-spring analogue exposed as a single-button pair by upstream keycode."
+    }
+  }
+}

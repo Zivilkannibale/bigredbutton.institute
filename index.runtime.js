@@ -12,12 +12,23 @@
   var sessionStart = Date.now();
   var maxBurst = 0;
   var fieldPressCount = 0;
-  var wavePhase = 0;
   var entropyVal = 0;
+  var telemetryRatePerMinute = 0;
+  var telemetryAvgIntervalMs = null;
+  var telemetryEntropy = null;
   var burstWindowSec = 30;
   var vizReady = false;
   var currentDockProgress = 0;
   var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var scrollAssist = {
+    lastY: window.scrollY || window.pageYOffset || 0,
+    lastAt: performance.now(),
+    velocity: 0,
+    settleTimer: null,
+    ignoreUntil: 0,
+    cooldownUntil: 0,
+    lastTargetTop: null
+  };
 
   var btn = document.getElementById("pressBtn");
   var countEl = document.getElementById("pressCount");
@@ -53,12 +64,13 @@
   var mBurstCtx = mBurstC && mBurstC.getContext("2d");
 
   var pedestal = document.getElementById("pedestalFloat");
-  var dome = document.getElementById("domeGroup");
+  var pedestalControl = document.getElementById("pedestalButton");
+  var pedestalFrame = document.getElementById("pedestalFrame");
   var pedestalShockwave = document.getElementById("pedestalShockwave");
   var pedestalScrollHint = document.getElementById("pedestalScrollHint");
-  var pedestalSvg = pedestal && pedestal.querySelector("svg");
   var sceneWrap = document.getElementById("sceneWrap");
   var sceneSvg = sceneWrap && sceneWrap.querySelector("svg.street-svg");
+  var sceneDockHalo = document.getElementById("sceneDockHalo");
   var sceneStatus = document.getElementById("sceneStatus");
   var fieldCaption = document.getElementById("fieldCaption");
   var miniDash = document.getElementById("miniDash");
@@ -82,6 +94,8 @@
   var fieldStatusTimer = null;
   var curiosityHomeX = 560;
   var curiosityTargetX = 512;
+  var dockTargetX = 498;
+  var dockTargetY = 356;
   var reggieHomeX = 1035;
   var reggieTargetX = 466;
   var reggieQuotes = [
@@ -137,6 +151,24 @@
     shiftCurrentY: 0,
     nextShift: 4000 + Math.random() * 7000
   };
+  var pedestalFrames = [];
+  var pedestalAnimRaf = null;
+  var pedestalFrameIndex = 0;
+  var pedestalPressPeakFrame = 0;
+  var pedestalAspectRatio = 140 / 320;
+  var pedestalMotionValue = 0;
+  var waveInjectionQueue = [];
+  var lastWaveSampleAt = 0;
+  var lastPedestalLoopAt = 0;
+  var sceneAttractionActive = false;
+  var pedestalScreenPose = {
+    x: 0,
+    y: 0,
+    rot: 0,
+    width: 0,
+    height: 0,
+    initialized: false
+  };
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -150,6 +182,89 @@
     if (!timers[name]) return;
     clearTimeout(timers[name]);
     timers[name] = null;
+  }
+
+  function padNumber(value) {
+    return String(value).padStart(2, "0");
+  }
+
+  function initPedestalFrames() {
+    if (!pedestalFrame) return;
+    pedestalFrames = [];
+    for (var i = 0; i <= 12; i++) pedestalFrames.push("Images/poly-button-press-" + padNumber(i) + ".png");
+    pedestalPressPeakFrame = Math.floor((pedestalFrames.length - 1) / 2);
+    for (var j = 0; j < pedestalFrames.length; j++) {
+      var preload = new Image();
+      preload.decoding = "async";
+      preload.src = pedestalFrames[j];
+    }
+    setPedestalFrame(0);
+  }
+
+  function setPedestalFrame(index) {
+    if (!pedestalFrame || !pedestalFrames.length) return;
+    var nextIndex = clamp(Math.round(index), 0, pedestalFrames.length - 1);
+    var lastIndex = pedestalFrames.length - 1;
+    var normalizedMotion = 0;
+    if (pedestalPressPeakFrame > 0 && lastIndex > 0) {
+      if (nextIndex <= pedestalPressPeakFrame) {
+        normalizedMotion = nextIndex / pedestalPressPeakFrame;
+      } else {
+        normalizedMotion = (lastIndex - nextIndex) / Math.max(1, lastIndex - pedestalPressPeakFrame);
+      }
+    }
+    pedestalMotionValue = smoothstep(clamp(normalizedMotion, 0, 1));
+    if (pedestalFrameIndex === nextIndex && pedestalFrame.getAttribute("src") === pedestalFrames[nextIndex]) return;
+    pedestalFrameIndex = nextIndex;
+    pedestalFrame.setAttribute("src", pedestalFrames[nextIndex]);
+  }
+
+  function stopPedestalAnimation() {
+    if (pedestalAnimRaf !== null) {
+      cancelAnimationFrame(pedestalAnimRaf);
+      pedestalAnimRaf = null;
+    }
+  }
+
+  function animatePedestalFrames(targetIndex, duration, done) {
+    if (!pedestalFrames.length) {
+      if (typeof done === "function") done();
+      return;
+    }
+    stopPedestalAnimation();
+    var from = pedestalFrameIndex;
+    var to = clamp(targetIndex, 0, pedestalFrames.length - 1);
+    if (from === to || duration <= 0) {
+      setPedestalFrame(to);
+      if (typeof done === "function") done();
+      return;
+    }
+    var startedAt = 0;
+    function tick(now) {
+      if (!startedAt) startedAt = now;
+      var progress = clamp((now - startedAt) / duration, 0, 1);
+      var nextIndex = from + (to - from) * progress;
+      setPedestalFrame(to > from ? Math.floor(nextIndex) : Math.ceil(nextIndex));
+      if (progress >= 1) {
+        setPedestalFrame(to);
+        pedestalAnimRaf = null;
+        if (typeof done === "function") done();
+        return;
+      }
+      pedestalAnimRaf = requestAnimationFrame(tick);
+    }
+    pedestalAnimRaf = requestAnimationFrame(tick);
+  }
+
+  function getPedestalFloatSize() {
+    var height;
+    if (window.innerWidth <= 650) height = 184;
+    else if (window.innerWidth <= 980) height = 288;
+    else height = 320;
+    return {
+      width: Math.round(height * pedestalAspectRatio),
+      height: height
+    };
   }
 
   function transient(name, el, className, ms, replay) {
@@ -356,28 +471,16 @@
     ctx.moveTo(0, height / 2);
     ctx.lineTo(width, height / 2);
     ctx.stroke();
-    if (waveData.length < 2) {
-      ctx.beginPath();
-      ctx.strokeStyle = "rgba(223,44,44,0.2)";
-      ctx.lineWidth = 1.5;
-      for (var x = 0; x < width; x++) {
-        var y = height / 2 + Math.sin(x * 0.03 + wavePhase) * 6;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-      wavePhase += 0.02;
-      return;
-    }
     ctx.beginPath();
     var gradient = ctx.createLinearGradient(0, 0, width, 0);
     gradient.addColorStop(0, "rgba(223,44,44,0.15)");
     gradient.addColorStop(1, "rgba(223,44,44,0.9)");
     ctx.strokeStyle = gradient;
     ctx.lineWidth = 2;
-    var points = waveData.slice(-80);
+    var points = waveData.slice(-96);
+    while (points.length < 96) points.unshift(0);
     for (var i = 0; i < points.length; i++) {
-      var px = (i / Math.max(1, 79)) * width;
+      var px = (i / Math.max(1, points.length - 1)) * width;
       var py = height / 2 - points[i] * (height * 0.4);
       if (i === 0) ctx.moveTo(px, py);
       else ctx.lineTo(px, py);
@@ -527,6 +630,28 @@
     return best;
   }
 
+  function getTelemetrySnapshot() {
+    return {
+      verifiedPresses: count,
+      ratePerMinute: telemetryRatePerMinute,
+      avgIntervalMs: telemetryAvgIntervalMs,
+      maxBurst: maxBurst,
+      entropy: telemetryEntropy,
+      waveform: waveData.slice(-96)
+    };
+  }
+
+  function publishTelemetrySnapshot() {
+    var snapshot = getTelemetrySnapshot();
+    window.BRB = window.BRB || {};
+    window.BRB.telemetry = snapshot;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:telemetry-update", {
+        detail: snapshot
+      }));
+    }
+  }
+
   function updateStats() {
     var now = Date.now();
     var recent = 0;
@@ -546,6 +671,9 @@
     if (burst > maxBurst) maxBurst = burst;
     var rateValue = recent.toFixed(1);
     var entropyValue = entropyVal > 0 ? entropyVal.toFixed(2) : "\u2014";
+    telemetryRatePerMinute = Number(rateValue);
+    telemetryAvgIntervalMs = avg === "\u2014" ? null : Number(avg);
+    telemetryEntropy = entropyValue === "\u2014" ? null : Number(entropyValue);
     if (statRate) statRate.textContent = rateValue;
     if (statEntropy) statEntropy.textContent = entropyValue;
     if (statAvg) statAvg.textContent = avg;
@@ -554,17 +682,18 @@
     if (mdEntropy) mdEntropy.textContent = entropyValue;
     if (mdAvg) mdAvg.textContent = avg;
     if (mdBurst) mdBurst.textContent = maxBurst;
+    publishTelemetrySnapshot();
   }
 
   function updateFloatAnchor() {
     if (window.innerWidth <= 650) {
-      floatState.baseX = 76;
-      floatState.baseY = 72;
+      floatState.baseX = 84;
+      floatState.baseY = 84;
     } else if (window.innerWidth <= 980) {
-      floatState.baseX = 80;
-      floatState.baseY = 56;
+      floatState.baseX = 84;
+      floatState.baseY = 60;
     } else {
-      floatState.baseX = 78;
+      floatState.baseX = 88;
       floatState.baseY = 32;
     }
   }
@@ -576,13 +705,14 @@
 
   function placePedestalFixed(x, y, rot, width, height) {
     if (!pedestal) return;
+    var size = getPedestalFloatSize();
     ensureFloatingHost();
     pedestal.classList.remove("docked");
     pedestal.style.position = "fixed";
     pedestal.style.left = "0";
     pedestal.style.top = "0";
-    pedestal.style.width = (width || 140) + "px";
-    pedestal.style.height = (height || 320) + "px";
+    pedestal.style.width = (width || size.width) + "px";
+    pedestal.style.height = (height || size.height) + "px";
     pedestal.style.transform = "translate(" + x + "px, " + y + "px) rotate(" + rot + "deg)";
     floatState.x = x;
     floatState.y = y;
@@ -593,10 +723,15 @@
     updateFloatAnchor();
     var vw = window.innerWidth;
     var vh = window.innerHeight;
-    var maxX = Math.max(8, vw - 148);
-    var maxY = Math.max(8, vh - 328);
+    var size = getPedestalFloatSize();
+    var footprintScaleX = window.innerWidth <= 700 ? 1.28 : 1.48;
+    var overhangX = size.width * (footprintScaleX - 1) * 0.5;
+    var minX = Math.max(8, 8 + overhangX);
+    var maxX = Math.max(minX, vw - size.width - overhangX - 8);
+    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.36 : size.height;
+    var maxY = Math.max(8, vh - visibleFloatHeight - 8);
     if (reducedMotion) {
-      floatState.x = clamp((floatState.baseX / 100) * vw, 8, maxX);
+      floatState.x = clamp((floatState.baseX / 100) * vw, minX, maxX);
       floatState.y = clamp((floatState.baseY / 100) * vh, 8, maxY);
       floatState.rot = 0;
       return;
@@ -605,19 +740,30 @@
     floatState.driftPhase2 += 0.011;
     floatState.driftPhase3 += 0.006;
     floatState.driftPhase4 += 0.0035;
-    var driftX = Math.sin(floatState.driftPhase1) * 18 + Math.sin(floatState.driftPhase2 * 0.7) * 10;
-    var driftY = Math.cos(floatState.driftPhase3) * 14 + Math.sin(floatState.driftPhase4 * 1.3) * 8;
-    floatState.rot = Math.sin(floatState.driftPhase1 * 0.6) * 4 + Math.sin(floatState.driftPhase2 * 0.4) * 2.5;
+    var driftScale = window.innerWidth <= 650 ? 0.55 : window.innerWidth <= 980 ? 0.78 : 1;
+    var driftX = (Math.sin(floatState.driftPhase1) * 18 + Math.sin(floatState.driftPhase2 * 0.7) * 10) * driftScale;
+    var driftY = (Math.cos(floatState.driftPhase3) * 14 + Math.sin(floatState.driftPhase4 * 1.3) * 8) * driftScale;
+    floatState.rot = (Math.sin(floatState.driftPhase1 * 0.6) * 4 + Math.sin(floatState.driftPhase2 * 0.4) * 2.5) * driftScale;
     floatState.shiftTimer += 16;
     if (floatState.shiftTimer > floatState.nextShift) {
       floatState.shiftTimer = 0;
       floatState.nextShift = 4000 + Math.random() * 7000;
-      floatState.shiftTargetX = (Math.random() - 0.5) * 120;
-      floatState.shiftTargetY = (Math.random() - 0.5) * 80;
+      floatState.shiftTargetX = (Math.random() - 0.5) * 120 * driftScale;
+      floatState.shiftTargetY = (Math.random() - 0.5) * 80 * driftScale;
     }
     floatState.shiftCurrentX += (floatState.shiftTargetX - floatState.shiftCurrentX) * 0.008;
     floatState.shiftCurrentY += (floatState.shiftTargetY - floatState.shiftCurrentY) * 0.008;
-    floatState.x = clamp((floatState.baseX / 100) * vw + driftX + floatState.shiftCurrentX, 8, maxX);
+    var proposedX = (floatState.baseX / 100) * vw + driftX + floatState.shiftCurrentX;
+    if (proposedX <= minX) {
+      proposedX = minX;
+      floatState.shiftTargetX = Math.abs(floatState.shiftTargetX) * 0.85;
+      floatState.shiftCurrentX = Math.abs(floatState.shiftCurrentX) * 0.52;
+    } else if (proposedX >= maxX) {
+      proposedX = maxX;
+      floatState.shiftTargetX = -Math.abs(floatState.shiftTargetX) * 0.85;
+      floatState.shiftCurrentX = -Math.abs(floatState.shiftCurrentX) * 0.52;
+    }
+    floatState.x = proposedX;
     floatState.y = clamp((floatState.baseY / 100) * vh + driftY + floatState.shiftCurrentY, 8, maxY);
   }
 
@@ -639,10 +785,10 @@
     var map = getSceneMapping();
     if (!map) return null;
     var height = 34 * map.scale;
-    var width = height * (140 / 320);
+    var width = height * pedestalAspectRatio;
     return {
-      x: map.rect.left + map.offX + 500 * map.scale - width / 2,
-      y: map.rect.top + map.offY + 362 * map.scale - height,
+      x: map.rect.left + map.offX + dockTargetX * map.scale - width / 2,
+      y: map.rect.top + map.offY + dockTargetY * map.scale - height,
       width: width,
       height: height
     };
@@ -652,12 +798,48 @@
     var map = getSceneMapping();
     if (!map) return null;
     var height = 34 * map.scale;
-    var width = height * (140 / 320);
+    var width = height * pedestalAspectRatio;
     return {
-      left: map.offX + 500 * map.scale - width / 2,
-      top: map.offY + 362 * map.scale - height,
+      left: map.offX + dockTargetX * map.scale - width / 2,
+      top: map.offY + dockTargetY * map.scale - height,
       width: width,
       height: height
+    };
+  }
+
+  function syncSceneDockHalo() {
+    if (!sceneDockHalo) return;
+    var absolute = getDockAbsolutePos();
+    if (!absolute) return;
+    var diameter = clamp(absolute.height * 0.72, 60, 88);
+    var centerX = absolute.left + absolute.width * 0.5;
+    var centerY = absolute.top + absolute.height * 0.6;
+    sceneDockHalo.style.left = centerX.toFixed(1) + "px";
+    sceneDockHalo.style.top = centerY.toFixed(1) + "px";
+    sceneDockHalo.style.width = diameter.toFixed(1) + "px";
+    sceneDockHalo.style.height = diameter.toFixed(1) + "px";
+  }
+
+  function getHomeScreenPose() {
+    var size = getPedestalFloatSize();
+    return {
+      x: floatState.x,
+      y: floatState.y,
+      rot: floatState.rot,
+      width: size.width,
+      height: size.height
+    };
+  }
+
+  function getDockPose() {
+    var dock = getDockScreenPos();
+    if (!dock) return null;
+    return {
+      x: dock.x,
+      y: dock.y,
+      rot: 0,
+      width: dock.width,
+      height: dock.height
     };
   }
 
@@ -669,6 +851,84 @@
       return rect.top < vh * 0.6 && rect.bottom > vh * 0.2 ? 1 : 0;
     }
     return clamp((vh * 0.9 - rect.top) / (vh * 0.9 - vh * 0.3), 0, 1);
+  }
+
+  function getSceneVisibilityRatio() {
+    if (!sceneWrap) return 0;
+    var rect = sceneWrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var visible = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
+    return clamp(visible / Math.max(1, Math.min(rect.height, vh)), 0, 1);
+  }
+
+  function shouldAttractToScene() {
+    if (!sceneWrap) return false;
+    var rect = sceneWrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var visibility = getSceneVisibilityRatio();
+    var centerY = rect.top + rect.height * 0.5;
+    var enterVisible = visibility > 0.42 && centerY > vh * 0.24 && centerY < vh * 0.88;
+    var stayVisible = visibility > 0.22 && centerY > vh * 0.1 && centerY < vh * 0.96;
+    if (reducedMotion) {
+      sceneAttractionActive = enterVisible;
+      return sceneAttractionActive;
+    }
+    if (sceneAttractionActive) sceneAttractionActive = stayVisible;
+    else sceneAttractionActive = enterVisible;
+    return sceneAttractionActive;
+  }
+
+  function getFrameSmoothing(amount, dt) {
+    return 1 - Math.pow(1 - amount, Math.max(0.5, dt / 16.6667));
+  }
+
+  function ensurePedestalScreenPose(homePose) {
+    if (pedestalScreenPose.initialized) return;
+    pedestalScreenPose.x = homePose.x;
+    pedestalScreenPose.y = homePose.y;
+    pedestalScreenPose.rot = homePose.rot;
+    pedestalScreenPose.width = homePose.width;
+    pedestalScreenPose.height = homePose.height;
+    pedestalScreenPose.initialized = true;
+  }
+
+  function applyPedestalScreenPose() {
+    if (!pedestal || !pedestalScreenPose.initialized) return;
+    ensureFloatingHost();
+    pedestal.classList.remove("docked");
+    pedestal.classList.remove("undocking");
+    pedestal.style.position = "fixed";
+    pedestal.style.left = "0";
+    pedestal.style.top = "0";
+    pedestal.style.width = pedestalScreenPose.width + "px";
+    pedestal.style.height = pedestalScreenPose.height + "px";
+    pedestal.style.transform = "translate(" + pedestalScreenPose.x + "px, " + pedestalScreenPose.y + "px) rotate(" + pedestalScreenPose.rot + "deg)";
+    if (!pedestal.classList.contains("pressed-glow")) pedestal.style.filter = "";
+  }
+
+  function getPoseDistance(a, b) {
+    if (!a || !b) return 0;
+    var dx = (a.x || 0) - (b.x || 0);
+    var dy = (a.y || 0) - (b.y || 0);
+    var dw = (a.width || 0) - (b.width || 0);
+    var dh = (a.height || 0) - (b.height || 0);
+    var dr = (a.rot || 0) - (b.rot || 0);
+    return Math.sqrt(dx * dx + dy * dy + dw * dw * 0.5 + dh * dh * 0.5 + dr * dr * 12);
+  }
+
+  function updateFieldDeploymentUI(isAttracting) {
+    if (miniDash) miniDash.classList.toggle("visible", isDocked || currentDockProgress > 0.62);
+    if (sceneDockHalo) {
+      syncSceneDockHalo();
+      sceneDockHalo.classList.toggle("active", isDocked);
+    }
+    if (landingSpot) {
+      var alpha = isDocked ? 1 : (isAttracting ? clamp((currentDockProgress - 0.18) / 0.82, 0, 1) : 0);
+      landingSpot.setAttribute("stroke", "rgba(223,44,44," + (alpha * 0.6) + ")");
+      landingSpot.setAttribute("fill", "rgba(223,44,44," + (alpha * 0.1) + ")");
+    }
+    if (fieldStatusTimer) return;
+    resetSceneStatus();
   }
 
   function createSceneNode(tagName, attrs) {
@@ -755,8 +1015,11 @@
     if (isDocked) {
       sceneStatus.textContent = "FIELD UNIT ACTIVE - AWAITING PRESSES";
       sceneStatus.classList.add("show");
-    } else if (currentDockProgress > 0.2 && !isUndocking) {
+    } else if (sceneAttractionActive && currentDockProgress > 0.08) {
       sceneStatus.textContent = "FIELD UNIT DEPLOYING... " + Math.round(currentDockProgress * 100) + "%";
+      sceneStatus.classList.add("show");
+    } else if (!sceneAttractionActive && currentDockProgress > 0.08) {
+      sceneStatus.textContent = "FIELD UNIT RETRACTING...";
       sceneStatus.classList.add("show");
     } else {
       sceneStatus.classList.remove("show");
@@ -769,49 +1032,6 @@
       fieldStatusTimer = null;
       resetSceneStatus();
     }, ms);
-  }
-
-  function applyDockProgress(progress) {
-    if (!pedestal || !sceneWrap || isDocked || isUndocking) return;
-    currentDockProgress = progress;
-    if (progress > 0 && progress < 1 && !capturedFloatPos) {
-      capturedFloatPos = { x: floatState.x, y: floatState.y, rot: floatState.rot };
-    }
-    if (progress === 0) capturedFloatPos = null;
-    if (miniDash) miniDash.classList.toggle("visible", progress > 0.6);
-    if (progress <= 0) {
-      if (landingSpot) {
-        landingSpot.setAttribute("stroke", "rgba(223,44,44,0)");
-        landingSpot.setAttribute("fill", "rgba(223,44,44,0)");
-      }
-      if (!fieldStatusTimer) resetSceneStatus();
-      pedestal.style.filter = "";
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
-      return;
-    }
-    ensureFloatingHost();
-    pedestal.classList.remove("docked");
-    pedestal.style.position = "fixed";
-    pedestal.style.left = "0";
-    pedestal.style.top = "0";
-    var dock = getDockScreenPos();
-    if (!dock) return;
-    var t = smoothstep(progress);
-    var src = capturedFloatPos || { x: floatState.x, y: floatState.y, rot: floatState.rot };
-    pedestal.style.width = (140 + (dock.width - 140) * t) + "px";
-    pedestal.style.height = (320 + (dock.height - 320) * t) + "px";
-    pedestal.style.transform = "translate(" + (src.x + (dock.x - src.x) * t) + "px, " + (src.y + (dock.y - src.y) * t) + "px) rotate(" + (src.rot * (1 - t)) + "deg)";
-    pedestal.style.filter = "drop-shadow(0 " + (20 * (1 - t) + 3 * t) + "px " + (40 * (1 - t) + 6 * t) + "px rgba(22,28,38,.25))";
-    if (landingSpot) {
-      var alpha = Math.max(0, (t - 0.3) / 0.7);
-      landingSpot.setAttribute("stroke", "rgba(223,44,44," + (alpha * 0.6) + ")");
-      landingSpot.setAttribute("fill", "rgba(223,44,44," + (alpha * 0.1) + ")");
-    }
-    if (!fieldStatusTimer && sceneStatus && progress > 0.2) {
-      sceneStatus.textContent = "FIELD UNIT DEPLOYING... " + Math.round(t * 100) + "%";
-      sceneStatus.classList.add("show");
-    }
-    if (progress >= 1) finalizeDock();
   }
 
   function finalizeDock() {
@@ -831,8 +1051,9 @@
     pedestal.style.height = absolute.height + "px";
     pedestal.style.transform = "rotate(0deg)";
     pedestal.style.filter = "";
+    syncSceneDockHalo();
     if (miniDash) miniDash.classList.add("visible");
-    if (fieldCaption) fieldCaption.textContent = "Button deployed. Press it and watch telemetry below.";
+    if (fieldCaption) fieldCaption.textContent = "Button deployed. Press it here, then inspect the live telemetry in Switch Lab below.";
     if (fieldStatusTimer) {
       clearTimeout(fieldStatusTimer);
       fieldStatusTimer = null;
@@ -841,58 +1062,60 @@
     animateCuriosity();
   }
 
-  function undockFromScene() {
-    if (!pedestal || !isDocked || isUndocking) return;
-    isUndocking = true;
-    isDocked = false;
-    currentDockProgress = 0;
-    if (miniDash) miniDash.classList.remove("visible");
-    if (landingSpot) {
-      landingSpot.setAttribute("stroke", "rgba(223,44,44,0)");
-      landingSpot.setAttribute("fill", "rgba(223,44,44,0)");
-    }
-    if (fieldStatusTimer) {
-      clearTimeout(fieldStatusTimer);
-      fieldStatusTimer = null;
-    }
-    if (sceneStatus) {
-      sceneStatus.textContent = "FIELD UNIT RETRACTING...";
-      sceneStatus.classList.add("show");
-    }
+  function releaseDockToFloat() {
+    if (!pedestal || !isDocked) return;
     var rect = pedestal.getBoundingClientRect();
     ensureFloatingHost();
     pedestal.classList.remove("docked");
+    pedestal.classList.remove("undocking");
     pedestal.style.position = "fixed";
     pedestal.style.left = "0";
     pedestal.style.top = "0";
     pedestal.style.transform = "translate(" + rect.left + "px, " + rect.top + "px) rotate(0deg)";
     pedestal.style.width = rect.width + "px";
     pedestal.style.height = rect.height + "px";
-    if (reducedMotion) {
-      pedestal.classList.remove("undocking");
-      pedestal.style.filter = "";
-      placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
-      isUndocking = false;
-      capturedFloatPos = null;
-      if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
-      if (sceneStatus) sceneStatus.classList.remove("show");
-      resetPeople();
-      return;
+    if (!pedestal.classList.contains("pressed-glow")) pedestal.style.filter = "";
+    pedestalScreenPose.x = rect.left;
+    pedestalScreenPose.y = rect.top;
+    pedestalScreenPose.rot = 0;
+    pedestalScreenPose.width = rect.width;
+    pedestalScreenPose.height = rect.height;
+    pedestalScreenPose.initialized = true;
+    isDocked = false;
+    isUndocking = false;
+    capturedFloatPos = null;
+    if (fieldStatusTimer) {
+      clearTimeout(fieldStatusTimer);
+      fieldStatusTimer = null;
     }
-    pedestal.classList.add("undocking");
-    void pedestal.offsetWidth;
-    pedestal.style.width = "140px";
-    pedestal.style.height = "320px";
-    pedestal.style.filter = "";
-    pedestal.style.transform = "translate(" + floatState.x + "px, " + floatState.y + "px) rotate(" + floatState.rot + "deg)";
-    setTimeout(function () {
-      pedestal.classList.remove("undocking");
-      isUndocking = false;
-      capturedFloatPos = null;
-      if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
-      if (sceneStatus) sceneStatus.classList.remove("show");
-      resetPeople();
-    }, 1250);
+    if (sceneDockHalo) sceneDockHalo.classList.remove("active");
+    if (fieldCaption) fieldCaption.textContent = "Scroll this section into view to deploy the field unit.";
+    resetPeople();
+  }
+
+  function updatePedestalFreeMotion(isAttracting, dt) {
+    if (!pedestal) return;
+    var home = getHomeScreenPose();
+    var dock = getDockPose();
+    ensurePedestalScreenPose(home);
+    var target = isAttracting && dock ? dock : home;
+    var moveFactor = getFrameSmoothing(isAttracting ? 0.1 : 0.08, dt);
+    var sizeFactor = getFrameSmoothing(isAttracting ? 0.12 : 0.09, dt);
+    var rotFactor = getFrameSmoothing(isAttracting ? 0.14 : 0.1, dt);
+    pedestalScreenPose.x += (target.x - pedestalScreenPose.x) * moveFactor;
+    pedestalScreenPose.y += (target.y - pedestalScreenPose.y) * moveFactor;
+    pedestalScreenPose.width += (target.width - pedestalScreenPose.width) * sizeFactor;
+    pedestalScreenPose.height += (target.height - pedestalScreenPose.height) * sizeFactor;
+    pedestalScreenPose.rot += (target.rot - pedestalScreenPose.rot) * rotFactor;
+    if (dock) {
+      var totalDistance = Math.max(1, getPoseDistance(home, dock));
+      currentDockProgress = clamp(1 - getPoseDistance(pedestalScreenPose, dock) / totalDistance, 0, 1);
+    } else {
+      currentDockProgress = 0;
+    }
+    applyPedestalScreenPose();
+    updateFieldDeploymentUI(isAttracting);
+    if (isAttracting && dock && getPoseDistance(pedestalScreenPose, dock) < 1.8) finalizeDock();
   }
 
   function animateCuriosity() {
@@ -974,10 +1197,22 @@
     var words = String(text || "").split(/\s+/);
     var lines = [];
     var currentLine = "";
-    var maxChars = 24;
+    var lineX = window.innerWidth <= 650 ? "39" : "40";
+    var lineStep = window.innerWidth <= 650 ? "12" : "13";
+    var maxLineWidth = window.innerWidth <= 650 ? 172 : 206;
+    var maxLines = window.innerWidth <= 650 ? 6 : 5;
+    var measure = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    measure.setAttribute("x", lineX);
+    person4Quote.appendChild(measure);
+
+    function fits(textLine) {
+      measure.textContent = textLine;
+      return measure.getComputedTextLength() <= maxLineWidth;
+    }
+
     for (var i = 0; i < words.length; i++) {
       var candidate = currentLine ? currentLine + " " + words[i] : words[i];
-      if (currentLine && candidate.length > maxChars) {
+      if (currentLine && !fits(candidate)) {
         lines.push(currentLine);
         currentLine = words[i];
       } else {
@@ -985,14 +1220,15 @@
       }
     }
     if (currentLine) lines.push(currentLine);
-    while (lines.length > 5) {
+    while (lines.length > maxLines) {
       lines[lines.length - 2] += " " + lines[lines.length - 1];
       lines.pop();
     }
+    person4Quote.removeChild(measure);
     for (var j = 0; j < lines.length; j++) {
       var tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
-      tspan.setAttribute("x", "36");
-      tspan.setAttribute("dy", j === 0 ? "0" : "10");
+      tspan.setAttribute("x", lineX);
+      tspan.setAttribute("dy", j === 0 ? "0" : lineStep);
       tspan.textContent = lines[j];
       person4Quote.appendChild(tspan);
     }
@@ -1061,26 +1297,63 @@
     requestAnimationFrame(walkPeople);
   }
 
-  function renderPedestalLoop() {
+  function renderPedestalLoop(now) {
+    if (!now) now = performance.now();
+    if (!lastPedestalLoopAt) lastPedestalLoopAt = now;
+    var dt = clamp(now - lastPedestalLoopAt, 8, 48);
+    lastPedestalLoopAt = now;
+    if (!lastWaveSampleAt || now - lastWaveSampleAt >= 32) {
+      waveData.push(consumeWaveSample());
+      trimData();
+      lastWaveSampleAt = now;
+    }
     tickFloatState();
-    currentDockProgress = getScrollProgress();
+    var isAttracting = shouldAttractToScene();
+    if (reducedMotion) {
+      currentDockProgress = isAttracting ? 1 : 0;
+      if (isAttracting) {
+        if (!isDocked) finalizeDock();
+        if (pedestal) {
+          var reducedAbsolute = getDockAbsolutePos();
+          if (reducedAbsolute) {
+            pedestal.style.left = reducedAbsolute.left + "px";
+            pedestal.style.top = reducedAbsolute.top + "px";
+            pedestal.style.width = reducedAbsolute.width + "px";
+            pedestal.style.height = reducedAbsolute.height + "px";
+          }
+        }
+      } else {
+        if (isDocked) releaseDockToFloat();
+        var homePose = getHomeScreenPose();
+        pedestalScreenPose.x = homePose.x;
+        pedestalScreenPose.y = homePose.y;
+        pedestalScreenPose.rot = homePose.rot;
+        pedestalScreenPose.width = homePose.width;
+        pedestalScreenPose.height = homePose.height;
+        pedestalScreenPose.initialized = true;
+        applyPedestalScreenPose();
+      }
+      updateFieldDeploymentUI(isAttracting);
+      requestAnimationFrame(renderPedestalLoop);
+      return;
+    }
     if (isDocked) {
-      if (currentDockProgress < 0.5) {
-        undockFromScene();
+      if (!isAttracting) {
+        releaseDockToFloat();
       } else if (pedestal) {
+        currentDockProgress = 1;
         var absolute = getDockAbsolutePos();
         if (absolute) {
-          bobPhase += reducedMotion ? 0 : 0.025;
+          bobPhase += 0.025;
           pedestal.style.left = absolute.left + "px";
-          pedestal.style.top = (absolute.top + (reducedMotion ? 0 : Math.sin(bobPhase) * 1.2)) + "px";
+          pedestal.style.top = (absolute.top + Math.sin(bobPhase) * 1.2) + "px";
           pedestal.style.width = absolute.width + "px";
           pedestal.style.height = absolute.height + "px";
         }
+        updateFieldDeploymentUI(true);
       }
-    } else if (!isUndocking) {
-      applyDockProgress(currentDockProgress);
-      if (currentDockProgress <= 0 && pedestal) placePedestalFixed(floatState.x, floatState.y, floatState.rot, 140, 320);
     }
+    if (!isDocked) updatePedestalFreeMotion(isAttracting, dt);
     requestAnimationFrame(renderPedestalLoop);
   }
 
@@ -1123,27 +1396,70 @@
     burstBins[index] += 1;
   }
 
+  function queueWaveSamples(samples) {
+    if (!samples || !samples.length) return;
+    var limit = 42;
+    var usable = Math.min(samples.length, limit);
+    while (waveInjectionQueue.length < usable) waveInjectionQueue.push(0);
+    for (var i = 0; i < usable; i++) {
+      var mixed = (Number(waveInjectionQueue[i]) || 0) + (Number(samples[i]) || 0);
+      waveInjectionQueue[i] = clamp(mixed, -2.5, 2.5);
+    }
+    if (waveInjectionQueue.length > limit) waveInjectionQueue.length = limit;
+  }
+
+  function consumeWaveSample() {
+    var injected = 0;
+    if (waveInjectionQueue.length) injected = Number(waveInjectionQueue.shift()) || 0;
+    return clamp(pedestalMotionValue + injected, -2.5, 2.5);
+  }
+
   function injectWaveFromHold(holdMs) {
     var clamped = clamp(holdMs, 40, 1600);
     var norm = (clamped - 40) / 1560;
-    var peak = 0.85 + norm * 1.15;
-    var tailCount = 5 + Math.round(norm * 7);
-    var freq = 1.05 + norm * 0.5;
-    var decayBase = 0.34 - norm * 0.08;
-    waveData.push(peak);
-    setTimeout(function () {
-      for (var i = 0; i < tailCount; i++) {
-        var step = i + 1;
-        waveData.push(Math.sin(step * freq) * Math.exp(-step * decayBase) * peak * 0.72);
-      }
-      trimData();
-    }, 30);
+    var family = activeSwitchProfile && activeSwitchProfile.family ? activeSwitchProfile.family : "linear";
+    var familyRinging = family === "clicky" ? 1 : family === "tactile" ? 0.58 : 0.24;
+    var wavePeakFactor = clamp(getSwitchProfileNumber("telemetryProfile", "wavePeak", 1), 0.72, 1.7);
+    var waveTailFactor = clamp(getSwitchProfileNumber("telemetryProfile", "waveTail", 0.42), 0.22, 0.72);
+    var clickiness = clamp(getSwitchProfileNumber("soundProfile", "clickiness", 0.12), 0, 1);
+    var travelDepth = clamp(getSwitchProfileNumber("animationProfile", "travelDepth", 0.72), 0.55, 0.94);
+    var peak = clamp((0.7 + norm * 0.66 + travelDepth * 0.28 + clickiness * 0.12) * wavePeakFactor, 0.55, 2.35);
+    var tailCount = 5 + Math.round(norm * 4 + waveTailFactor * 9 + familyRinging * 6);
+    var freq = 0.7 + norm * 0.18 + clickiness * 0.74 + familyRinging * 0.18;
+    var decayBase = clamp(0.5 - waveTailFactor * 0.22 - familyRinging * 0.12 + (0.12 - clickiness * 0.06), 0.11, 0.44);
+    var initialPeak = peak * (0.84 + familyRinging * 0.18);
+    var recoil = -peak * (0.05 + familyRinging * 0.1 + clickiness * 0.05);
+    var queuedSamples = [
+      initialPeak * 0.46,
+      initialPeak * 0.78,
+      initialPeak
+    ];
+    if (Math.abs(recoil) > 0.035) queuedSamples.push(recoil);
+    for (var i = 0; i < tailCount; i++) {
+      var step = i + 1;
+      var ring = Math.sin(step * freq) *
+        Math.exp(-step * decayBase) *
+        peak *
+        (0.18 + familyRinging * 0.48 + clickiness * 0.08);
+      var body = Math.exp(-Math.pow((step - (1.7 + waveTailFactor * 4.5)) / (1.8 + (1 - familyRinging) * 2.4), 2)) *
+        peak *
+        (0.05 + waveTailFactor * 0.18 + travelDepth * 0.08);
+      var sample = ring + body;
+      if (family === "linear") sample *= 0.88;
+      if (family === "clicky" && step < 4) sample += peak * 0.05;
+      queuedSamples.push(sample);
+    }
+    queueWaveSamples(queuedSamples);
   }
 
   function runPedestalEffects() {
     if (!pedestal) return;
     var center = getPedestalCenter();
     transient("pedGlow", pedestal, "pressed-glow", 420, false);
+    if (sceneDockHalo && isDocked) {
+      syncSceneDockHalo();
+      transient("sceneDockHaloPulse", sceneDockHalo, "pulse", 520, true);
+    }
     if (pedestalShockwave) {
       pedestalShockwave.style.left = center.x + "px";
       pedestalShockwave.style.top = center.y + "px";
@@ -1153,13 +1469,6 @@
     }
     spawnPedestalSparkles(center.x, center.y, isDocked ? 8 : 14);
     spawnParticles(center.x, center.y, 10);
-    if (pedestalScrollHint) {
-      var label = pedestalScrollHint.querySelector("span");
-      if (label) label.textContent = isDocked ? "field logged" : "telemetry live";
-      pedestalScrollHint.style.left = (center.x - 36) + "px";
-      pedestalScrollHint.style.top = (center.y + 48) + "px";
-      transient("pedHint", pedestalScrollHint, "show", 520, false);
-    }
   }
 
   function getButtonCenter() {
@@ -1170,6 +1479,7 @@
 
   function handlePress(holdMs, source) {
     var now = Date.now();
+    var effectiveHoldMs = getEffectiveHoldMs(holdMs);
     count++;
     pressTimestamps.push(now);
     if (pressTimestamps.length > 1) intervals.push(now - pressTimestamps[pressTimestamps.length - 2]);
@@ -1191,8 +1501,8 @@
     pulseRedWords();
     var origin = source === "pedestal" ? getPedestalCenter() : getButtonCenter();
     spawnParticles(origin.x, origin.y, source === "pedestal" ? 10 : 14);
-    injectWaveFromHold(holdMs);
     addBurstSample(now);
+    injectWaveFromHold(effectiveHoldMs);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
     if (isDocked) spawnCrowdPerson();
@@ -1216,9 +1526,317 @@
   var pedestalReleaseTimer = null;
   var activePointerId = null;
   var pedestalPointerId = null;
+  var buttonTouchId = null;
   var lastTouchStart = 0;
   var pedestalLastTouchStart = 0;
   var pedestalTouchId = null;
+  var minimumPressDurationMs = 48;
+  var activeSwitchProfile = null;
+  var SOUND_STORAGE_KEY = "brb.soundProfileId";
+  var activeSoundProfile = null;
+  var storedSoundProfileId = loadStoredSoundProfileId();
+  var audioContext = null;
+  var audioBufferPromises = Object.create(null);
+  var audioDataPromises = Object.create(null);
+  var lastSoundRuntimeError = null;
+
+  function loadStoredSoundProfileId() {
+    try {
+      return window.localStorage.getItem(SOUND_STORAGE_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function persistStoredSoundProfileId(id) {
+    storedSoundProfileId = id || null;
+    try {
+      if (storedSoundProfileId) window.localStorage.setItem(SOUND_STORAGE_KEY, storedSoundProfileId);
+      else window.localStorage.removeItem(SOUND_STORAGE_KEY);
+    } catch (_) {}
+  }
+
+  function getAudioContext() {
+    var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextCtor) return null;
+    if (!audioContext) audioContext = new AudioContextCtor();
+    if (audioContext.state === "suspended" && typeof audioContext.resume === "function") {
+      try { audioContext.resume(); } catch (_) {}
+    }
+    return audioContext;
+  }
+
+  function decodeAudioDataCompat(context, arrayBuffer) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+
+      function finishResolve(value) {
+        if (settled) return;
+        settled = true;
+        resolve(value);
+      }
+
+      function finishReject(error) {
+        if (settled) return;
+        settled = true;
+        reject(error);
+      }
+
+      var result;
+      try {
+        result = context.decodeAudioData(arrayBuffer.slice(0), finishResolve, finishReject);
+      } catch (error) {
+        finishReject(error);
+        return;
+      }
+      if (result && typeof result.then === "function") {
+        result.then(finishResolve, finishReject);
+      }
+    });
+  }
+
+  function fetchAudioData(url) {
+    if (audioDataPromises[url]) return audioDataPromises[url];
+    audioDataPromises[url] = fetch(url, { cache: "force-cache" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Audio request failed for " + url + " (" + response.status + ")");
+        }
+        return response.arrayBuffer();
+      })
+      .catch(function (error) {
+        delete audioDataPromises[url];
+        throw error;
+      });
+    return audioDataPromises[url];
+  }
+
+  function loadAudioBuffer(url) {
+    if (audioBufferPromises[url]) return audioBufferPromises[url];
+    audioBufferPromises[url] = fetchAudioData(url).then(function (arrayBuffer) {
+      var context = getAudioContext();
+      if (!context) throw new Error("Web Audio API unavailable.");
+      return decodeAudioDataCompat(context, arrayBuffer);
+    }).catch(function (error) {
+      delete audioBufferPromises[url];
+      throw error;
+    });
+    return audioBufferPromises[url];
+  }
+
+  function startBufferPlayback(buffer, options) {
+    var context = getAudioContext();
+    if (!context) throw new Error("Web Audio API unavailable.");
+    var source = context.createBufferSource();
+    var gain = context.createGain();
+    var offset = clamp(Number(options && options.offset) || 0, 0, Math.max(0, buffer.duration - 0.01));
+    var duration = options && options.duration != null
+      ? clamp(Number(options.duration) || 0.01, 0.01, Math.max(0.01, buffer.duration - offset))
+      : Math.max(0.01, buffer.duration - offset);
+    gain.gain.value = options && options.gain != null ? Number(options.gain) || 1 : 0.96;
+    source.buffer = buffer;
+    source.connect(gain);
+    gain.connect(context.destination);
+    source.start(0, offset, duration);
+    return source;
+  }
+
+  function emitSoundRuntimeError(error, detail) {
+    lastSoundRuntimeError = {
+      message: error && error.message ? error.message : String(error || "Unknown sound error"),
+      detail: detail || null
+    };
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:sound-runtime-error", {
+        detail: lastSoundRuntimeError
+      }));
+    }
+  }
+
+  function chooseVariant(variants) {
+    if (!variants) return null;
+    if (!Array.isArray(variants)) return variants;
+    if (!variants.length) return null;
+    return variants[Math.floor(Math.random() * variants.length)];
+  }
+
+  function normalizeVariantEntry(entry) {
+    if (!entry) return null;
+    return typeof entry === "string" ? { path: entry } : entry;
+  }
+
+  function resolveSoundPhaseEntry(profile, phase) {
+    var adapter = profile && profile.adapter ? profile.adapter : null;
+    if (!adapter || !adapter.type) return null;
+    if (adapter.type === "mechvibes-v1-slice-pack") {
+      return phase === "release" ? adapter.release || adapter.press : adapter.press;
+    }
+    if (adapter.type === "mechvibes-v2-press-release-pack") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
+    if (adapter.type === "mechvibes-file-map-pack") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
+    if (adapter.type === "bucklespring-wav-pair") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
+    return null;
+  }
+
+  function playResolvedSoundEntry(entry, detail) {
+    if (!entry) return Promise.resolve(false);
+    if (entry.asset_path && entry.offset_ms != null && entry.duration_ms != null) {
+      return loadAudioBuffer(entry.asset_path).then(function (buffer) {
+        startBufferPlayback(buffer, {
+          offset: Number(entry.offset_ms) / 1000,
+          duration: Number(entry.duration_ms) / 1000
+        });
+        return true;
+      }).catch(function (error) {
+        emitSoundRuntimeError(error, detail);
+        return false;
+      });
+    }
+    if (entry.path) {
+      return loadAudioBuffer(entry.path).then(function (buffer) {
+        startBufferPlayback(buffer);
+        return true;
+      }).catch(function (error) {
+        emitSoundRuntimeError(error, detail);
+        return false;
+      });
+    }
+    return Promise.resolve(false);
+  }
+
+  function playSoundProfilePhase(profile, phase, options) {
+    if (!profile) return Promise.resolve(false);
+    var resolved = resolveSoundPhaseEntry(profile, phase);
+    return playResolvedSoundEntry(resolved, {
+      phase: phase,
+      profileId: profile.id || null,
+      source: options && options.source ? options.source : null
+    });
+  }
+
+  function playActiveSoundPhase(phase, options) {
+    return playSoundProfilePhase(activeSoundProfile, phase, options);
+  }
+
+  function previewSoundProfile(profile, holdMs, options) {
+    var ms = clamp(Number(holdMs) || 120, 48, 320);
+    var previewProfile = profile || activeSoundProfile;
+    if (!previewProfile) return Promise.resolve(false);
+    playSoundProfilePhase(previewProfile, "press", options || { source: "preview" });
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        playSoundProfilePhase(previewProfile, "release", options || { source: "preview" }).then(function (played) {
+          resolve(Boolean(played));
+        }, function () {
+          resolve(false);
+        });
+      }, ms);
+    });
+  }
+
+  function dispatchSoundProfileChange() {
+    if (window.BRB) {
+      window.BRB.activeSoundProfile = activeSoundProfile;
+      window.BRB.activeSoundProfileId = storedSoundProfileId;
+    }
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:sound-profile-change", {
+        detail: {
+          profile: activeSoundProfile,
+          id: storedSoundProfileId
+        }
+      }));
+    }
+  }
+
+  function setActiveSoundProfile(profile, options) {
+    options = options || {};
+    activeSoundProfile = profile && typeof profile === "object" ? profile : null;
+    if (!options.skipPersist) {
+      persistStoredSoundProfileId(activeSoundProfile && activeSoundProfile.id ? activeSoundProfile.id : null);
+    }
+    dispatchSoundProfileChange();
+    return activeSoundProfile;
+  }
+
+  function getSwitchProfileNumber(sectionName, key, fallback) {
+    var section = activeSwitchProfile && activeSwitchProfile[sectionName];
+    var value = section ? Number(section[key]) : NaN;
+    return isFinite(value) ? value : fallback;
+  }
+
+  function getEffectiveHoldMs(holdMs) {
+    var ms = clamp(Number(holdMs) || 120, 40, 1600);
+    if (!activeSwitchProfile) return ms;
+    var profileMs = getSwitchProfileNumber("animationProfile", "pressDurationMs", ms);
+    return clamp(profileMs + (ms - 120) * 0.55, 40, 1600);
+  }
+
+  function getPedestalPressDuration(defaultMs) {
+    return clamp(Math.round(getSwitchProfileNumber("animationProfile", "pressDurationMs", defaultMs)), 48, 240);
+  }
+
+  function getPedestalReturnDuration(defaultMs) {
+    return clamp(Math.round(getSwitchProfileNumber("animationProfile", "returnDurationMs", defaultMs)), 48, 260);
+  }
+
+  function syncSwitchProfileStyles() {
+    var root = document.documentElement;
+    var body = document.body;
+    var props = [
+      "--brb-switch-press-ms",
+      "--brb-switch-return-ms",
+      "--brb-switch-hover-shift",
+      "--brb-switch-press-shift",
+      "--brb-switch-press-scale",
+      "--brb-switch-pedestal-saturate",
+      "--brb-switch-pedestal-brightness"
+    ];
+    var i;
+    if (!root) return;
+    if (!activeSwitchProfile) {
+      for (i = 0; i < props.length; i++) root.style.removeProperty(props[i]);
+      if (body) {
+        body.classList.remove("switch-profile-active");
+        body.removeAttribute("data-switch-family");
+      }
+      return;
+    }
+    var animation = activeSwitchProfile.animationProfile || {};
+    var sound = activeSwitchProfile.soundProfile || {};
+    var travelDepth = clamp(Number(animation.travelDepth) || 0.72, 0.55, 0.94);
+    var clickiness = clamp(Number(sound.clickiness) || 0.12, 0, 1);
+    var pressDuration = getPedestalPressDuration(120);
+    var returnDuration = getPedestalReturnDuration(92);
+    root.style.setProperty("--brb-switch-press-ms", pressDuration + "ms");
+    root.style.setProperty("--brb-switch-return-ms", returnDuration + "ms");
+    root.style.setProperty("--brb-switch-hover-shift", (1.2 + clickiness * 1.6).toFixed(2) + "px");
+    root.style.setProperty("--brb-switch-press-shift", (1.6 + travelDepth * 2.6).toFixed(2) + "px");
+    root.style.setProperty("--brb-switch-press-scale", clamp(0.992 - travelDepth * 0.04 - clickiness * 0.015, 0.935, 0.986).toFixed(3));
+    root.style.setProperty("--brb-switch-pedestal-saturate", (1.01 + clickiness * 0.22).toFixed(3));
+    root.style.setProperty("--brb-switch-pedestal-brightness", (0.985 - clickiness * 0.03).toFixed(3));
+    if (body) {
+      body.classList.add("switch-profile-active");
+      body.setAttribute("data-switch-family", activeSwitchProfile.family || "linear");
+    }
+  }
+
+  function setActiveSwitchProfile(profile) {
+    activeSwitchProfile = profile && typeof profile === "object" ? profile : null;
+    syncSwitchProfileStyles();
+    if (window.BRB) window.BRB.activeSwitchProfile = activeSwitchProfile;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:switch-profile-change", {
+        detail: { profile: activeSwitchProfile }
+      }));
+    }
+    return activeSwitchProfile;
+  }
 
   function finalizeButton(cancelled) {
     if (!buttonActive) return;
@@ -1228,7 +1846,10 @@
     }
     buttonActive = false;
     if (btn) btn.classList.remove("is-pressed");
-    if (!cancelled) handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
+    if (!cancelled) {
+      playActiveSoundPhase("release", { source: "lab" });
+      handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
+    }
   }
 
   function beginButton() {
@@ -1242,6 +1863,7 @@
     buttonActive = true;
     buttonDownAt = Date.now();
     btn.classList.add("is-pressed");
+    playActiveSoundPhase("press", { source: "lab" });
   }
 
   function endButton(cancelled) {
@@ -1251,7 +1873,7 @@
       return;
     }
     var elapsed = Date.now() - buttonDownAt;
-    if (elapsed >= 90) {
+    if (elapsed >= minimumPressDurationMs) {
       finalizeButton(false);
       return;
     }
@@ -1259,10 +1881,11 @@
     buttonReleaseTimer = setTimeout(function () {
       buttonReleaseTimer = null;
       finalizeButton(false);
-    }, 90 - elapsed);
+    }, minimumPressDurationMs - elapsed);
   }
 
-  function triggerExternalPress(holdMs, source) {
+  function triggerExternalPress(holdMs, source, options) {
+    options = options || {};
     var ms = clamp(Number(holdMs) || 120, 40, 1600);
     if (btn && !buttonActive) {
       btn.classList.add("is-pressed");
@@ -1272,6 +1895,7 @@
         timers.proxyButton = null;
       }, 140);
     }
+    if (!options.skipSound) previewSoundProfile(activeSoundProfile, ms, { source: source || "external" });
     handlePress(ms, source || "external");
   }
 
@@ -1282,24 +1906,23 @@
       pedestalReleaseTimer = null;
     }
     pedestalActive = false;
-    if (dome) {
-      dome.classList.remove("pushed");
-      dome.style.transform = "";
-    }
-    if (dome && !cancelled) {
-      dome.classList.remove("rebound");
-      void dome.offsetWidth;
-      dome.classList.add("rebound");
-    }
-    if (dome && cancelled) dome.classList.remove("rebound");
+    if (pedestalControl) pedestalControl.classList.remove("is-pressed");
+    animatePedestalFrames(
+      pedestalFrames.length ? pedestalFrames.length - 1 : 0,
+      cancelled ? getPedestalReturnDuration(96) : getPedestalReturnDuration(124),
+      function () {
+        setPedestalFrame(0);
+      }
+    );
     if (!cancelled) {
+      playActiveSoundPhase("release", { source: "pedestal" });
       runPedestalEffects();
-      triggerExternalPress(clamp(Date.now() - pedestalDownAt, 40, 1600), "pedestal");
+      triggerExternalPress(clamp(Date.now() - pedestalDownAt, 40, 1600), "pedestal", { skipSound: true });
     }
   }
 
   function beginPedestal() {
-    if (!pedestal || !dome || isUndocking) return;
+    if (!pedestal || !pedestalControl || isUndocking) return;
     if (pedestalActive && pedestalReleaseTimer !== null) finalizePedestal(false);
     else if (pedestalActive) return;
     if (pedestalReleaseTimer !== null) {
@@ -1308,11 +1931,9 @@
     }
     pedestalActive = true;
     pedestalDownAt = Date.now();
-    dome.style.transform = "";
-    dome.classList.remove("rebound");
-    dome.classList.remove("pushed");
-    void dome.offsetWidth;
-    dome.classList.add("pushed");
+    pedestalControl.classList.add("is-pressed");
+    animatePedestalFrames(pedestalPressPeakFrame, getPedestalPressDuration(92));
+    playActiveSoundPhase("press", { source: "pedestal" });
   }
 
   function endPedestal(cancelled) {
@@ -1322,7 +1943,7 @@
       return;
     }
     var elapsed = Date.now() - pedestalDownAt;
-    if (elapsed >= 90) {
+    if (elapsed >= minimumPressDurationMs) {
       finalizePedestal(false);
       return;
     }
@@ -1330,12 +1951,104 @@
     pedestalReleaseTimer = setTimeout(function () {
       pedestalReleaseTimer = null;
       finalizePedestal(false);
-    }, 90 - elapsed);
+    }, minimumPressDurationMs - elapsed);
+  }
+
+  function scrollAssistEnabled() {
+    return !reducedMotion && window.innerWidth > 980;
+  }
+
+  function getScrollAssistPanels() {
+    return Array.prototype.slice.call(document.querySelectorAll(".hero, .field-section, .stack > .panel"));
+  }
+
+  function getScrollAssistTarget(rect) {
+    var margin = 14;
+    var availableHeight = window.innerHeight - margin * 2;
+    var offset = rect.height >= availableHeight
+      ? margin
+      : Math.max(margin, Math.round((window.innerHeight - rect.height) / 2));
+    var top = (window.scrollY || window.pageYOffset || 0) + rect.top - offset;
+    var maxTop = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    return clamp(Math.round(top), 0, maxTop);
+  }
+
+  function findScrollAssistCandidate() {
+    if (!scrollAssistEnabled()) return null;
+    var panels = getScrollAssistPanels();
+    var viewportCenter = window.innerHeight / 2;
+    var threshold = Math.min(140, window.innerHeight * 0.18);
+    var best = null;
+    for (var i = 0; i < panels.length; i++) {
+      var rect = panels[i].getBoundingClientRect();
+      if (rect.bottom < -40 || rect.top > window.innerHeight + 40) continue;
+      var centerDistance = Math.abs((rect.top + rect.height / 2) - viewportCenter);
+      if (centerDistance > threshold) continue;
+      var targetTop = getScrollAssistTarget(rect);
+      var distanceToTarget = Math.abs((window.scrollY || window.pageYOffset || 0) - targetTop);
+      if (distanceToTarget < 8) continue;
+      var score = centerDistance + distanceToTarget * 0.12;
+      if (!best || score < best.score) {
+        best = {
+          score: score,
+          targetTop: targetTop
+        };
+      }
+    }
+    return best;
+  }
+
+  function settleScrollAssist() {
+    scrollAssist.settleTimer = null;
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    if (now < scrollAssist.ignoreUntil || now < scrollAssist.cooldownUntil) return;
+    if (scrollAssist.velocity > 0.9) return;
+    var candidate = findScrollAssistCandidate();
+    if (!candidate) return;
+    if (
+      scrollAssist.lastTargetTop !== null &&
+      Math.abs(candidate.targetTop - scrollAssist.lastTargetTop) < 6 &&
+      now < scrollAssist.cooldownUntil + 280
+    ) {
+      return;
+    }
+    scrollAssist.lastTargetTop = candidate.targetTop;
+    scrollAssist.ignoreUntil = now + 420;
+    scrollAssist.cooldownUntil = now + 900;
+    window.scrollTo({
+      top: candidate.targetTop,
+      behavior: "smooth"
+    });
+  }
+
+  function queueScrollAssist() {
+    if (!scrollAssistEnabled() || performance.now() < scrollAssist.ignoreUntil) return;
+    if (scrollAssist.settleTimer !== null) clearTimeout(scrollAssist.settleTimer);
+    scrollAssist.settleTimer = setTimeout(settleScrollAssist, 96);
   }
 
   window.BRB = window.BRB || {};
   window.BRB.triggerPress = triggerExternalPress;
+  window.BRB.getSwitchProfile = function () { return activeSwitchProfile; };
+  window.BRB.setSwitchProfile = setActiveSwitchProfile;
+  window.BRB.clearSwitchProfile = function () { return setActiveSwitchProfile(null); };
+  window.BRB.getSoundProfile = function () { return activeSoundProfile; };
+  window.BRB.getStoredSoundProfileId = function () { return storedSoundProfileId; };
+  window.BRB.setSoundProfile = setActiveSoundProfile;
+  window.BRB.clearSoundProfile = function () { return setActiveSoundProfile(null); };
+  window.BRB.previewSoundProfile = previewSoundProfile;
+  window.BRB.getLastSoundRuntimeError = function () { return lastSoundRuntimeError; };
+  window.BRB.getEffectivePressMs = getEffectiveHoldMs;
+  window.BRB.getLiveWaveform = function () { return waveData.slice(-96); };
+  window.BRB.getTelemetrySnapshot = getTelemetrySnapshot;
+  window.BRB.activeSwitchProfile = activeSwitchProfile;
+  window.BRB.activeSoundProfile = activeSoundProfile;
+  window.BRB.activeSoundProfileId = storedSoundProfileId;
+  window.BRB.telemetry = getTelemetrySnapshot();
 
+  initPedestalFrames();
+  syncSwitchProfileStyles();
   collectRedWords();
   updateReggieBubbleLayout();
   initAmbient();
@@ -1351,6 +2064,7 @@
     updateReggieBubbleLayout();
     resizeAmbient();
     resizeCanvases();
+    scrollAssist.lastTargetTop = null;
     if (isDocked && pedestal) {
       var absolute = getDockAbsolutePos();
       if (absolute) {
@@ -1362,81 +2076,92 @@
     }
   });
 
-  if (pedestalSvg) {
+  window.addEventListener("wheel", function (e) {
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    if (Math.abs(e.deltaY) > 120 || Math.abs(e.deltaX) > 48) {
+      scrollAssist.velocity = Math.max(scrollAssist.velocity, 1.1);
+      scrollAssist.ignoreUntil = now + 140;
+    }
+  }, { passive: true });
+
+  window.addEventListener("scroll", function () {
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    var currentY = window.scrollY || window.pageYOffset || 0;
+    var deltaY = Math.abs(currentY - scrollAssist.lastY);
+    var deltaT = Math.max(16, now - scrollAssist.lastAt);
+    var instantVelocity = deltaY / deltaT;
+    scrollAssist.velocity = instantVelocity * 0.74 + scrollAssist.velocity * 0.26;
+    scrollAssist.lastY = currentY;
+    scrollAssist.lastAt = now;
+    queueScrollAssist();
+  }, { passive: true });
+
+  if (pedestalControl) {
     if ("PointerEvent" in window) {
-      pedestalSvg.addEventListener("pointerdown", function (e) {
+      pedestalControl.addEventListener("pointerdown", function (e) {
         if (e.pointerType === "mouse" && e.button !== 0) return;
         e.preventDefault();
         pedestalPointerId = e.pointerId;
-        if (pedestalSvg.setPointerCapture) {
-          try { pedestalSvg.setPointerCapture(e.pointerId); } catch (_) {}
+        if (pedestalControl.setPointerCapture) {
+          try { pedestalControl.setPointerCapture(e.pointerId); } catch (_) {}
         }
         beginPedestal();
       });
-      pedestalSvg.addEventListener("pointerup", function (e) {
+      pedestalControl.addEventListener("pointerup", function (e) {
         if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
         endPedestal(false);
         pedestalPointerId = null;
       });
-      pedestalSvg.addEventListener("pointercancel", function (e) {
+      pedestalControl.addEventListener("pointercancel", function (e) {
         if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
         endPedestal(true);
         pedestalPointerId = null;
       });
-      pedestalSvg.addEventListener("lostpointercapture", function () {
+      pedestalControl.addEventListener("lostpointercapture", function () {
         pedestalPointerId = null;
         endPedestal(true);
       });
     } else {
-      pedestalSvg.addEventListener("touchstart", function (e) {
+      pedestalControl.addEventListener("touchstart", function (e) {
         pedestalLastTouchStart = Date.now();
         e.preventDefault();
         if (!e.changedTouches || !e.changedTouches.length) return;
         pedestalTouchId = e.changedTouches[0].identifier;
         beginPedestal();
       }, { passive: false });
-      pedestalSvg.addEventListener("touchend", function (e) {
+      pedestalControl.addEventListener("touchend", function (e) {
         if (pedestalTouchId === null) return;
         e.preventDefault();
         endPedestal(false);
         pedestalTouchId = null;
       }, { passive: false });
-      pedestalSvg.addEventListener("touchcancel", function () {
+      pedestalControl.addEventListener("touchcancel", function () {
         endPedestal(true);
         pedestalTouchId = null;
       });
-      pedestalSvg.addEventListener("click", function () {
+      pedestalControl.addEventListener("click", function () {
         if (Date.now() - pedestalLastTouchStart < 700) return;
         beginPedestal();
         endPedestal(false);
       });
     }
-    pedestalSvg.addEventListener("keydown", function (e) {
+    pedestalControl.addEventListener("keydown", function (e) {
       if (!e.repeat && (e.key === "Enter" || e.key === " ")) {
         e.preventDefault();
         beginPedestal();
       }
     });
-    pedestalSvg.addEventListener("keyup", function (e) {
+    pedestalControl.addEventListener("keyup", function (e) {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         endPedestal(false);
       }
     });
-    pedestalSvg.addEventListener("blur", function () {
+    pedestalControl.addEventListener("blur", function () {
       endPedestal(true);
     });
-    if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      pedestalSvg.addEventListener("mouseenter", function () {
-        if (!dome || dome.classList.contains("pushed")) return;
-        dome.style.transition = "transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1)";
-        dome.style.transform = "scale(1.04)";
-      });
-      pedestalSvg.addEventListener("mouseleave", function () {
-        if (!dome || dome.classList.contains("pushed")) return;
-        dome.style.transform = "";
-      });
-    }
   }
 
   if (btn) {
@@ -1468,14 +2193,19 @@
       btn.addEventListener("touchstart", function (e) {
         lastTouchStart = Date.now();
         e.preventDefault();
+        if (!e.changedTouches || !e.changedTouches.length) return;
+        buttonTouchId = e.changedTouches[0].identifier;
         beginButton();
       }, { passive: false });
       btn.addEventListener("touchend", function (e) {
+        if (buttonTouchId === null) return;
         e.preventDefault();
         endButton(false);
+        buttonTouchId = null;
       }, { passive: false });
       btn.addEventListener("touchcancel", function () {
         endButton(true);
+        buttonTouchId = null;
       });
       btn.addEventListener("click", function () {
         if (Date.now() - lastTouchStart < 700) return;
@@ -1495,14 +2225,10 @@
         endButton(false);
       }
     });
+    btn.addEventListener("blur", function () {
+      endButton(true);
+    });
   }
-
-  setInterval(function () {
-    if (!waveData.length) return;
-    waveData.push(waveData[waveData.length - 1] * 0.85);
-    if (waveData.length > 160) waveData.splice(0, waveData.length - 160);
-    if (Math.abs(waveData[waveData.length - 1]) < 0.01) waveData.push(0);
-  }, 60);
 
   setInterval(updateStats, 1000);
 })();
