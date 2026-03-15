@@ -1,0 +1,267 @@
+body.visual-workover .button-choice-panel {
+  grid-column: 1 / -1;
+}
+
+body.visual-workover .button-choice-panel__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.8rem 1rem;
+  align-items: end;
+  padding-bottom: 0.72rem;
+  border-bottom: 1px solid rgba(26, 30, 40, 0.14);
+}
+
+body.visual-workover .button-choice-panel__copy {
+  min-width: 0;
+}
+
+body.visual-workover .button-choice-panel__kicker {
+  margin: 0 0 0.32rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(26, 30, 40, 0.62);
+}
+
+body.visual-workover .button-choice-panel__title {
+  margin: 0;
+}
+
+body.visual-workover .button-choice-panel__lede {
+  margin: 0.42rem 0 0;
+  max-width: 58ch;
+  color: rgba(26, 30, 40, 0.72);
+}
+
+body.visual-workover .button-choice-panel__meta {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.74rem;
+  color: rgba(26, 30, 40, 0.62);
+  text-align: right;
+}
+
+body.visual-workover .button-choice-root {
+  margin-top: 0.82rem;
+}
+
+body.visual-workover .button-choice-loading,
+body.visual-workover .button-choice-empty {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.82rem;
+  color: rgba(26, 30, 40, 0.62);
+}
+
+body.visual-workover .button-choice-app {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+body.visual-workover .button-choice-card {
+  border: 2px solid var(--ink);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.95));
+  box-shadow: 8px 8px 0 rgba(5, 6, 8, 0.06);
+  padding: 0.92rem;
+}
+
+body.visual-workover .button-choice-card__title {
+  margin: 0 0 0.14rem;
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+body.visual-workover .button-choice-card__lede {
+  margin: 0;
+  color: rgba(26, 30, 40, 0.7);
+}
+
+body.visual-workover .button-choice-card__note {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  color: rgba(26, 30, 40, 0.58);
+}
+
+body.visual-workover .button-choice-controls {
+  display: grid;
+  gap: 0.72rem;
+}
+
+body.visual-workover .button-choice-summary {
+  display: grid;
+  gap: 0.68rem;
+}
+
+body.visual-workover .button-choice-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+body.visual-workover .button-choice-summary__item {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.62rem 0.68rem;
+  border: 1px solid rgba(26, 30, 40, 0.16);
+  background: rgba(255, 255, 255, 0.64);
+}
+
+body.visual-workover .button-choice-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(26, 30, 40, 0.58);
+}
+
+body.visual-workover .button-choice-value {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+body.visual-workover .button-choice-subvalue {
+  font-size: 0.84rem;
+  color: rgba(26, 30, 40, 0.68);
+}
+
+body.visual-workover .button-choice-field {
+  display: grid;
+  gap: 0.34rem;
+}
+
+body.visual-workover .button-choice-select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.58rem 0.72rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: #fff;
+  font: 500 0.95rem/1.3 "IBM Plex Sans", sans-serif;
+  color: var(--ink);
+}
+
+body.visual-workover .button-choice-select:focus-visible {
+  outline: 2px solid rgba(223, 44, 44, 0.5);
+  outline-offset: 2px;
+}
+
+body.visual-workover .button-choice-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.72rem;
+  align-items: start;
+}
+
+body.visual-workover .button-choice-toggle {
+  min-height: 2.75rem;
+  padding: 0.62rem 0.92rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--ink);
+  color: #fff;
+  font: 600 0.9rem/1.2 "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+}
+
+body.visual-workover .button-choice-toggle:hover {
+  background: #2b3443;
+}
+
+body.visual-workover .button-choice-toggle:focus-visible {
+  outline: 2px solid rgba(223, 44, 44, 0.5);
+  outline-offset: 2px;
+}
+
+body.visual-workover .button-choice-telemetry {
+  display: grid;
+  gap: 0.72rem;
+}
+
+body.visual-workover .button-choice-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.54rem;
+}
+
+body.visual-workover .button-choice-stat {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.58rem 0.62rem;
+  border: 1px solid rgba(26, 30, 40, 0.16);
+  background: rgba(255, 255, 255, 0.64);
+}
+
+body.visual-workover .button-choice-stat__value {
+  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  font-size: 1.28rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+}
+
+body.visual-workover .button-choice-stat__label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(26, 30, 40, 0.58);
+}
+
+body.visual-workover .button-choice-wave {
+  display: grid;
+  gap: 0.32rem;
+}
+
+body.visual-workover .button-choice-wave canvas {
+  display: block;
+  width: 100%;
+  height: 152px;
+  border: 1px solid rgba(26, 30, 40, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.82));
+}
+
+body.visual-workover .lab-deck {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+body.visual-workover .lab-deck[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 980px) {
+  body.visual-workover .button-choice-app,
+  body.visual-workover .lab-deck {
+    grid-template-columns: 1fr;
+  }
+
+  body.visual-workover .button-choice-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  body.visual-workover .button-choice-panel__head,
+  body.visual-workover .button-choice-actions,
+  body.visual-workover .button-choice-summary__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.visual-workover .button-choice-panel__meta {
+    text-align: left;
+  }
+
+  body.visual-workover .button-choice-wave canvas {
+    height: 128px;
+  }
+}
