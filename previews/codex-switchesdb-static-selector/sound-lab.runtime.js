@@ -3,6 +3,7 @@
   var META_ID = "soundLabMeta";
   var CATALOG_URL = "data/audio/catalog.json";
   var MATCHING_URL = "data/audio/matching.json";
+  var FAVORITES_KEY = "brb.soundFavorites";
   var root = document.getElementById(ROOT_ID);
   var meta = document.getElementById(META_ID);
   if (!root) return;
@@ -13,9 +14,11 @@
     catalogGeneratedAt: null,
     matching: null,
     search: "",
+    view: "all",
     source: "all",
     selectedId: null,
     appliedId: null,
+    favorites: [],
     switchSelection: null,
     recommendation: null,
     error: null,
@@ -72,6 +75,12 @@
     return bundle || "Local bundle";
   }
 
+  function sourceOptionRank(bundle) {
+    if (bundle === "mechvibes-mit") return 0;
+    if (bundle === "bucklespring-gpl") return 1;
+    return 2;
+  }
+
   function formatSourceType(type) {
     if (type === "mechvibes-v1-slice-pack") return "Mechvibes v1 slice pack";
     if (type === "mechvibes-v2-press-release-pack") return "Mechvibes v2 press/release pack";
@@ -111,6 +120,75 @@
     for (i = 0; i < items.length; i++) map[items[i].id] = items[i];
     return map;
   }
+
+  function readFavoriteIds() {
+    if (!window.localStorage) return [];
+    try {
+      var raw = window.localStorage.getItem(FAVORITES_KEY);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      var unique = [];
+      var seen = Object.create(null);
+      var i;
+      for (i = 0; i < parsed.length; i++) {
+        var id = String(parsed[i] || "");
+        if (!id || seen[id]) continue;
+        seen[id] = true;
+        unique.push(id);
+      }
+      return unique;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function writeFavoriteIds(ids) {
+    if (!window.localStorage) return;
+    try {
+      window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(ids || []));
+    } catch (_) {}
+  }
+
+  function favoriteIndex(id) {
+    return state.favorites.indexOf(id);
+  }
+
+  function isFavorite(id) {
+    return favoriteIndex(id) !== -1;
+  }
+
+  function favoriteCount() {
+    var count = 0;
+    var i;
+    for (i = 0; i < state.favorites.length; i++) {
+      if (state.catalogById[state.favorites[i]]) count++;
+    }
+    return count;
+  }
+
+  function pruneFavoriteIds() {
+    var next = [];
+    var i;
+    for (i = 0; i < state.favorites.length; i++) {
+      if (state.catalogById[state.favorites[i]]) next.push(state.favorites[i]);
+    }
+    if (next.length === state.favorites.length) return;
+    state.favorites = next;
+    writeFavoriteIds(next);
+  }
+
+  function toggleFavorite(id) {
+    if (!id) return;
+    var next = state.favorites.slice();
+    var index = next.indexOf(id);
+    if (index === -1) next.push(id);
+    else next.splice(index, 1);
+    state.favorites = next;
+    writeFavoriteIds(next);
+  }
+
+  state.favorites = readFavoriteIds();
 
   function readSwitchSelection() {
     if (window.BRB && typeof window.BRB.getSwitchLabSelection === "function") {
@@ -269,19 +347,33 @@
   }
 
   function sourceOptions() {
-    var counts = {
-      all: state.catalog.length,
-      "mechvibes-mit": 0,
-      "bucklespring-gpl": 0
-    };
+    var counts = { all: state.catalog.length };
     var i;
     for (i = 0; i < state.catalog.length; i++) {
       counts[state.catalog[i].source_bundle] = (counts[state.catalog[i].source_bundle] || 0) + 1;
     }
+    var keys = Object.keys(counts)
+      .filter(function (key) { return key !== "all" && counts[key] > 0; })
+      .sort(function (left, right) {
+        var rankDelta = sourceOptionRank(left) - sourceOptionRank(right);
+        if (rankDelta !== 0) return rankDelta;
+        return formatSourceBundle(left).localeCompare(formatSourceBundle(right));
+      });
+    var options = [{ key: "all", label: "All", count: counts.all }];
+    for (i = 0; i < keys.length; i++) {
+      options.push({
+        key: keys[i],
+        label: formatSourceBundle(keys[i]),
+        count: counts[keys[i]] || 0
+      });
+    }
+    return options;
+  }
+
+  function viewOptions() {
     return [
-      { key: "all", label: "All", count: counts.all },
-      { key: "mechvibes-mit", label: "Mechvibes MIT", count: counts["mechvibes-mit"] || 0 },
-      { key: "bucklespring-gpl", label: "bucklespring GPL", count: counts["bucklespring-gpl"] || 0 }
+      { key: "all", label: "All Sounds", count: state.catalog.length },
+      { key: "favorites", label: "Favorites", count: favoriteCount() }
     ];
   }
 
@@ -291,6 +383,7 @@
       item.source_name,
       item.source_bundle,
       item.license_spdx,
+      item.summary || "",
       (item.tags || []).join(" ")
     ].join(" ").toLowerCase();
   }
@@ -301,6 +394,15 @@
       var leftApplied = left.id === state.appliedId ? 1 : 0;
       var rightApplied = right.id === state.appliedId ? 1 : 0;
       if (leftApplied !== rightApplied) return rightApplied - leftApplied;
+
+      var leftFavorite = isFavorite(left.id) ? 1 : 0;
+      var rightFavorite = isFavorite(right.id) ? 1 : 0;
+      if (leftFavorite !== rightFavorite) return rightFavorite - leftFavorite;
+      if (leftFavorite && rightFavorite) {
+        var leftFavoriteIndex = favoriteIndex(left.id);
+        var rightFavoriteIndex = favoriteIndex(right.id);
+        if (leftFavoriteIndex !== rightFavoriteIndex) return leftFavoriteIndex - rightFavoriteIndex;
+      }
 
       var leftRecommended = left.id === recommendationId ? 1 : 0;
       var rightRecommended = right.id === recommendationId ? 1 : 0;
@@ -317,6 +419,7 @@
   function getFilteredItems() {
     var needle = state.search.trim().toLowerCase();
     var filtered = state.catalog.filter(function (item) {
+      if (state.view === "favorites" && !isFavorite(item.id)) return false;
       if (state.source !== "all" && item.source_bundle !== state.source) return false;
       if (!needle) return true;
       return searchTextFor(item).indexOf(needle) !== -1;
@@ -326,15 +429,17 @@
 
   function ensureSelectedItem(filtered) {
     var recommendationId = state.recommendation && state.recommendation.item ? state.recommendation.item.id : null;
-    if (state.selectedId && state.catalogById[state.selectedId]) {
-      var visible = filtered.some(function (item) { return item.id === state.selectedId; });
-      if (visible) return;
+    function isVisible(id) {
+      return !!id && filtered.some(function (item) { return item.id === id; });
     }
-    if (state.appliedId && state.catalogById[state.appliedId]) {
+    if (state.selectedId && state.catalogById[state.selectedId]) {
+      if (isVisible(state.selectedId)) return;
+    }
+    if (state.appliedId && state.catalogById[state.appliedId] && isVisible(state.appliedId)) {
       state.selectedId = state.appliedId;
       return;
     }
-    if (recommendationId && state.catalogById[recommendationId]) {
+    if (recommendationId && state.catalogById[recommendationId] && isVisible(recommendationId)) {
       state.selectedId = recommendationId;
       return;
     }
@@ -356,6 +461,9 @@
 
   function renderResults(items) {
     if (!items.length) {
+      if (state.view === "favorites" && !favoriteCount()) {
+        return '<p class="sound-lab-empty">No BRB favorites yet. Save sounds from the detail pane to build this list.</p>';
+      }
       return '<p class="sound-lab-empty">No local sounds fit the current search and source filter.</p>';
     }
     return items.map(function (item) {
@@ -363,6 +471,7 @@
       var classes = ["sound-lab-item"];
       if (item.id === state.selectedId) classes.push("is-selected");
       if (item.id === state.appliedId) classes.push("is-applied");
+      if (isFavorite(item.id)) classes.push("is-favorite");
       if (state.recommendation && state.recommendation.item && item.id === state.recommendation.item.id) {
         classes.push("is-recommended");
       }
@@ -376,6 +485,7 @@
           "</span>" +
           '<span class="sound-lab-item__status sound-lab-item__status--' + escapeHtml(match.state) + '">' +
             escapeHtml(match.label) +
+            (isFavorite(item.id) ? " \u00b7 Favorite" : "") +
             (item.id === state.appliedId ? " \u00b7 Applied" : "") +
           "</span>" +
         "</button>"
@@ -442,6 +552,7 @@
   function renderSelectedSoundCard(item) {
     var match = deriveEntryMatch(item);
     var isApplied = item.id === state.appliedId;
+    var favorite = isFavorite(item.id);
     return (
       '<section class="sound-lab-block">' +
         '<p class="sound-lab-block__eyebrow">Selected Sound</p>' +
@@ -450,6 +561,7 @@
         '<p class="sound-lab-detail__status sound-lab-detail__status--' + escapeHtml(match.state) + '">' +
           escapeHtml(match.label) +
           (isApplied ? " \u00b7 currently applied to BRB" : " \u00b7 manual selection only") +
+          (favorite ? " \u00b7 saved as BRB favorite" : "") +
         "</p>" +
         '<dl class="sound-lab-metrics">' +
           '<div class="sound-lab-metric"><dt>Bundle</dt><dd>' + escapeHtml(formatSourceBundle(item.source_bundle)) + "</dd></div>" +
@@ -467,15 +579,17 @@
     var canApply = window.BRB && typeof window.BRB.setSoundProfile === "function";
     var canClear = window.BRB && typeof window.BRB.clearSoundProfile === "function";
     var isApplied = item.id === state.appliedId;
+    var favoriteLabel = isFavorite(item.id) ? "Remove Favorite" : "Add Favorite";
     return (
       '<section class="sound-lab-block sound-lab-block--actions">' +
         '<p class="sound-lab-block__eyebrow">Actions</p>' +
         '<div class="sound-lab-actions">' +
           '<button class="sound-lab-action" type="button" id="soundLabPreview"' + (canPreview ? "" : " disabled") + ">Preview</button>" +
           '<button class="sound-lab-action sound-lab-action--primary" type="button" id="soundLabApply"' + (canApply ? "" : " disabled") + ">" + escapeHtml(isApplied ? "Applied to BRB" : "Apply to BRB") + "</button>" +
+          '<button class="sound-lab-action" type="button" id="soundLabFavorite">' + escapeHtml(favoriteLabel) + "</button>" +
           '<button class="sound-lab-action" type="button" id="soundLabClear"' + (canClear && state.appliedId ? "" : " disabled") + ">Clear</button>" +
         "</div>" +
-        '<p class="sound-lab-block__note">Preview uses the selected sound only. Real BRB button presses use the currently applied sound profile.</p>' +
+        '<p class="sound-lab-block__note">Preview uses the selected sound only. Real BRB button presses use the currently applied sound profile. Favorites stay separate from the applied sound.</p>' +
       "</section>"
     );
   }
@@ -536,6 +650,8 @@
 
   function renderApp() {
     var filtered = getFilteredItems();
+    var totalVisiblePool = state.view === "favorites" ? favoriteCount() : state.catalog.length;
+    var totalVisibleLabel = state.view === "favorites" ? "favorites" : "local sounds";
     ensureSelectedItem(filtered);
     return (
       '<div class="sound-lab-app">' +
@@ -545,10 +661,14 @@
             '<input class="sound-lab-search" id="soundLabSearch" type="search" value="' + escapeHtml(state.search) + '" placeholder="Search by sound, source, or tag">' +
           "</label>" +
           '<div class="sound-lab-filter-group">' +
+            '<div class="sound-lab-label">Collection</div>' +
+            '<div class="sound-lab-filter-row">' + renderChips(viewOptions(), state.view, "view") + "</div>" +
+          "</div>" +
+          '<div class="sound-lab-filter-group">' +
             '<div class="sound-lab-label">Source</div>' +
             '<div class="sound-lab-filter-row">' + renderChips(sourceOptions(), state.source, "source") + "</div>" +
           "</div>" +
-          '<div class="sound-lab-results-meta">Showing ' + escapeHtml(formatCount(filtered.length)) + " of " + escapeHtml(formatCount(state.catalog.length)) + " local sounds</div>" +
+          '<div class="sound-lab-results-meta">Showing ' + escapeHtml(formatCount(filtered.length)) + " of " + escapeHtml(formatCount(totalVisiblePool)) + " " + escapeHtml(totalVisibleLabel) + "</div>" +
           '<div class="sound-lab-list">' + renderResults(filtered) + "</div>" +
         "</div>" +
         renderDetail() +
@@ -566,13 +686,15 @@
     meta.textContent =
       "Catalog " + generatedAt +
       " | " + formatCount(state.catalog.length) +
-      " local sound profiles | MIT and GPL kept in separate bundles";
+      " local sound profiles | " + formatCount(favoriteCount()) +
+      " favorites saved | MIT and GPL kept in separate bundles";
   }
 
   function bindEvents() {
     var searchInput = document.getElementById("soundLabSearch");
     var previewButton = document.getElementById("soundLabPreview");
     var applyButton = document.getElementById("soundLabApply");
+    var favoriteButton = document.getElementById("soundLabFavorite");
     var clearButton = document.getElementById("soundLabClear");
     var itemButtons = root.querySelectorAll("[data-sound-id]");
     var filterButtons = root.querySelectorAll("[data-filter]");
@@ -614,6 +736,15 @@
         if (!item || !window.BRB || typeof window.BRB.setSoundProfile !== "function") return;
         state.soundError = null;
         window.BRB.setSoundProfile(item);
+      });
+    }
+
+    if (favoriteButton) {
+      favoriteButton.addEventListener("click", function () {
+        var item = currentSelectedItem();
+        if (!item) return;
+        toggleFavorite(item.id);
+        render();
       });
     }
 
@@ -672,6 +803,12 @@
         state.catalogById = buildCatalogIndex(state.catalog);
         state.catalogGeneratedAt = catalogPayload.generatedAt || null;
         state.matching = payloads[1] || null;
+        state.favorites = readFavoriteIds();
+        pruneFavoriteIds();
+        if (state.source !== "all" && !state.catalog.some(function (item) { return item.source_bundle === state.source; })) {
+          state.source = "all";
+        }
+        if (state.view === "favorites" && !favoriteCount()) state.view = "all";
         restoreAppliedSoundProfile();
         state.switchSelection = readSwitchSelection();
         state.recommendation = computeRecommendation();

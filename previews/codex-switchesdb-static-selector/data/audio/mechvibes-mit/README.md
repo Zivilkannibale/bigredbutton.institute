@@ -31,3 +31,7 @@ It preserves the upstream licensing materials as published and does not add any 
 
 The BRB Sound Lab currently exposes all 18 vendored Mechvibes packs from this bundle.
 Further Mechvibes expansion therefore means vendoring additional upstream packs or a different upstream source, not unlocking hidden packs already present in this directory.
+
+MechvibesDX was reviewed on 2026-03-15 as a possible additional source, but its repository did not provide a standard preserved `LICENSE` file or other source-level MIT metadata beyond the README claim. To stay conservative on licensing, those DX soundpacks are not vendored into this repo.
+
+A second GitHub search on 2026-03-15 only turned up MIT-licensed tooling such as `p-febis/bucklevibes`, which converts Mechvibes packs into another format but does not publish an additional audio bundle of its own. That means the vendorable MIT audio set remains the 18 upstream packs preserved here.

@@ -7,7 +7,7 @@ It preserves the upstream GPL notice and origin documentation and keeps the samp
 
 - `wav/`: the 209 upstream WAV samples copied from the bucklespring source tree.
 - `manifest.json`: machine-readable provenance, source URLs, naming notes, and per-file metadata.
-- `CURATED_SET.md`: the explicit subset currently surfaced by the BRB Sound Lab as single-button GPL entries.
+- `CURATED_SET.md`: the app-facing record for the paired keydown/keyup set currently surfaced by the BRB Sound Lab.
 - `THIRD_PARTY_NOTICES.md`: the human-readable notice file to keep in your public site repo.
 - `ATTRIBUTION_SNIPPET.html`: a small HTML block you can adapt for a credits or licenses page.
 - `LICENSES/`: preserved upstream GPL notice.
@@ -20,7 +20,7 @@ It preserves the upstream GPL notice and origin documentation and keeps the samp
 3. Surface attribution from `ATTRIBUTION_SNIPPET.html` or equivalent on a public licenses or credits page.
 4. If you rename or transcode the WAV files for web playback, note that on your notices page and keep the source reference.
 5. Keep this GPL bundle separate from the MIT bundle so site maintainers can make an explicit inclusion decision.
-6. If you expose a curated subset in the app UI, keep `CURATED_SET.md` in sync with the actual entry list.
+6. If you expose paired sample entries in the app UI, keep `CURATED_SET.md` in sync with the actual entry rules and naming.
 
 ## Provenance
 
