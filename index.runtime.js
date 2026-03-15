@@ -684,11 +684,14 @@
     var vw = window.innerWidth;
     var vh = window.innerHeight;
     var size = getPedestalFloatSize();
-    var maxX = Math.max(8, vw - size.width - 8);
+    var footprintScaleX = window.innerWidth <= 700 ? 1.28 : 1.48;
+    var overhangX = size.width * (footprintScaleX - 1) * 0.5;
+    var minX = Math.max(8, 8 + overhangX);
+    var maxX = Math.max(minX, vw - size.width - overhangX - 8);
     var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.36 : size.height;
     var maxY = Math.max(8, vh - visibleFloatHeight - 8);
     if (reducedMotion) {
-      floatState.x = clamp((floatState.baseX / 100) * vw, 8, maxX);
+      floatState.x = clamp((floatState.baseX / 100) * vw, minX, maxX);
       floatState.y = clamp((floatState.baseY / 100) * vh, 8, maxY);
       floatState.rot = 0;
       return;
@@ -710,7 +713,17 @@
     }
     floatState.shiftCurrentX += (floatState.shiftTargetX - floatState.shiftCurrentX) * 0.008;
     floatState.shiftCurrentY += (floatState.shiftTargetY - floatState.shiftCurrentY) * 0.008;
-    floatState.x = clamp((floatState.baseX / 100) * vw + driftX + floatState.shiftCurrentX, 8, maxX);
+    var proposedX = (floatState.baseX / 100) * vw + driftX + floatState.shiftCurrentX;
+    if (proposedX <= minX) {
+      proposedX = minX;
+      floatState.shiftTargetX = Math.abs(floatState.shiftTargetX) * 0.85;
+      floatState.shiftCurrentX = Math.abs(floatState.shiftCurrentX) * 0.52;
+    } else if (proposedX >= maxX) {
+      proposedX = maxX;
+      floatState.shiftTargetX = -Math.abs(floatState.shiftTargetX) * 0.85;
+      floatState.shiftCurrentX = -Math.abs(floatState.shiftCurrentX) * 0.52;
+    }
+    floatState.x = proposedX;
     floatState.y = clamp((floatState.baseY / 100) * vh + driftY + floatState.shiftCurrentY, 8, maxY);
   }
 
@@ -800,8 +813,9 @@
     var rect = sceneWrap.getBoundingClientRect();
     var vh = window.innerHeight;
     var visibility = getSceneVisibilityRatio();
-    var enterVisible = visibility > 0.32 && rect.top < vh * 0.82 && rect.bottom > vh * 0.28;
-    var stayVisible = visibility > 0.16 && rect.top < vh * 0.92 && rect.bottom > vh * 0.12;
+    var centerY = rect.top + rect.height * 0.5;
+    var enterVisible = visibility > 0.42 && centerY > vh * 0.24 && centerY < vh * 0.88;
+    var stayVisible = visibility > 0.22 && centerY > vh * 0.1 && centerY < vh * 0.96;
     if (reducedMotion) {
       sceneAttractionActive = enterVisible;
       return sceneAttractionActive;
