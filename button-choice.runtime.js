@@ -394,7 +394,8 @@
     var ctx = setup.ctx;
     var width = setup.width;
     var height = setup.height;
-    var waveform = readWaveform();
+    var rawWaveform = readWaveform();
+    var waveform = rawWaveform.slice();
     while (waveform.length < 96) waveform.unshift(0);
     var paddingX = 10;
     var paddingY = 12;
@@ -416,7 +417,7 @@
       ctx.stroke();
     }
 
-    if (!waveform.length) {
+    if (!rawWaveform.length) {
       ctx.fillStyle = "rgba(26, 30, 40, 0.55)";
       ctx.font = "12px 'IBM Plex Mono', monospace";
       ctx.textAlign = "center";
@@ -426,19 +427,13 @@
     }
 
     var maxAbs = 0;
-    var maxPositive = 0.22;
-    var maxNegative = 0.18;
     for (i = 0; i < waveform.length; i++) {
       var sample = Number(waveform[i]) || 0;
       maxAbs = Math.max(maxAbs, Math.abs(sample));
-      if (sample >= 0) maxPositive = Math.max(maxPositive, sample);
-      else maxNegative = Math.max(maxNegative, Math.abs(sample));
     }
     var targetRange = clampNumber(maxAbs * 1.16, 0.8, 2.5);
     telemetryWaveRange += (targetRange - telemetryWaveRange) * 0.08;
     var scaleRange = Math.max(0.8, telemetryWaveRange);
-    var targetBaseline = clampNumber(maxPositive / Math.max(0.4, maxPositive + maxNegative), 0.56, 0.66);
-    telemetryWaveBaseline += (targetBaseline - telemetryWaveBaseline) * 0.08;
     var baselineY = paddingY + chartHeight * telemetryWaveBaseline;
     var amplitudeHeight = chartHeight * 0.38;
 
