@@ -1,0 +1,822 @@
+{
+  "generated_at": "2026-03-15T15:34:02.1799023+01:00",
+  "source": {
+    "repo": "https://github.com/hainguyents13/mechvibes",
+    "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+    "tag_or_describe": "v2.3.6-11-gb7cb633",
+    "package_version": "v2.3.5",
+    "license": {
+      "spdx": "MIT",
+      "notice_file": "LICENSES/Mechvibes-MIT.txt",
+      "url": "https://github.com/hainguyents13/mechvibes/blob/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/LICENSE"
+    }
+  },
+  "pack_count": 18,
+  "packs": [
+    {
+      "folder": "cherrymx-black-abs",
+      "name": "CherryMX Black - ABS keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-black-abs",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-black-abs"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-black-pbt",
+      "name": "CherryMX Black - PBT keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-black-pbt",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-black-pbt"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-blue-abs",
+      "name": "CherryMX Blue - ABS keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-blue-abs",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-blue-abs"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-blue-pbt",
+      "name": "CherryMX Blue - PBT keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-blue-pbt",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-blue-pbt"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-brown-abs",
+      "name": "CherryMX Brown - ABS keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-brown-abs",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-brown-abs"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-brown-pbt",
+      "name": "CherryMX Brown - PBT keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-brown-pbt",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-brown-pbt"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-red-abs",
+      "name": "CherryMX Red - ABS keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-red-abs",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-red-abs"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cherrymx-red-pbt",
+      "name": "CherryMX Red - PBT keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cherrymx-red-pbt",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cherrymx-red-pbt"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "cream-travel",
+      "name": "Full Creamy Goodness",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 12,
+      "audio_files": [
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "included_files": [
+        "config.json",
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/cream-travel",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/cream-travel"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "eg-crystal-purple",
+      "name": "EG Crystal Purple",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "purple.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "purple.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/eg-crystal-purple",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/eg-crystal-purple"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "eg-oreo",
+      "name": "EG Oreo",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "oreo.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "oreo.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/eg-oreo",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/eg-oreo"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "holy-pandas",
+      "name": "pandas",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 12,
+      "audio_files": [
+        "BACKSPACE.mp3",
+        "ENTER.mp3",
+        "GENERIC_R0.mp3",
+        "GENERIC_R1.mp3",
+        "GENERIC_R2.mp3",
+        "GENERIC_R3.mp3",
+        "GENERIC_R4.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3",
+        "SPACE.mp3"
+      ],
+      "included_files": [
+        "BACKSPACE.mp3",
+        "config.json",
+        "ENTER.mp3",
+        "GENERIC_R0.mp3",
+        "GENERIC_R1.mp3",
+        "GENERIC_R2.mp3",
+        "GENERIC_R3.mp3",
+        "GENERIC_R4.mp3",
+        "LICENSE",
+        "README.md",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3",
+        "SPACE.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/holy-pandas",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/holy-pandas"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license and includes a pack-specific MIT license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt",
+          "LICENSES/holy-pandas-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree.",
+          "This pack includes its own MIT license and README in the upstream source tree."
+        ],
+        "secondary_upstream_urls": [
+          "https://github.com/tplai/kbsim"
+        ]
+      }
+    },
+    {
+      "folder": "mxblack-travel",
+      "name": "MX Black - Full Travel",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 12,
+      "audio_files": [
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "included_files": [
+        "config.json",
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/mxblack-travel",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/mxblack-travel"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "mxblue-travel",
+      "name": "MX Blue - Full Travel",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 6,
+      "audio_files": [
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "release/GENERIC.mp3"
+      ],
+      "included_files": [
+        "config.json",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "release/GENERIC.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/mxblue-travel",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/mxblue-travel"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "mxbrown-travel",
+      "name": "MX Brown - Full Travel",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 12,
+      "audio_files": [
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "included_files": [
+        "config.json",
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/mxbrown-travel",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/mxbrown-travel"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "nk-cream",
+      "name": "NK Cream (original by Ryan)",
+      "config_version": null,
+      "key_define_type": "multi",
+      "audio_file_count": 34,
+      "audio_files": [
+        "[.wav",
+        "].wav",
+        "a.wav",
+        "b.wav",
+        "backspace.wav",
+        "c.wav",
+        "caps lock.wav",
+        "d.wav",
+        "e.wav",
+        "enter.wav",
+        "f.wav",
+        "g.wav",
+        "h.wav",
+        "i.wav",
+        "j.wav",
+        "k.wav",
+        "l.wav",
+        "m.wav",
+        "n.wav",
+        "o.wav",
+        "p.wav",
+        "q.wav",
+        "r.wav",
+        "s.wav",
+        "shift.wav",
+        "space.wav",
+        "t.wav",
+        "tab.wav",
+        "u.wav",
+        "v.wav",
+        "w.wav",
+        "x.wav",
+        "y.wav",
+        "z.wav"
+      ],
+      "included_files": [
+        "[.wav",
+        "].wav",
+        "a.wav",
+        "b.wav",
+        "backspace.wav",
+        "c.wav",
+        "caps lock.wav",
+        "config.json",
+        "d.wav",
+        "e.wav",
+        "enter.wav",
+        "f.wav",
+        "g.wav",
+        "h.wav",
+        "i.wav",
+        "j.wav",
+        "k.wav",
+        "l.wav",
+        "m.wav",
+        "n.wav",
+        "o.wav",
+        "p.wav",
+        "q.wav",
+        "r.wav",
+        "s.wav",
+        "shift.wav",
+        "space.wav",
+        "t.wav",
+        "tab.wav",
+        "u.wav",
+        "v.wav",
+        "w.wav",
+        "x.wav",
+        "y.wav",
+        "z.wav"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/nk-cream",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/nk-cream"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree.",
+          "The upstream pack name includes additional origin text: 'NK Cream (original by Ryan)'."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "topre-purple-hybrid-pbt",
+      "name": "Topre Purple Hybrid - PBT keycaps",
+      "config_version": null,
+      "key_define_type": "single",
+      "audio_file_count": 1,
+      "audio_files": [
+        "sound.ogg"
+      ],
+      "included_files": [
+        "config.json",
+        "sound.ogg"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/topre-purple-hybrid-pbt",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/topre-purple-hybrid-pbt"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    },
+    {
+      "folder": "turquoise",
+      "name": "Turquoise (Full Travel)",
+      "config_version": 2,
+      "key_define_type": "multi",
+      "audio_file_count": 12,
+      "audio_files": [
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "included_files": [
+        "config.json",
+        "press/BACKSPACE.mp3",
+        "press/ENTER.mp3",
+        "press/GENERIC_R0.mp3",
+        "press/GENERIC_R1.mp3",
+        "press/GENERIC_R2.mp3",
+        "press/GENERIC_R3.mp3",
+        "press/GENERIC_R4.mp3",
+        "press/SPACE.mp3",
+        "release/BACKSPACE.mp3",
+        "release/ENTER.mp3",
+        "release/GENERIC.mp3",
+        "release/SPACE.mp3"
+      ],
+      "source": {
+        "repo": "https://github.com/hainguyents13/mechvibes",
+        "commit": "b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb",
+        "tag_or_describe": "v2.3.6-11-gb7cb633",
+        "path": "src/audio/turquoise",
+        "url": "https://github.com/hainguyents13/mechvibes/tree/b7cb6332fa741f82bdf2281bf6d2b9990e84ddbb/src/audio/turquoise"
+      },
+      "license": {
+        "spdx": "MIT",
+        "basis": "Covered by the upstream Mechvibes MIT repository license.",
+        "notice_files": [
+          "LICENSES/Mechvibes-MIT.txt"
+        ]
+      },
+      "attribution": {
+        "origin_notes": [
+          "Bundled in the upstream Mechvibes source tree."
+        ],
+        "secondary_upstream_urls": []
+      }
+    }
+  ]
+}

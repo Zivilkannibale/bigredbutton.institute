@@ -11,6 +11,7 @@
 
   <link rel="stylesheet" href="visual-workover.css?v=20260315e">
   <link rel="stylesheet" href="switch-lab.css?v=20260315k">
+  <link rel="stylesheet" href="sound-lab.css?v=20260315a">
 </head>
 <body class="visual-workover">
   <canvas id="ambientCanvas"></canvas>
@@ -158,6 +159,20 @@
         </div>
         <div class="switch-lab-root" id="switchLabRoot" data-state="loading">
           <p class="switch-lab-loading">Loading switch profiles from the local BRB sync cache.</p>
+        </div>
+      </section>
+
+      <section class="panel reveal sound-lab-panel" id="soundLabPanel" aria-labelledby="soundLabTitle">
+        <div class="sound-lab-panel__head">
+          <div class="sound-lab-panel__copy">
+            <p class="mono sound-lab-panel__kicker">Local Sound Catalog</p>
+            <h2 class="sound-lab-panel__title" id="soundLabTitle">Sound Lab</h2>
+            <p class="sound-lab-panel__lede">Preview and apply BRB-native press sounds from locally vendored MIT and GPL bundles, with source, license, and recommendation state kept visible.</p>
+          </div>
+          <div class="sound-lab-panel__meta" id="soundLabMeta">Loading sound catalog...</div>
+        </div>
+        <div class="sound-lab-root" id="soundLabRoot" data-state="loading">
+          <p class="sound-lab-loading">Loading local sound sources and attribution data.</p>
         </div>
       </section>
 
@@ -1115,6 +1130,7 @@
   </script>
   <script src="index.runtime.js?v=20260315o"></script>
   <script src="switch-lab.runtime.js?v=20260315j"></script>
+  <script src="sound-lab.runtime.js?v=20260315a"></script>
 </body>
 </html>
 

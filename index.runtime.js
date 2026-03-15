@@ -1532,6 +1532,234 @@
   var pedestalTouchId = null;
   var minimumPressDurationMs = 48;
   var activeSwitchProfile = null;
+  var SOUND_STORAGE_KEY = "brb.soundProfileId";
+  var activeSoundProfile = null;
+  var storedSoundProfileId = loadStoredSoundProfileId();
+  var audioContext = null;
+  var audioBufferPromises = Object.create(null);
+  var audioDataPromises = Object.create(null);
+  var lastSoundRuntimeError = null;
+
+  function loadStoredSoundProfileId() {
+    try {
+      return window.localStorage.getItem(SOUND_STORAGE_KEY);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function persistStoredSoundProfileId(id) {
+    storedSoundProfileId = id || null;
+    try {
+      if (storedSoundProfileId) window.localStorage.setItem(SOUND_STORAGE_KEY, storedSoundProfileId);
+      else window.localStorage.removeItem(SOUND_STORAGE_KEY);
+    } catch (_) {}
+  }
+
+  function getAudioContext() {
+    var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextCtor) return null;
+    if (!audioContext) audioContext = new AudioContextCtor();
+    if (audioContext.state === "suspended" && typeof audioContext.resume === "function") {
+      try { audioContext.resume(); } catch (_) {}
+    }
+    return audioContext;
+  }
+
+  function decodeAudioDataCompat(context, arrayBuffer) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+
+      function finishResolve(value) {
+        if (settled) return;
+        settled = true;
+        resolve(value);
+      }
+
+      function finishReject(error) {
+        if (settled) return;
+        settled = true;
+        reject(error);
+      }
+
+      var result;
+      try {
+        result = context.decodeAudioData(arrayBuffer.slice(0), finishResolve, finishReject);
+      } catch (error) {
+        finishReject(error);
+        return;
+      }
+      if (result && typeof result.then === "function") {
+        result.then(finishResolve, finishReject);
+      }
+    });
+  }
+
+  function fetchAudioData(url) {
+    if (audioDataPromises[url]) return audioDataPromises[url];
+    audioDataPromises[url] = fetch(url, { cache: "force-cache" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Audio request failed for " + url + " (" + response.status + ")");
+        }
+        return response.arrayBuffer();
+      })
+      .catch(function (error) {
+        delete audioDataPromises[url];
+        throw error;
+      });
+    return audioDataPromises[url];
+  }
+
+  function loadAudioBuffer(url) {
+    if (audioBufferPromises[url]) return audioBufferPromises[url];
+    audioBufferPromises[url] = fetchAudioData(url).then(function (arrayBuffer) {
+      var context = getAudioContext();
+      if (!context) throw new Error("Web Audio API unavailable.");
+      return decodeAudioDataCompat(context, arrayBuffer);
+    }).catch(function (error) {
+      delete audioBufferPromises[url];
+      throw error;
+    });
+    return audioBufferPromises[url];
+  }
+
+  function startBufferPlayback(buffer, options) {
+    var context = getAudioContext();
+    if (!context) throw new Error("Web Audio API unavailable.");
+    var source = context.createBufferSource();
+    var gain = context.createGain();
+    var offset = clamp(Number(options && options.offset) || 0, 0, Math.max(0, buffer.duration - 0.01));
+    var duration = options && options.duration != null
+      ? clamp(Number(options.duration) || 0.01, 0.01, Math.max(0.01, buffer.duration - offset))
+      : Math.max(0.01, buffer.duration - offset);
+    gain.gain.value = options && options.gain != null ? Number(options.gain) || 1 : 0.96;
+    source.buffer = buffer;
+    source.connect(gain);
+    gain.connect(context.destination);
+    source.start(0, offset, duration);
+    return source;
+  }
+
+  function emitSoundRuntimeError(error, detail) {
+    lastSoundRuntimeError = {
+      message: error && error.message ? error.message : String(error || "Unknown sound error"),
+      detail: detail || null
+    };
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:sound-runtime-error", {
+        detail: lastSoundRuntimeError
+      }));
+    }
+  }
+
+  function chooseVariant(variants) {
+    if (!variants) return null;
+    if (!Array.isArray(variants)) return variants;
+    if (!variants.length) return null;
+    return variants[Math.floor(Math.random() * variants.length)];
+  }
+
+  function normalizeVariantEntry(entry) {
+    if (!entry) return null;
+    return typeof entry === "string" ? { path: entry } : entry;
+  }
+
+  function resolveSoundPhaseEntry(profile, phase) {
+    var adapter = profile && profile.adapter ? profile.adapter : null;
+    if (!adapter || !adapter.type) return null;
+    if (adapter.type === "mechvibes-v1-slice-pack") {
+      return phase === "release" ? adapter.release || adapter.press : adapter.press;
+    }
+    if (adapter.type === "mechvibes-v2-press-release-pack") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
+    if (adapter.type === "bucklespring-wav-pair") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
+    return null;
+  }
+
+  function playResolvedSoundEntry(entry, detail) {
+    if (!entry) return Promise.resolve(false);
+    if (entry.asset_path && entry.offset_ms != null && entry.duration_ms != null) {
+      return loadAudioBuffer(entry.asset_path).then(function (buffer) {
+        startBufferPlayback(buffer, {
+          offset: Number(entry.offset_ms) / 1000,
+          duration: Number(entry.duration_ms) / 1000
+        });
+        return true;
+      }).catch(function (error) {
+        emitSoundRuntimeError(error, detail);
+        return false;
+      });
+    }
+    if (entry.path) {
+      return loadAudioBuffer(entry.path).then(function (buffer) {
+        startBufferPlayback(buffer);
+        return true;
+      }).catch(function (error) {
+        emitSoundRuntimeError(error, detail);
+        return false;
+      });
+    }
+    return Promise.resolve(false);
+  }
+
+  function playSoundProfilePhase(profile, phase, options) {
+    if (!profile) return Promise.resolve(false);
+    var resolved = resolveSoundPhaseEntry(profile, phase);
+    return playResolvedSoundEntry(resolved, {
+      phase: phase,
+      profileId: profile.id || null,
+      source: options && options.source ? options.source : null
+    });
+  }
+
+  function playActiveSoundPhase(phase, options) {
+    return playSoundProfilePhase(activeSoundProfile, phase, options);
+  }
+
+  function previewSoundProfile(profile, holdMs, options) {
+    var ms = clamp(Number(holdMs) || 120, 48, 320);
+    var previewProfile = profile || activeSoundProfile;
+    if (!previewProfile) return Promise.resolve(false);
+    playSoundProfilePhase(previewProfile, "press", options || { source: "preview" });
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        playSoundProfilePhase(previewProfile, "release", options || { source: "preview" }).then(function (played) {
+          resolve(Boolean(played));
+        }, function () {
+          resolve(false);
+        });
+      }, ms);
+    });
+  }
+
+  function dispatchSoundProfileChange() {
+    if (window.BRB) {
+      window.BRB.activeSoundProfile = activeSoundProfile;
+      window.BRB.activeSoundProfileId = storedSoundProfileId;
+    }
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("brb:sound-profile-change", {
+        detail: {
+          profile: activeSoundProfile,
+          id: storedSoundProfileId
+        }
+      }));
+    }
+  }
+
+  function setActiveSoundProfile(profile, options) {
+    options = options || {};
+    activeSoundProfile = profile && typeof profile === "object" ? profile : null;
+    if (!options.skipPersist) {
+      persistStoredSoundProfileId(activeSoundProfile && activeSoundProfile.id ? activeSoundProfile.id : null);
+    }
+    dispatchSoundProfileChange();
+    return activeSoundProfile;
+  }
 
   function getSwitchProfileNumber(sectionName, key, fallback) {
     var section = activeSwitchProfile && activeSwitchProfile[sectionName];
@@ -1615,7 +1843,10 @@
     }
     buttonActive = false;
     if (btn) btn.classList.remove("is-pressed");
-    if (!cancelled) handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
+    if (!cancelled) {
+      playActiveSoundPhase("release", { source: "lab" });
+      handlePress(clamp(Date.now() - buttonDownAt, 40, 1600), "lab");
+    }
   }
 
   function beginButton() {
@@ -1629,6 +1860,7 @@
     buttonActive = true;
     buttonDownAt = Date.now();
     btn.classList.add("is-pressed");
+    playActiveSoundPhase("press", { source: "lab" });
   }
 
   function endButton(cancelled) {
@@ -1649,7 +1881,8 @@
     }, minimumPressDurationMs - elapsed);
   }
 
-  function triggerExternalPress(holdMs, source) {
+  function triggerExternalPress(holdMs, source, options) {
+    options = options || {};
     var ms = clamp(Number(holdMs) || 120, 40, 1600);
     if (btn && !buttonActive) {
       btn.classList.add("is-pressed");
@@ -1659,6 +1892,7 @@
         timers.proxyButton = null;
       }, 140);
     }
+    if (!options.skipSound) previewSoundProfile(activeSoundProfile, ms, { source: source || "external" });
     handlePress(ms, source || "external");
   }
 
@@ -1678,8 +1912,9 @@
       }
     );
     if (!cancelled) {
+      playActiveSoundPhase("release", { source: "pedestal" });
       runPedestalEffects();
-      triggerExternalPress(clamp(Date.now() - pedestalDownAt, 40, 1600), "pedestal");
+      triggerExternalPress(clamp(Date.now() - pedestalDownAt, 40, 1600), "pedestal", { skipSound: true });
     }
   }
 
@@ -1695,6 +1930,7 @@
     pedestalDownAt = Date.now();
     pedestalControl.classList.add("is-pressed");
     animatePedestalFrames(pedestalPressPeakFrame, getPedestalPressDuration(92));
+    playActiveSoundPhase("press", { source: "pedestal" });
   }
 
   function endPedestal(cancelled) {
@@ -1794,10 +2030,18 @@
   window.BRB.getSwitchProfile = function () { return activeSwitchProfile; };
   window.BRB.setSwitchProfile = setActiveSwitchProfile;
   window.BRB.clearSwitchProfile = function () { return setActiveSwitchProfile(null); };
+  window.BRB.getSoundProfile = function () { return activeSoundProfile; };
+  window.BRB.getStoredSoundProfileId = function () { return storedSoundProfileId; };
+  window.BRB.setSoundProfile = setActiveSoundProfile;
+  window.BRB.clearSoundProfile = function () { return setActiveSoundProfile(null); };
+  window.BRB.previewSoundProfile = previewSoundProfile;
+  window.BRB.getLastSoundRuntimeError = function () { return lastSoundRuntimeError; };
   window.BRB.getEffectivePressMs = getEffectiveHoldMs;
   window.BRB.getLiveWaveform = function () { return waveData.slice(-96); };
   window.BRB.getTelemetrySnapshot = getTelemetrySnapshot;
   window.BRB.activeSwitchProfile = activeSwitchProfile;
+  window.BRB.activeSoundProfile = activeSoundProfile;
+  window.BRB.activeSoundProfileId = storedSoundProfileId;
   window.BRB.telemetry = getTelemetrySnapshot();
 
   initPedestalFrames();
