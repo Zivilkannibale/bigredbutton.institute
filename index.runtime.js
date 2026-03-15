@@ -773,14 +773,12 @@
     var absolute = getDockAbsolutePos();
     if (!absolute) return;
     var diameter = clamp(absolute.height * 0.72, 60, 88);
-    var spread = Math.max(8, Math.round(diameter * 0.14));
     var centerX = absolute.left + absolute.width * 0.5;
-    var centerY = absolute.top + absolute.height * 0.31;
+    var centerY = absolute.top + absolute.height * 0.45;
     sceneDockHalo.style.left = centerX.toFixed(1) + "px";
     sceneDockHalo.style.top = centerY.toFixed(1) + "px";
     sceneDockHalo.style.width = diameter.toFixed(1) + "px";
     sceneDockHalo.style.height = diameter.toFixed(1) + "px";
-    sceneDockHalo.style.setProperty("--dock-halo-spread", spread + "px");
   }
 
   function getHomeScreenPose() {

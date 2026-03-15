@@ -1912,7 +1912,6 @@ body.visual-workover .scene-wrap {
 }
 
 body.visual-workover .scene-dock-halo {
-  --dock-halo-spread: 14px;
   position: absolute;
   left: 0;
   top: 0;
@@ -1920,8 +1919,16 @@ body.visual-workover .scene-dock-halo {
   height: 84px;
   transform: translate(-50%, -50%) scale(0.92);
   border-radius: 50%;
-  border: 1px solid rgba(214, 29, 35, 0.44);
-  box-shadow: 0 0 0 var(--dock-halo-spread) rgba(214, 29, 35, 0.12);
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(214, 29, 35, 0) 39%,
+      rgba(214, 29, 35, 0.56) 52%,
+      rgba(214, 29, 35, 0.3) 61%,
+      rgba(214, 29, 35, 0.14) 73%,
+      rgba(214, 29, 35, 0.05) 83%,
+      rgba(214, 29, 35, 0) 100%
+    );
   opacity: 0;
   pointer-events: none;
   z-index: 2;
@@ -1933,13 +1940,20 @@ body.visual-workover .scene-dock-halo::after {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px solid rgba(214, 29, 35, 0.46);
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(214, 29, 35, 0) 42%,
+      rgba(214, 29, 35, 0.64) 55%,
+      rgba(214, 29, 35, 0.22) 69%,
+      rgba(214, 29, 35, 0) 100%
+    );
   opacity: 0;
-  transform: scale(0.84);
+  transform: scale(0.82);
 }
 
 body.visual-workover .scene-dock-halo.active {
-  opacity: 0.62;
+  opacity: 0.74;
   transform: translate(-50%, -50%) scale(1);
   animation: scene-dock-halo-idle 4.8s ease-in-out infinite;
 }
@@ -2030,24 +2044,24 @@ body.visual-workover .scroll-hint {
 @keyframes scene-dock-halo-idle {
   0%, 100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.54;
+    opacity: 0.68;
   }
 
   50% {
     transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.72;
+    opacity: 0.84;
   }
 }
 
 @keyframes scene-dock-halo-press {
   0% {
-    opacity: 0.72;
-    transform: scale(0.78);
+    opacity: 0.84;
+    transform: scale(0.74);
   }
 
   100% {
     opacity: 0;
-    transform: scale(1.48);
+    transform: scale(1.56);
   }
 }
 
