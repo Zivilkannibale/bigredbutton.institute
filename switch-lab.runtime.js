@@ -26,7 +26,8 @@
     selectedId: null,
     appliedId: null,
     error: null,
-    telemetry: defaultTelemetry()
+    telemetry: defaultTelemetry(),
+    forceTelemetryPreviewUntil: 0
   };
 
   function defaultTelemetry() {
@@ -96,6 +97,10 @@
   function titleCase(value) {
     if (!value) return "Unknown";
     return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  function clampNumber(value, minimum, maximum) {
+    return Math.max(minimum, Math.min(maximum, value));
   }
 
   function getStoredId() {
@@ -259,9 +264,8 @@
     }).join("");
   }
 
-  function renderTelemetryCard(item) {
+  function renderTelemetryCard() {
     var telemetry = state.telemetry;
-    var actionLabel = item && item.id === state.appliedId ? "Press for Science" : "Test selected switch";
     return (
       '<section class="switch-lab-telemetry" aria-labelledby="switchLabTelemetryTitle">' +
         '<div class="switch-lab-card__head">' +
@@ -279,7 +283,6 @@
             '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryBurst">' + escapeHtml(String(telemetry.maxBurst || 0)) + '</span><span class="switch-lab-telemetry__stat-label">Max burst</span></div>' +
           "</div>" +
         "</div>" +
-        '<button class="switch-lab-telemetry__button" type="button" id="switchLabTelemetryPress">' + escapeHtml(actionLabel) + "</button>" +
         '<div class="switch-lab-telemetry__wave">' +
           '<div class="switch-lab-card__label">Temporal waveform</div>' +
           '<canvas id="switchLabTelemetryWave" aria-label="BRB temporal waveform"></canvas>' +
@@ -346,6 +349,7 @@
             '<button class="switch-lab-action switch-lab-action--primary" type="button" id="switchLabApply">' + escapeHtml(applyLabel) + "</button>" +
             '<button class="switch-lab-action" type="button" id="switchLabTest"' + (applied ? "" : " disabled") + ">Test Press</button>" +
             '<button class="switch-lab-action" type="button" id="switchLabClear"' + (state.appliedId ? "" : " disabled") + ">Clear</button>" +
+            '<button class="switch-lab-action switch-lab-action--science" type="button" id="switchLabScience">Press for Science</button>' +
           "</div>" +
           '<div class="switch-lab-links">' +
             '<a class="switch-lab-link" href="' + escapeHtml(item.switchesDbAppUrl) + '" target="_blank" rel="noopener noreferrer">View original</a>' +
@@ -353,8 +357,8 @@
           "</div>" +
         "</div>" +
         '<div class="switch-lab-detail__lower">' +
-          renderTelemetryCard(item) +
           renderCurveCard(item, profile) +
+          renderTelemetryCard() +
         "</div>" +
         '<p class="switch-lab-attribution">Data derived from <a href="https://www.switchesdb.com/" target="_blank" rel="noopener noreferrer">SwitchesDB</a> and the original measurement source for this switch.</p>' +
       "</div>"
@@ -433,6 +437,12 @@
     var height = metrics.height;
     if (!width || !height) return;
     var points = state.telemetry.waveform.slice(-72);
+    var peak = 0;
+    var i;
+    for (i = 0; i < points.length; i++) peak = Math.max(peak, Math.abs(points[i]));
+    if (Date.now() < state.forceTelemetryPreviewUntil || points.length < 18 || peak < 0.08) {
+      points = buildTelemetryPreview().slice(-72);
+    }
     while (points.length < 72) points.unshift(0);
     ctx.clearRect(0, 0, width, height);
     ctx.strokeStyle = "rgba(255,255,255,0.06)";
@@ -462,7 +472,6 @@
     gradient.addColorStop(1, "rgba(255,76,76,0.98)");
     ctx.strokeStyle = gradient;
     ctx.lineWidth = 2;
-    var i;
     for (i = 0; i < points.length; i++) {
       var px = (i / Math.max(1, points.length - 1)) * width;
       var py = height / 2 - points[i] * (height * 0.38);
@@ -470,6 +479,33 @@
       else ctx.lineTo(px, py);
     }
     ctx.stroke();
+  }
+
+  function buildTelemetryPreview() {
+    var profile = currentAppliedProfile() || currentSelectedProfile();
+    var telemetry = profile && profile.telemetryProfile ? profile.telemetryProfile : {};
+    var animation = profile && profile.animationProfile ? profile.animationProfile : {};
+    var wavePeak = clampNumber(Number(telemetry.wavePeak) || 1, 0.75, 1.7);
+    var waveTail = clampNumber(Number(telemetry.waveTail) || 0.42, 0.22, 0.72);
+    var snapAt = clampNumber(Number(animation.snapAt) || 0.46, 0.16, 0.9);
+    var clickiness = clampNumber(
+      profile && profile.soundProfile ? Number(profile.soundProfile.clickiness) || 0 : 0,
+      0,
+      1
+    );
+    var points = [];
+    var sampleCount = 72;
+    var i;
+    for (i = 0; i < sampleCount; i++) {
+      var t = i / Math.max(1, sampleCount - 1);
+      var impact = Math.exp(-Math.pow((t - snapAt * 0.5) / 0.085, 2)) * (0.24 + wavePeak * 0.16);
+      var rebound = Math.sin((t + clickiness * 0.08) * (5.3 + wavePeak * 1.4)) *
+        Math.exp(-t * (3.1 - waveTail * 1.8)) *
+        (0.08 + waveTail * 0.24);
+      var release = Math.exp(-Math.pow((t - (0.42 + waveTail * 0.18)) / 0.12, 2)) * -0.09;
+      points.push(clampNumber(impact + rebound + release, -0.46, 0.94));
+    }
+    return points;
   }
 
   function drawCurvePlaceholder(ctx, width, height, message) {
@@ -625,7 +661,7 @@
     var applyButton = document.getElementById("switchLabApply");
     var testButton = document.getElementById("switchLabTest");
     var clearButton = document.getElementById("switchLabClear");
-    var telemetryButton = document.getElementById("switchLabTelemetryPress");
+    var scienceButton = document.getElementById("switchLabScience");
     var itemButtons = root.querySelectorAll("[data-switch-id]");
     var filterButtons = root.querySelectorAll("[data-filter]");
     var i;
@@ -671,8 +707,8 @@
       });
     }
 
-    if (telemetryButton) {
-      telemetryButton.addEventListener("click", function () {
+    if (scienceButton) {
+      scienceButton.addEventListener("click", function () {
         testSelected();
       });
     }
@@ -798,6 +834,7 @@
 
   window.addEventListener("brb:switch-profile-change", function () {
     syncAppliedIdFromRuntime();
+    state.forceTelemetryPreviewUntil = Date.now() + 1200;
     render();
   });
 

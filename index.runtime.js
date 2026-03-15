@@ -20,6 +20,15 @@
   var vizReady = false;
   var currentDockProgress = 0;
   var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var scrollAssist = {
+    lastY: window.scrollY || window.pageYOffset || 0,
+    lastAt: performance.now(),
+    velocity: 0,
+    settleTimer: null,
+    ignoreUntil: 0,
+    cooldownUntil: 0,
+    lastTargetTop: null
+  };
 
   var btn = document.getElementById("pressBtn");
   var countEl = document.getElementById("pressCount");
@@ -1389,16 +1398,19 @@
   function injectWaveFromHold(holdMs) {
     var clamped = clamp(holdMs, 40, 1600);
     var norm = (clamped - 40) / 1560;
-    var peak = 0.85 + norm * 1.15;
-    var tailCount = 5 + Math.round(norm * 7);
-    var freq = 1.05 + norm * 0.5;
-    var decayBase = 0.34 - norm * 0.08;
+    var wavePeakFactor = clamp(getSwitchProfileNumber("telemetryProfile", "wavePeak", 1), 0.72, 1.7);
+    var waveTailFactor = clamp(getSwitchProfileNumber("telemetryProfile", "waveTail", 0.42), 0.22, 0.72);
+    var clickiness = clamp(getSwitchProfileNumber("soundProfile", "clickiness", 0.12), 0, 1);
+    var peak = clamp((0.74 + norm * 0.84) * wavePeakFactor, 0.55, 2.1);
+    var tailCount = 4 + Math.round((norm * 5) + waveTailFactor * 10);
+    var freq = 0.92 + norm * 0.34 + clickiness * 0.28;
+    var decayBase = clamp(0.45 - waveTailFactor * 0.24, 0.16, 0.38);
     waveData.push(peak);
     publishTelemetrySnapshot();
     setTimeout(function () {
       for (var i = 0; i < tailCount; i++) {
         var step = i + 1;
-        waveData.push(Math.sin(step * freq) * Math.exp(-step * decayBase) * peak * 0.72);
+        waveData.push(Math.sin(step * freq) * Math.exp(-step * decayBase) * peak * (0.56 + waveTailFactor * 0.34));
       }
       trimData();
       publishTelemetrySnapshot();
@@ -1668,6 +1680,80 @@
     }, minimumPressDurationMs - elapsed);
   }
 
+  function scrollAssistEnabled() {
+    return !reducedMotion && window.innerWidth > 980;
+  }
+
+  function getScrollAssistPanels() {
+    return Array.prototype.slice.call(document.querySelectorAll(".hero, .field-section, .stack > .panel"));
+  }
+
+  function getScrollAssistTarget(rect) {
+    var margin = 14;
+    var availableHeight = window.innerHeight - margin * 2;
+    var offset = rect.height >= availableHeight
+      ? margin
+      : Math.max(margin, Math.round((window.innerHeight - rect.height) / 2));
+    var top = (window.scrollY || window.pageYOffset || 0) + rect.top - offset;
+    var maxTop = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    return clamp(Math.round(top), 0, maxTop);
+  }
+
+  function findScrollAssistCandidate() {
+    if (!scrollAssistEnabled()) return null;
+    var panels = getScrollAssistPanels();
+    var viewportCenter = window.innerHeight / 2;
+    var threshold = Math.min(140, window.innerHeight * 0.18);
+    var best = null;
+    for (var i = 0; i < panels.length; i++) {
+      var rect = panels[i].getBoundingClientRect();
+      if (rect.bottom < -40 || rect.top > window.innerHeight + 40) continue;
+      var centerDistance = Math.abs((rect.top + rect.height / 2) - viewportCenter);
+      if (centerDistance > threshold) continue;
+      var targetTop = getScrollAssistTarget(rect);
+      var distanceToTarget = Math.abs((window.scrollY || window.pageYOffset || 0) - targetTop);
+      if (distanceToTarget < 8) continue;
+      var score = centerDistance + distanceToTarget * 0.12;
+      if (!best || score < best.score) {
+        best = {
+          score: score,
+          targetTop: targetTop
+        };
+      }
+    }
+    return best;
+  }
+
+  function settleScrollAssist() {
+    scrollAssist.settleTimer = null;
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    if (now < scrollAssist.ignoreUntil || now < scrollAssist.cooldownUntil) return;
+    if (scrollAssist.velocity > 0.9) return;
+    var candidate = findScrollAssistCandidate();
+    if (!candidate) return;
+    if (
+      scrollAssist.lastTargetTop !== null &&
+      Math.abs(candidate.targetTop - scrollAssist.lastTargetTop) < 6 &&
+      now < scrollAssist.cooldownUntil + 280
+    ) {
+      return;
+    }
+    scrollAssist.lastTargetTop = candidate.targetTop;
+    scrollAssist.ignoreUntil = now + 420;
+    scrollAssist.cooldownUntil = now + 900;
+    window.scrollTo({
+      top: candidate.targetTop,
+      behavior: "smooth"
+    });
+  }
+
+  function queueScrollAssist() {
+    if (!scrollAssistEnabled() || performance.now() < scrollAssist.ignoreUntil) return;
+    if (scrollAssist.settleTimer !== null) clearTimeout(scrollAssist.settleTimer);
+    scrollAssist.settleTimer = setTimeout(settleScrollAssist, 96);
+  }
+
   window.BRB = window.BRB || {};
   window.BRB.triggerPress = triggerExternalPress;
   window.BRB.getSwitchProfile = function () { return activeSwitchProfile; };
@@ -1695,6 +1781,7 @@
     updateReggieBubbleLayout();
     resizeAmbient();
     resizeCanvases();
+    scrollAssist.lastTargetTop = null;
     if (isDocked && pedestal) {
       var absolute = getDockAbsolutePos();
       if (absolute) {
@@ -1705,6 +1792,28 @@
       }
     }
   });
+
+  window.addEventListener("wheel", function (e) {
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    if (Math.abs(e.deltaY) > 120 || Math.abs(e.deltaX) > 48) {
+      scrollAssist.velocity = Math.max(scrollAssist.velocity, 1.1);
+      scrollAssist.ignoreUntil = now + 140;
+    }
+  }, { passive: true });
+
+  window.addEventListener("scroll", function () {
+    if (!scrollAssistEnabled()) return;
+    var now = performance.now();
+    var currentY = window.scrollY || window.pageYOffset || 0;
+    var deltaY = Math.abs(currentY - scrollAssist.lastY);
+    var deltaT = Math.max(16, now - scrollAssist.lastAt);
+    var instantVelocity = deltaY / deltaT;
+    scrollAssist.velocity = instantVelocity * 0.74 + scrollAssist.velocity * 0.26;
+    scrollAssist.lastY = currentY;
+    scrollAssist.lastAt = now;
+    queueScrollAssist();
+  }, { passive: true });
 
   if (pedestalControl) {
     if ("PointerEvent" in window) {

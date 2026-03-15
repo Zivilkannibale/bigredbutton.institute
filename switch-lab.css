@@ -255,7 +255,8 @@ body.visual-workover .switch-lab-detail__primary {
 
 body.visual-workover .switch-lab-detail__lower {
   display: grid;
-  grid-template-columns: minmax(16rem, 0.92fr) minmax(0, 1.08fr);
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1.18fr) minmax(0, 0.82fr);
   gap: 0.8rem;
   min-height: 0;
 }
@@ -334,8 +335,7 @@ body.visual-workover .switch-lab-links {
 }
 
 body.visual-workover .switch-lab-action,
-body.visual-workover .switch-lab-link,
-body.visual-workover .switch-lab-telemetry__button {
+body.visual-workover .switch-lab-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -360,26 +360,34 @@ body.visual-workover .switch-lab-telemetry__button {
 body.visual-workover .switch-lab-action:hover,
 body.visual-workover .switch-lab-action:focus-visible,
 body.visual-workover .switch-lab-link:hover,
-body.visual-workover .switch-lab-link:focus-visible,
-body.visual-workover .switch-lab-telemetry__button:hover,
-body.visual-workover .switch-lab-telemetry__button:focus-visible {
+body.visual-workover .switch-lab-link:focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 rgba(5, 6, 8, 0.1);
 }
 
-body.visual-workover .switch-lab-action--primary,
-body.visual-workover .switch-lab-telemetry__button {
+body.visual-workover .switch-lab-action--primary {
   background: var(--ink);
   color: var(--paper);
   box-shadow: 6px 6px 0 rgba(214, 29, 35, 0.7);
 }
 
 body.visual-workover .switch-lab-action--primary:hover,
-body.visual-workover .switch-lab-action--primary:focus-visible,
-body.visual-workover .switch-lab-telemetry__button:hover,
-body.visual-workover .switch-lab-telemetry__button:focus-visible {
+body.visual-workover .switch-lab-action--primary:focus-visible {
   background: #202020;
   box-shadow: 8px 8px 0 rgba(214, 29, 35, 0.72);
+}
+
+body.visual-workover .switch-lab-action--science {
+  background: linear-gradient(180deg, #f05454 0%, #d61d23 100%);
+  border-color: #a7181d;
+  color: #fff7f3;
+  box-shadow: 6px 6px 0 rgba(17, 17, 17, 0.14);
+}
+
+body.visual-workover .switch-lab-action--science:hover,
+body.visual-workover .switch-lab-action--science:focus-visible {
+  background: linear-gradient(180deg, #ff6262 0%, #dd252b 100%);
+  box-shadow: 8px 8px 0 rgba(17, 17, 17, 0.16);
 }
 
 body.visual-workover .switch-lab-action[disabled] {
@@ -414,7 +422,7 @@ body.visual-workover .switch-lab-card__label {
 
 body.visual-workover .switch-lab-telemetry {
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto 1fr;
   gap: 0.72rem;
   min-height: 0;
   padding: 0.82rem;
@@ -478,7 +486,7 @@ body.visual-workover .switch-lab-telemetry__wave {
 body.visual-workover .switch-lab-telemetry__wave canvas {
   width: 100%;
   height: 100%;
-  min-height: 118px;
+  min-height: 98px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.03);
 }
@@ -540,7 +548,7 @@ body.visual-workover .switch-lab-curve__canvas-wrap {
 body.visual-workover .switch-lab-curve__canvas-wrap canvas {
   width: 100%;
   height: 100%;
-  min-height: 220px;
+  min-height: 192px;
   border: 1px solid rgba(17, 17, 17, 0.12);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(248, 241, 231, 0.9)),
@@ -641,8 +649,7 @@ body.visual-workover .switch-lab-empty {
   }
 
   body.visual-workover .switch-lab-action,
-  body.visual-workover .switch-lab-link,
-  body.visual-workover .switch-lab-telemetry__button {
+  body.visual-workover .switch-lab-link {
     width: 100%;
   }
 
