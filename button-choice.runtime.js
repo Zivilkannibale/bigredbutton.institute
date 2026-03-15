@@ -418,15 +418,23 @@
     }
 
     var maxAbs = 0.4;
+    var maxPositive = 0.22;
+    var maxNegative = 0.18;
     for (i = 0; i < waveform.length; i++) {
-      maxAbs = Math.max(maxAbs, Math.abs(Number(waveform[i]) || 0));
+      var sample = Number(waveform[i]) || 0;
+      maxAbs = Math.max(maxAbs, Math.abs(sample));
+      if (sample >= 0) maxPositive = Math.max(maxPositive, sample);
+      else maxNegative = Math.max(maxNegative, Math.abs(sample));
     }
+    var baseline = Math.max(0.56, Math.min(0.66, maxPositive / Math.max(0.4, maxPositive + maxNegative)));
+    var amplitudeScale = Math.max(maxAbs * 2.15, (maxPositive + maxNegative) * 1.18);
 
     ctx.beginPath();
     for (i = 0; i < waveform.length; i++) {
       var value = Number(waveform[i]) || 0;
       var x = paddingX + (i / Math.max(1, waveform.length - 1)) * chartWidth;
-      var yNorm = 0.5 - value / (maxAbs * 2);
+      var yNorm = baseline - value / amplitudeScale;
+      yNorm = Math.max(0.08, Math.min(0.92, yNorm));
       var yPos = paddingY + yNorm * chartHeight;
       if (i === 0) ctx.moveTo(x, yPos);
       else ctx.lineTo(x, yPos);

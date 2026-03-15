@@ -181,26 +181,27 @@ body.visual-workover .button-choice-toggle:focus-visible {
 
 body.visual-workover .button-choice-telemetry {
   display: grid;
-  gap: 0.72rem;
+  gap: 0.52rem;
+  padding: 0.86rem 0.86rem 0.74rem;
 }
 
 body.visual-workover .button-choice-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.54rem;
+  gap: 0.42rem;
 }
 
 body.visual-workover .button-choice-stat {
   display: grid;
   gap: 0.18rem;
-  padding: 0.58rem 0.62rem;
+  padding: 0.48rem 0.52rem;
   border: 1px solid rgba(26, 30, 40, 0.16);
   background: rgba(255, 255, 255, 0.64);
 }
 
 body.visual-workover .button-choice-stat__value {
   font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
-  font-size: 1.28rem;
+  font-size: 1.18rem;
   font-weight: 600;
   line-height: 1;
   color: var(--ink);
@@ -216,13 +217,13 @@ body.visual-workover .button-choice-stat__label {
 
 body.visual-workover .button-choice-wave {
   display: grid;
-  gap: 0.32rem;
+  gap: 0.24rem;
 }
 
 body.visual-workover .button-choice-wave canvas {
   display: block;
   width: 100%;
-  height: 152px;
+  height: 112px;
   border: 1px solid rgba(26, 30, 40, 0.18);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.82));
 }
@@ -262,6 +263,6 @@ body.visual-workover .lab-deck[hidden] {
   }
 
   body.visual-workover .button-choice-wave canvas {
-    height: 128px;
+    height: 96px;
   }
 }
