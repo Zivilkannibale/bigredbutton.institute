@@ -27,7 +27,7 @@ body.visual-workover .switch-lab-panel__kicker {
 body.visual-workover .switch-lab-panel__title {
   margin: 0;
   max-width: 15ch;
-  font-size: clamp(2rem, 3vw, 3.05rem);
+  font-size: clamp(1.9rem, 2.65vw, 2.85rem);
   line-height: 0.92;
 }
 
@@ -66,11 +66,18 @@ body.visual-workover .switch-lab-error {
   color: var(--muted);
 }
 
+body.visual-workover .switch-lab-root,
+body.visual-workover .switch-lab-app,
+body.visual-workover .switch-lab-controls,
+body.visual-workover .switch-lab-detail {
+  min-height: 0;
+}
+
 body.visual-workover .switch-lab-app {
   display: grid;
-  grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
+  grid-template-columns: minmax(20rem, 22.5rem) minmax(0, 1fr);
   gap: 0.9rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 body.visual-workover .switch-lab-controls,
@@ -83,9 +90,10 @@ body.visual-workover .switch-lab-detail {
 
 body.visual-workover .switch-lab-controls {
   display: grid;
-  gap: 0.9rem;
+  grid-template-rows: auto auto auto auto 1fr;
+  gap: 0.8rem;
   align-content: start;
-  padding: 0.95rem;
+  padding: 0.9rem;
 }
 
 body.visual-workover .switch-lab-field {
@@ -103,12 +111,12 @@ body.visual-workover .switch-lab-label {
 
 body.visual-workover .switch-lab-search {
   width: 100%;
-  min-height: 50px;
+  min-height: 48px;
   border: 2px solid var(--ink);
   background: #ffffff;
   color: var(--ink);
-  padding: 0.78rem 0.9rem;
-  font: 600 0.96rem/1.2 "IBM Plex Sans", sans-serif;
+  padding: 0.74rem 0.84rem;
+  font: 600 0.94rem/1.2 "IBM Plex Sans", sans-serif;
 }
 
 body.visual-workover .switch-lab-search::placeholder {
@@ -122,22 +130,22 @@ body.visual-workover .switch-lab-search:focus-visible {
 
 body.visual-workover .switch-lab-filter-group {
   display: grid;
-  gap: 0.52rem;
+  gap: 0.45rem;
 }
 
 body.visual-workover .switch-lab-filter-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.42rem;
 }
 
 body.visual-workover .switch-lab-chip {
-  min-height: 40px;
-  padding: 0.52rem 0.82rem;
+  min-height: 38px;
+  padding: 0.5rem 0.72rem;
   border: 2px solid rgba(17, 17, 17, 0.18);
   background: #f3ede2;
   color: var(--ink);
-  font: 700 0.78rem/1 "IBM Plex Mono", monospace;
+  font: 700 0.76rem/1 "IBM Plex Mono", monospace;
   letter-spacing: 0.04em;
   cursor: pointer;
   transition:
@@ -171,15 +179,15 @@ body.visual-workover .switch-lab-results-meta {
 
 body.visual-workover .switch-lab-list {
   display: grid;
-  gap: 0.5rem;
-  max-height: 26rem;
+  gap: 0.45rem;
+  min-height: 0;
   overflow: auto;
-  padding-right: 0.15rem;
+  padding-right: 0.12rem;
 }
 
 body.visual-workover .switch-lab-item {
   width: 100%;
-  padding: 0.8rem 0.86rem;
+  padding: 0.72rem 0.78rem;
   border: 2px solid rgba(17, 17, 17, 0.14);
   background: #ffffff;
   color: var(--ink);
@@ -217,29 +225,43 @@ body.visual-workover .switch-lab-item.is-selected.is-applied {
 
 body.visual-workover .switch-lab-item__title {
   display: block;
-  margin: 0 0 0.28rem;
-  font: 700 1.02rem/1.14 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  margin: 0 0 0.24rem;
+  font: 700 0.98rem/1.14 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.03em;
 }
 
 body.visual-workover .switch-lab-item__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.7rem;
+  gap: 0.3rem 0.65rem;
   color: #766d61;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   letter-spacing: 0.04em;
 }
 
 body.visual-workover .switch-lab-detail {
   display: grid;
-  gap: 1rem;
-  align-content: start;
-  padding: 1rem;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.8rem;
+  padding: 0.9rem;
 }
 
-body.visual-workover .switch-lab-detail__eyebrow {
+body.visual-workover .switch-lab-detail__primary {
+  display: grid;
+  gap: 0.78rem;
+  align-content: start;
+}
+
+body.visual-workover .switch-lab-detail__lower {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.92fr) minmax(0, 1.08fr);
+  gap: 0.8rem;
+  min-height: 0;
+}
+
+body.visual-workover .switch-lab-detail__eyebrow,
+body.visual-workover .switch-lab-card__eyebrow {
   margin: 0;
   color: var(--red);
   font-family: "IBM Plex Mono", monospace;
@@ -251,7 +273,7 @@ body.visual-workover .switch-lab-detail__eyebrow {
 body.visual-workover .switch-lab-detail h3 {
   margin: 0;
   max-width: 16ch;
-  font-size: clamp(1.55rem, 2.25vw, 2.4rem);
+  font-size: clamp(1.45rem, 2.05vw, 2.15rem);
   line-height: 0.94;
 }
 
@@ -261,12 +283,12 @@ body.visual-workover .switch-lab-detail p {
 }
 
 body.visual-workover .switch-lab-detail__status {
-  padding-left: 0.9rem;
+  padding-left: 0.78rem;
   border-left: 4px solid rgba(17, 17, 17, 0.14);
   color: #655d51;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.8rem;
-  line-height: 1.6;
+  font-size: 0.78rem;
+  line-height: 1.55;
   letter-spacing: 0.04em;
 }
 
@@ -277,22 +299,22 @@ body.visual-workover .switch-lab-detail__status.is-applied {
 
 body.visual-workover .switch-lab-metrics {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
   margin: 0;
 }
 
 body.visual-workover .switch-lab-metric {
-  padding: 0.72rem 0.76rem;
+  padding: 0.62rem 0.68rem;
   border: 1px solid rgba(17, 17, 17, 0.14);
   background: #f7f1e8;
 }
 
 body.visual-workover .switch-lab-metric dt {
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.3rem;
   color: #72695d;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -300,7 +322,7 @@ body.visual-workover .switch-lab-metric dt {
 body.visual-workover .switch-lab-metric dd {
   margin: 0;
   color: var(--ink);
-  font: 700 1.02rem/1.12 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font: 700 0.96rem/1.1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -308,21 +330,22 @@ body.visual-workover .switch-lab-actions,
 body.visual-workover .switch-lab-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.55rem;
 }
 
 body.visual-workover .switch-lab-action,
-body.visual-workover .switch-lab-link {
+body.visual-workover .switch-lab-link,
+body.visual-workover .switch-lab-telemetry__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.68rem 0.98rem;
+  min-height: 42px;
+  padding: 0.64rem 0.92rem;
   border: 2px solid var(--ink);
   background: #fffdf8;
   color: var(--ink);
   text-decoration: none;
-  font: 700 0.82rem/1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font: 700 0.8rem/1 "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   box-shadow: 3px 3px 0 rgba(5, 6, 8, 0.07);
@@ -337,19 +360,24 @@ body.visual-workover .switch-lab-link {
 body.visual-workover .switch-lab-action:hover,
 body.visual-workover .switch-lab-action:focus-visible,
 body.visual-workover .switch-lab-link:hover,
-body.visual-workover .switch-lab-link:focus-visible {
+body.visual-workover .switch-lab-link:focus-visible,
+body.visual-workover .switch-lab-telemetry__button:hover,
+body.visual-workover .switch-lab-telemetry__button:focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 rgba(5, 6, 8, 0.1);
 }
 
-body.visual-workover .switch-lab-action--primary {
+body.visual-workover .switch-lab-action--primary,
+body.visual-workover .switch-lab-telemetry__button {
   background: var(--ink);
   color: var(--paper);
   box-shadow: 6px 6px 0 rgba(214, 29, 35, 0.7);
 }
 
 body.visual-workover .switch-lab-action--primary:hover,
-body.visual-workover .switch-lab-action--primary:focus-visible {
+body.visual-workover .switch-lab-action--primary:focus-visible,
+body.visual-workover .switch-lab-telemetry__button:hover,
+body.visual-workover .switch-lab-telemetry__button:focus-visible {
   background: #202020;
   box-shadow: 8px 8px 0 rgba(214, 29, 35, 0.72);
 }
@@ -368,11 +396,193 @@ body.visual-workover .switch-lab-action[disabled]:focus-visible {
   box-shadow: none;
 }
 
+body.visual-workover .switch-lab-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+body.visual-workover .switch-lab-card__meta,
+body.visual-workover .switch-lab-card__label {
+  color: rgba(238, 232, 224, 0.76);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .switch-lab-telemetry {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: 0.72rem;
+  min-height: 0;
+  padding: 0.82rem;
+  border: 2px solid var(--ink);
+  background: linear-gradient(180deg, #171717 0%, #0f0f10 100%);
+  color: #f5f0e3;
+  box-shadow: 4px 4px 0 rgba(5, 6, 8, 0.12);
+}
+
+body.visual-workover .switch-lab-telemetry__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+body.visual-workover .switch-lab-telemetry__count-value {
+  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font-size: clamp(2.7rem, 5vw, 4rem);
+  line-height: 0.9;
+  color: #ff4848;
+  text-shadow: 4px 4px 0 rgba(255, 72, 72, 0.14);
+}
+
+body.visual-workover .switch-lab-telemetry__count-label,
+body.visual-workover .switch-lab-telemetry__stat-label {
+  display: block;
+  margin-top: 0.15rem;
+  color: rgba(168, 181, 205, 0.8);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .switch-lab-telemetry__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+body.visual-workover .switch-lab-telemetry__stat {
+  padding: 0.35rem 0;
+}
+
+body.visual-workover .switch-lab-telemetry__stat-value {
+  display: block;
+  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: #f5f0e3;
+}
+
+body.visual-workover .switch-lab-telemetry__wave {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.38rem;
+  min-height: 0;
+}
+
+body.visual-workover .switch-lab-telemetry__wave canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 118px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+body.visual-workover .switch-lab-curve {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.72rem;
+  min-height: 0;
+  padding: 0.82rem;
+  border: 2px solid var(--ink);
+  background: #f7f1e8;
+  box-shadow: 4px 4px 0 rgba(5, 6, 8, 0.06);
+}
+
+body.visual-workover .switch-lab-card__head--curve h4 {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+}
+
+body.visual-workover .switch-lab-curve__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem 0.8rem;
+  color: #6f6559;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .switch-lab-curve__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+body.visual-workover .switch-lab-curve__legend-line {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
+}
+
+body.visual-workover .switch-lab-curve__legend-line--down {
+  color: var(--red);
+}
+
+body.visual-workover .switch-lab-curve__legend-line--up {
+  color: #7b97b3;
+}
+
+body.visual-workover .switch-lab-curve__canvas-wrap {
+  position: relative;
+  min-height: 0;
+}
+
+body.visual-workover .switch-lab-curve__canvas-wrap canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(248, 241, 231, 0.9)),
+    linear-gradient(90deg, rgba(17, 17, 17, 0.03) 0 1px, transparent 1px 28px),
+    linear-gradient(180deg, rgba(17, 17, 17, 0.03) 0 1px, transparent 1px 28px);
+}
+
+body.visual-workover .switch-lab-curve__empty {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: #746b60;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+body.visual-workover .switch-lab-curve__empty.is-visible {
+  display: flex;
+}
+
+body.visual-workover .switch-lab-curve__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  color: #6f6559;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 body.visual-workover .switch-lab-attribution {
   padding-top: 0.3rem;
   border-top: 1px solid rgba(17, 17, 17, 0.14);
   color: #675f55;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 body.visual-workover .switch-lab-attribution a {
@@ -382,6 +592,64 @@ body.visual-workover .switch-lab-attribution a {
 body.visual-workover .switch-lab-empty {
   margin: 0;
   color: #675f55;
+}
+
+@media (min-width: 1101px) {
+  body.visual-workover .switch-lab-panel {
+    height: var(--switch-lab-reference-height, auto);
+    grid-template-rows: auto 1fr;
+  }
+
+  body.visual-workover .switch-lab-root,
+  body.visual-workover .switch-lab-app {
+    height: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  body.visual-workover .switch-lab-panel__head,
+  body.visual-workover .switch-lab-app,
+  body.visual-workover .switch-lab-detail__lower {
+    grid-template-columns: 1fr;
+  }
+
+  body.visual-workover .switch-lab-panel__meta {
+    max-width: none;
+    justify-self: start;
+  }
+
+  body.visual-workover .switch-lab-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  body.visual-workover .switch-lab-controls,
+  body.visual-workover .switch-lab-detail {
+    padding: 0.82rem;
+  }
+
+  body.visual-workover .switch-lab-metrics,
+  body.visual-workover .switch-lab-telemetry__summary,
+  body.visual-workover .switch-lab-telemetry__stats {
+    grid-template-columns: 1fr;
+  }
+
+  body.visual-workover .switch-lab-actions,
+  body.visual-workover .switch-lab-links {
+    display: grid;
+  }
+
+  body.visual-workover .switch-lab-action,
+  body.visual-workover .switch-lab-link,
+  body.visual-workover .switch-lab-telemetry__button {
+    width: 100%;
+  }
+
+  body.visual-workover .switch-lab-curve__legend,
+  body.visual-workover .switch-lab-curve__footer {
+    justify-content: flex-start;
+  }
 }
 
 body.visual-workover.switch-profile-active .press-btn {
@@ -417,37 +685,4 @@ body.visual-workover.switch-profile-active .pedestal-float__button.is-pressed .p
   filter:
     saturate(var(--brb-switch-pedestal-saturate, 1.04))
     brightness(var(--brb-switch-pedestal-brightness, 0.98));
-}
-
-@media (max-width: 1100px) {
-  body.visual-workover .switch-lab-panel__head,
-  body.visual-workover .switch-lab-app {
-    grid-template-columns: 1fr;
-  }
-
-  body.visual-workover .switch-lab-panel__meta {
-    max-width: none;
-    justify-self: start;
-  }
-}
-
-@media (max-width: 700px) {
-  body.visual-workover .switch-lab-controls,
-  body.visual-workover .switch-lab-detail {
-    padding: 0.86rem;
-  }
-
-  body.visual-workover .switch-lab-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  body.visual-workover .switch-lab-actions,
-  body.visual-workover .switch-lab-links {
-    display: grid;
-  }
-
-  body.visual-workover .switch-lab-action,
-  body.visual-workover .switch-lab-link {
-    width: 100%;
-  }
 }
