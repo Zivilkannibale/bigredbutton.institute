@@ -168,18 +168,20 @@
       speed: 1.08,
       phase: 0.2,
       floatY: 1.15,
-      tilt: 0.34
+      tilt: 0.34,
+      direction: -1
     },
     {
       palette: "sand",
-      x: 356,
+      x: 284,
       baseY: 78,
       width: 160,
       height: 88,
       speed: 0.84,
       phase: 1.7,
       floatY: 0.92,
-      tilt: 0.26
+      tilt: 0.26,
+      direction: 1
     },
     {
       palette: "plum",
@@ -190,7 +192,8 @@
       speed: 0.92,
       phase: 3.1,
       floatY: 0.98,
-      tilt: 0.28
+      tilt: 0.28,
+      direction: -1
     },
     {
       palette: "slate",
@@ -201,18 +204,20 @@
       speed: 0.94,
       phase: 4.2,
       floatY: 0.72,
-      tilt: 0.21
+      tilt: 0.21,
+      direction: 1
     },
     {
       palette: "classic",
-      x: -98,
+      x: 1036,
       baseY: 54,
       width: 126,
       height: 70,
       speed: 1.18,
       phase: 5.1,
       floatY: 0.84,
-      tilt: 0.24
+      tilt: 0.24,
+      direction: -1
     },
     {
       palette: "sand",
@@ -223,18 +228,20 @@
       speed: 1.02,
       phase: 6.2,
       floatY: 0.76,
-      tilt: 0.2
+      tilt: 0.2,
+      direction: 1
     },
     {
       palette: "plum",
-      x: -174,
+      x: 1108,
       baseY: 42,
       width: 122,
       height: 68,
       speed: 1.1,
       phase: 7.1,
       floatY: 0.78,
-      tilt: 0.22
+      tilt: 0.22,
+      direction: -1
     }
   ];
   var baseAirshipCount = 3;
@@ -1083,11 +1090,12 @@
 
   function positionAirship(airship, x, y, tilt) {
     if (!airship || !airship.node) return;
+    var facing = airship.direction > 0 ? -1 : 1;
     airship.node.style.left = (((x - sceneViewBox.minX) / sceneViewBox.width) * 100).toFixed(3) + "%";
     airship.node.style.top = (((y - sceneViewBox.minY) / sceneViewBox.height) * 100).toFixed(3) + "%";
     airship.node.style.width = ((airship.width / sceneViewBox.width) * 100).toFixed(3) + "%";
     airship.node.style.height = ((airship.height / sceneViewBox.height) * 100).toFixed(3) + "%";
-    airship.node.style.transform = "translate(-50%, -50%) rotate(" + tilt.toFixed(3) + "deg)";
+    airship.node.style.transform = "translate(-50%, -50%) scaleX(" + facing + ") rotate(" + (tilt * facing).toFixed(3) + "deg)";
   }
 
   function createAirshipNode(config) {
@@ -1116,6 +1124,7 @@
       width: config.width,
       height: config.height,
       speed: config.speed,
+      direction: config.direction || -1,
       phase: config.phase,
       floatY: config.floatY,
       tilt: config.tilt,
@@ -1173,9 +1182,11 @@
     airshipClock += dt;
     for (var i = 0; i < airships.length; i++) {
       var airship = airships[i];
-      airship.x += airship.speed * dt * 0.026 * motionScale;
-      if (airship.x > sceneViewBox.minX + sceneViewBox.width + airship.width * 0.72) {
+      airship.x += airship.speed * airship.direction * dt * 0.026 * motionScale;
+      if (airship.direction > 0 && airship.x > sceneViewBox.minX + sceneViewBox.width + airship.width * 0.72) {
         airship.x = sceneViewBox.minX - airship.width * (0.9 + Math.random() * 0.7);
+      } else if (airship.direction < 0 && airship.x < sceneViewBox.minX - airship.width * 0.72) {
+        airship.x = sceneViewBox.minX + sceneViewBox.width + airship.width * (0.9 + Math.random() * 0.7);
       }
       var driftY = Math.sin(airshipClock * 0.00014 + airship.phase) * airship.floatY * floatScale;
       var tilt = Math.sin(airshipClock * 0.00009 + airship.phase) * airship.tilt * floatScale;
