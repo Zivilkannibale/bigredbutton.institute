@@ -1293,6 +1293,7 @@
     var origin = source === "pedestal" ? getPedestalCenter() : getButtonCenter();
     spawnParticles(origin.x, origin.y, source === "pedestal" ? 10 : 14);
     addBurstSample(now);
+    injectWaveFromHold(holdMs);
     nudgeEntropy(entropyParticlesMain);
     nudgeEntropy(entropyParticlesMini);
     if (isDocked) spawnCrowdPerson();

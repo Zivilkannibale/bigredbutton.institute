@@ -1,5 +1,8 @@
 /downloads/
 /studies/first-big-red-button-study/audio-assets/reusable/audio/local-only/
+.codex-artifacts/
+/button-mechanics-lab/
+/test-results/
 *.aux
 *.bbl
 *.blg
