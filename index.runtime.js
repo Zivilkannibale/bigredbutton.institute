@@ -1674,6 +1674,9 @@
     if (adapter.type === "mechvibes-v2-press-release-pack") {
       return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
     }
+    if (adapter.type === "mechvibes-file-map-pack") {
+      return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
+    }
     if (adapter.type === "bucklespring-wav-pair") {
       return normalizeVariantEntry(chooseVariant(phase === "release" ? adapter.release_variants : adapter.press_variants));
     }
