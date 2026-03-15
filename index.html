@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="visual-workover.css?v=20260315e">
-  <link rel="stylesheet" href="switch-lab.css?v=20260315g">
+  <link rel="stylesheet" href="switch-lab.css?v=20260315h">
 </head>
 <body class="visual-workover">
   <canvas id="ambientCanvas"></canvas>
@@ -144,28 +144,6 @@
         <span class="bemi-val" id="bemiVal">0.00</span>
       </div>
       <p class="field-caption" id="fieldCaption">Scroll this section into view to deploy the field unit and observe crowd spillover.</p>
-      <div class="mini-dashboard" id="miniDash">
-        <div class="mini-dash-header">
-          <div class="mini-dash-readout">
-            <h3>Field Telemetry</h3>
-            <div class="mini-dash-count" id="pressCount">0</div>
-            <div class="mini-dash-count-label">verified presses</div>
-          </div>
-          <div class="mini-dash-stats" aria-label="Field telemetry summary">
-            <div class="md-stat"><div class="md-stat-val red" id="mdRate">0.0</div><div class="md-stat-lbl">Press/min</div></div>
-            <div class="md-stat"><div class="md-stat-val" id="mdEntropy">&mdash;</div><div class="md-stat-lbl">Entropy</div></div>
-            <div class="md-stat"><div class="md-stat-val" id="mdAvg">&mdash;</div><div class="md-stat-lbl">Avg ms</div></div>
-            <div class="md-stat"><div class="md-stat-val" id="mdBurst">0</div><div class="md-stat-lbl">Max burst</div></div>
-          </div>
-        </div>
-        <div class="mini-dash-actions">
-          <button class="press-btn mini-dash-press-btn" id="pressBtn" type="button">Press for Science</button>
-        </div>
-        <div class="mini-viz-row">
-          <div class="mini-viz-card mini-viz-card--wave"><h4>Temporal waveform</h4><canvas id="mWave"></canvas></div>
-          <div class="mini-viz-card mini-viz-card--entropy"><h4>Entropy field</h4><canvas id="mEntropy"></canvas></div>
-        </div>
-      </div>
     </section>
 
     <main class="stack">
@@ -1135,8 +1113,8 @@
     setInterval(updateStats,1000);
   })();
   </script>
-  <script src="index.runtime.js?v=20260315k"></script>
-  <script src="switch-lab.runtime.js?v=20260315e"></script>
+  <script src="index.runtime.js?v=20260315l"></script>
+  <script src="switch-lab.runtime.js?v=20260315f"></script>
 </body>
 </html>
 

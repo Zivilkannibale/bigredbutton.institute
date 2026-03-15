@@ -1052,7 +1052,7 @@
     pedestal.style.filter = "";
     syncSceneDockHalo();
     if (miniDash) miniDash.classList.add("visible");
-    if (fieldCaption) fieldCaption.textContent = "Button deployed. Press it and watch telemetry below.";
+    if (fieldCaption) fieldCaption.textContent = "Button deployed. Press it here, then inspect the live telemetry in Switch Lab below.";
     if (fieldStatusTimer) {
       clearTimeout(fieldStatusTimer);
       fieldStatusTimer = null;
@@ -1398,19 +1398,35 @@
   function injectWaveFromHold(holdMs) {
     var clamped = clamp(holdMs, 40, 1600);
     var norm = (clamped - 40) / 1560;
+    var family = activeSwitchProfile && activeSwitchProfile.family ? activeSwitchProfile.family : "linear";
+    var familyRinging = family === "clicky" ? 1 : family === "tactile" ? 0.58 : 0.24;
     var wavePeakFactor = clamp(getSwitchProfileNumber("telemetryProfile", "wavePeak", 1), 0.72, 1.7);
     var waveTailFactor = clamp(getSwitchProfileNumber("telemetryProfile", "waveTail", 0.42), 0.22, 0.72);
     var clickiness = clamp(getSwitchProfileNumber("soundProfile", "clickiness", 0.12), 0, 1);
-    var peak = clamp((0.74 + norm * 0.84) * wavePeakFactor, 0.55, 2.1);
-    var tailCount = 4 + Math.round((norm * 5) + waveTailFactor * 10);
-    var freq = 0.92 + norm * 0.34 + clickiness * 0.28;
-    var decayBase = clamp(0.45 - waveTailFactor * 0.24, 0.16, 0.38);
-    waveData.push(peak);
+    var travelDepth = clamp(getSwitchProfileNumber("animationProfile", "travelDepth", 0.72), 0.55, 0.94);
+    var peak = clamp((0.7 + norm * 0.66 + travelDepth * 0.28 + clickiness * 0.12) * wavePeakFactor, 0.55, 2.35);
+    var tailCount = 5 + Math.round(norm * 4 + waveTailFactor * 9 + familyRinging * 6);
+    var freq = 0.7 + norm * 0.18 + clickiness * 0.74 + familyRinging * 0.18;
+    var decayBase = clamp(0.5 - waveTailFactor * 0.22 - familyRinging * 0.12 + (0.12 - clickiness * 0.06), 0.11, 0.44);
+    var initialPeak = peak * (0.84 + familyRinging * 0.18);
+    var recoil = -peak * (0.05 + familyRinging * 0.1 + clickiness * 0.05);
+    waveData.push(initialPeak);
     publishTelemetrySnapshot();
     setTimeout(function () {
+      if (Math.abs(recoil) > 0.035) waveData.push(recoil);
       for (var i = 0; i < tailCount; i++) {
         var step = i + 1;
-        waveData.push(Math.sin(step * freq) * Math.exp(-step * decayBase) * peak * (0.56 + waveTailFactor * 0.34));
+        var ring = Math.sin(step * freq) *
+          Math.exp(-step * decayBase) *
+          peak *
+          (0.18 + familyRinging * 0.48 + clickiness * 0.08);
+        var body = Math.exp(-Math.pow((step - (1.7 + waveTailFactor * 4.5)) / (1.8 + (1 - familyRinging) * 2.4), 2)) *
+          peak *
+          (0.05 + waveTailFactor * 0.18 + travelDepth * 0.08);
+        var sample = ring + body;
+        if (family === "linear") sample *= 0.88;
+        if (family === "clicky" && step < 4) sample += peak * 0.05;
+        waveData.push(sample);
       }
       trimData();
       publishTelemetrySnapshot();
