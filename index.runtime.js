@@ -167,7 +167,7 @@
     {
       palette: "classic",
       x: 676,
-      baseY: 32,
+      baseY: 24,
       width: 91,
       height: 49,
       speed: 1.08,
@@ -179,7 +179,7 @@
     {
       palette: "sand",
       x: 284,
-      baseY: 78,
+      baseY: 59,
       width: 80,
       height: 44,
       speed: 0.84,
@@ -191,7 +191,7 @@
     {
       palette: "plum",
       x: 882,
-      baseY: 122,
+      baseY: 92,
       width: 71,
       height: 39,
       speed: 0.92,
@@ -203,7 +203,7 @@
     {
       palette: "slate",
       x: -62,
-      baseY: 18,
+      baseY: 14,
       width: 66,
       height: 36,
       speed: 0.94,
@@ -215,7 +215,7 @@
     {
       palette: "classic",
       x: 1036,
-      baseY: 54,
+      baseY: 41,
       width: 63,
       height: 35,
       speed: 1.18,
@@ -227,7 +227,7 @@
     {
       palette: "sand",
       x: -136,
-      baseY: 96,
+      baseY: 72,
       width: 59,
       height: 33,
       speed: 1.02,
@@ -239,7 +239,7 @@
     {
       palette: "plum",
       x: 1108,
-      baseY: 42,
+      baseY: 32,
       width: 61,
       height: 34,
       speed: 1.1,
