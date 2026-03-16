@@ -1129,9 +1129,18 @@
     };
   }
 
-  function getCrimsonHoldX(airship) {
-    var anchor = getAirshipCabinAnchor(airship);
-    return airship.x + (reggieTargetX - anchor.x);
+  function getCrimsonBeamOffsetX(airship) {
+    if (!airship) return 0;
+    var beamRatio = airship.direction > 0 ? 0.415 : 0.585;
+    return (beamRatio - 0.5) * airship.width;
+  }
+
+  function getCrimsonBeamCenterX(airship) {
+    return airship ? airship.x + getCrimsonBeamOffsetX(airship) : 0;
+  }
+
+  function getCrimsonHoldX(airship, targetX) {
+    return (targetX == null ? reggieTargetX : targetX) - getCrimsonBeamOffsetX(airship);
   }
 
   function getPersonPose(person, fallbackX, fallbackY) {
@@ -1205,10 +1214,11 @@
       return;
     }
     var anchor = getAirshipCabinAnchor(airship);
+    var beamCenterX = getCrimsonBeamCenterX(airship);
     var progress = clamp((now - reggieLiftState.startAt) / 2050, 0, 1);
     var eased = smoothstep(progress);
     var liftTargetY = anchor.y + 6;
-    var currentX = reggieLiftState.startX + (anchor.x - reggieLiftState.startX) * eased;
+    var currentX = reggieLiftState.startX + (beamCenterX - reggieLiftState.startX) * eased;
     var currentY = reggieLiftState.startY + (liftTargetY - reggieLiftState.startY) * eased;
     var scale = 1 - eased * 0.82;
     setPersonPose(person4, currentX, currentY, scale);
@@ -1389,7 +1399,8 @@
       var airship = airships[i];
       var speed = airship.speed * (airship.departing ? airship.exitSpeedBoost : 1);
       if (airship.special && !airship.departing) {
-        var holdX = getCrimsonHoldX(airship);
+        var reggiePose = getPersonPose(person4, reggieTargetX, reggieSceneY);
+        var holdX = getCrimsonHoldX(airship, reggiePose.x);
         if (airship.direction < 0) {
           airship.x = Math.max(holdX, airship.x + speed * airship.direction * dt * 0.026 * motionScale);
         } else {
