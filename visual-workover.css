@@ -309,6 +309,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   transform: translate(-50%, -50%);
   transform-origin: center center;
   isolation: isolate;
+  overflow: visible;
   will-change: left, top, width, height, transform;
 }
 .scene-airship--crimson {
@@ -329,6 +330,44 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   opacity: 0;
   pointer-events: none;
   transform: scale(0.94);
+}
+.scene-airship__beam {
+  position: absolute;
+  top: 77%;
+  left: 55%;
+  width: 19%;
+  height: var(--beam-length, 0px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+  background: linear-gradient(to bottom, rgba(255, 150, 150, 0.62) 0%, rgba(223, 44, 44, 0.34) 54%, rgba(223, 44, 44, 0.06) 100%);
+  filter: drop-shadow(0 0 20px rgba(223, 44, 44, 0.32));
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+.scene-airship__beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(46% 0, 54% 0, 78% 100%, 22% 100%);
+  background: linear-gradient(to bottom, rgba(255, 236, 236, 0.88) 0%, rgba(255, 118, 118, 0.54) 56%, rgba(255, 118, 118, 0.08) 100%);
+}
+.scene-airship__beam::after {
+  content: "";
+  position: absolute;
+  top: -16%;
+  left: 50%;
+  width: 165%;
+  height: 18%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 178, 178, 0.92) 0%, rgba(223, 44, 44, 0.46) 54%, rgba(223, 44, 44, 0) 100%);
+}
+.scene-airship--crimson.is-beaming .scene-airship__beam {
+  opacity: 1;
+  animation: crimson-tractor-beam 220ms linear infinite alternate;
 }
 .scene-airship--crimson.is-blinking {
   animation: crimson-airship-blink 520ms linear 1;
@@ -370,6 +409,19 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   30%, 68% {
     opacity: 0.82;
     transform: scale(1.08);
+  }
+}
+@keyframes crimson-tractor-beam {
+  from {
+    filter:
+      brightness(0.98)
+      drop-shadow(0 0 18px rgba(223, 44, 44, 0.26));
+  }
+  to {
+    filter:
+      brightness(1.08)
+      drop-shadow(0 0 24px rgba(223, 44, 44, 0.42))
+      drop-shadow(0 0 12px rgba(255, 178, 178, 0.22));
   }
 }
 .scene-airship__model {
