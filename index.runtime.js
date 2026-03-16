@@ -167,7 +167,7 @@
     {
       palette: "classic",
       x: 676,
-      baseY: 24,
+      baseY: 16,
       width: 91,
       height: 49,
       speed: 1.08,
@@ -179,7 +179,7 @@
     {
       palette: "sand",
       x: 284,
-      baseY: 59,
+      baseY: 40,
       width: 80,
       height: 44,
       speed: 0.84,
@@ -191,7 +191,7 @@
     {
       palette: "plum",
       x: 882,
-      baseY: 92,
+      baseY: 62,
       width: 71,
       height: 39,
       speed: 0.92,
@@ -203,7 +203,7 @@
     {
       palette: "slate",
       x: -62,
-      baseY: 14,
+      baseY: 10,
       width: 66,
       height: 36,
       speed: 0.94,
@@ -215,7 +215,7 @@
     {
       palette: "classic",
       x: 1036,
-      baseY: 41,
+      baseY: 28,
       width: 63,
       height: 35,
       speed: 1.18,
@@ -227,7 +227,7 @@
     {
       palette: "sand",
       x: -136,
-      baseY: 72,
+      baseY: 48,
       width: 59,
       height: 33,
       speed: 1.02,
@@ -239,7 +239,7 @@
     {
       palette: "plum",
       x: 1108,
-      baseY: 32,
+      baseY: 22,
       width: 61,
       height: 34,
       speed: 1.1,
@@ -1259,7 +1259,6 @@
     if (!lastAirshipTickAt) lastAirshipTickAt = now;
     var dt = clamp(now - lastAirshipTickAt, 10, 40);
     var motionScale = reducedMotion ? 0.3 : 1;
-    var floatScale = reducedMotion ? 0.18 : 1;
     lastAirshipTickAt = now;
     airshipClock += dt;
     for (var i = 0; i < airships.length; i++) {
@@ -1283,9 +1282,7 @@
         }
         airship.x = sceneViewBox.minX + sceneViewBox.width + airship.width * (0.9 + Math.random() * 0.7);
       }
-      var driftY = Math.sin(airshipClock * 0.00014 + airship.phase) * airship.floatY * floatScale;
-      var tilt = Math.sin(airshipClock * 0.00009 + airship.phase) * airship.tilt * floatScale;
-      positionAirship(airship, airship.x, airship.baseY + driftY, tilt);
+      positionAirship(airship, airship.x, airship.baseY, 0);
     }
   }
 
