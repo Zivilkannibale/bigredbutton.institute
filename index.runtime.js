@@ -121,6 +121,9 @@
   var reggieQuoteIndex = -1;
   var reggieQuoteTimer = null;
   var reggieArrived = false;
+  var reggieSceneY = 332;
+  var reggieAbducted = false;
+  var reggieLiftState = null;
   var redWordSpans = [];
   var crowdPeople = [];
   var crowdSlots = [
@@ -161,6 +164,7 @@
   var airshipClock = Math.random() * 7000;
   var lastAirshipTickAt = 0;
   var crimsonAirshipActive = false;
+  var crimsonEventConsumed = false;
   var crimsonPressThreshold = 42;
   var crimsonPressWindowMs = 60000;
   var airshipBlueprints = [
@@ -1116,12 +1120,127 @@
     airship.node.style.transform = "translate(-50%, -50%) scaleX(" + facing + ") rotate(" + (tilt * facing).toFixed(3) + "deg)";
   }
 
+  function getAirshipCabinAnchor(airship) {
+    if (!airship) return { x: 0, y: 0 };
+    var cabinOffsetX = airship.width * 0.056 * (airship.direction > 0 ? -1 : 1);
+    return {
+      x: airship.x + cabinOffsetX,
+      y: airship.baseY + airship.height * 0.268
+    };
+  }
+
+  function getCrimsonHoldX(airship) {
+    var anchor = getAirshipCabinAnchor(airship);
+    return airship.x + (reggieTargetX - anchor.x);
+  }
+
+  function getPersonPose(person, fallbackX, fallbackY) {
+    if (!person) return { x: fallbackX, y: fallbackY };
+    var current = person.getAttribute("transform");
+    var match = current && current.match(/translate\(([-\d.]+),([-\d.]+)/);
+    return {
+      x: match ? parseFloat(match[1]) : fallbackX,
+      y: match ? parseFloat(match[2]) : fallbackY
+    };
+  }
+
+  function setPersonPose(person, x, y, scale) {
+    if (!person) return;
+    var transform = "translate(" + x.toFixed(3) + "," + y.toFixed(3) + ")";
+    if (scale != null && Math.abs(scale - 1) > 0.001) transform += " scale(" + scale.toFixed(3) + ")";
+    person.setAttribute("transform", transform);
+  }
+
+  function clearCrimsonBeam(airship) {
+    if (!airship || !airship.node) return;
+    airship.node.classList.remove("is-beaming");
+    airship.node.style.removeProperty("--beam-length");
+  }
+
+  function setCrimsonBeamTarget(airship, targetSceneY) {
+    if (!airship || !airship.beam || !sceneWrap) return;
+    var anchor = getAirshipCabinAnchor(airship);
+    var sceneHeightPx = sceneWrap.clientHeight || sceneWrap.getBoundingClientRect().height || 0;
+    var beamLength = Math.max(0, ((targetSceneY - anchor.y) / sceneViewBox.height) * sceneHeightPx);
+    if (beamLength < 8) {
+      clearCrimsonBeam(airship);
+      return;
+    }
+    airship.node.style.setProperty("--beam-length", beamLength.toFixed(1) + "px");
+    airship.node.classList.add("is-beaming");
+  }
+
+  function finishCrimsonPass() {
+    crimsonAirshipActive = false;
+    reggieLiftState = null;
+    if (sceneStatus && isDocked) {
+      sceneStatus.textContent = "RED FLAG AIRSHIP DEPARTED - REGGIE REMOVED FROM FIELD";
+      sceneStatus.classList.add("show");
+      queueSceneStatusReset(2600);
+    }
+  }
+
+  function startCrimsonAbduction(airship) {
+    if (!airship || !airship.special || !person4 || reggieLiftState || reggieAbducted || !isDocked || !reggieArrived) return;
+    var reggiePose = getPersonPose(person4, reggieTargetX, reggieSceneY);
+    stopReggieQuotes();
+    reggieAbducted = true;
+    reggieLiftState = {
+      airship: airship,
+      startAt: performance.now(),
+      startX: reggiePose.x,
+      startY: reggiePose.y
+    };
+    if (sceneStatus) {
+      sceneStatus.textContent = "TRACTOR BEAM ENGAGED - REGGIE TRANSFER IN PROGRESS";
+      sceneStatus.classList.add("show");
+    }
+  }
+
+  function updateCrimsonAbduction(now) {
+    if (!reggieLiftState || !person4) return;
+    var airship = reggieLiftState.airship;
+    if (!airship || !airship.node) {
+      reggieLiftState = null;
+      return;
+    }
+    var anchor = getAirshipCabinAnchor(airship);
+    var progress = clamp((now - reggieLiftState.startAt) / 2050, 0, 1);
+    var eased = smoothstep(progress);
+    var liftTargetY = anchor.y + 6;
+    var currentX = reggieLiftState.startX + (anchor.x - reggieLiftState.startX) * eased;
+    var currentY = reggieLiftState.startY + (liftTargetY - reggieLiftState.startY) * eased;
+    var scale = 1 - eased * 0.82;
+    setPersonPose(person4, currentX, currentY, scale);
+    person4.setAttribute("opacity", (1 - eased * 0.96).toFixed(3));
+    setCrimsonBeamTarget(airship, currentY - 16);
+    if (progress < 1) return;
+    person4.setAttribute("opacity", "0");
+    clearCrimsonBeam(airship);
+    reggieLiftState = null;
+    airship.departing = true;
+    airship.exitSpeedBoost = 1.82;
+    airship.direction = -1;
+    if (sceneStatus) {
+      sceneStatus.textContent = "REGGIE ACQUIRED - RED FLAG AIRSHIP EXITING";
+      sceneStatus.classList.add("show");
+      queueSceneStatusReset(2400);
+    }
+  }
+
   function createAirshipNode(config) {
     if (!airshipDomLayer) return null;
     var node = document.createElement("div");
+    var beam = null;
     var model = document.createElement("model-viewer");
     node.className = "scene-airship";
     if (config.special) node.classList.add("scene-airship--crimson");
+    if (config.special) {
+      beam = document.createElement("div");
+      beam.className = "scene-airship__beam";
+      beam.setAttribute("aria-hidden", "true");
+      node.appendChild(beam);
+    }
     model.className = "scene-airship__model";
     model.setAttribute("alt", "");
     model.setAttribute("aria-hidden", "true");
@@ -1148,6 +1267,7 @@
       floatY: config.floatY,
       tilt: config.tilt,
       special: !!config.special,
+      beam: beam,
       departing: false,
       exitSpeedBoost: 1,
       palettePath: airshipPalettePaths[config.palette] || airshipPalettePaths.classic,
@@ -1217,8 +1337,9 @@
   }
 
   function activateCrimsonAirship() {
-    if (crimsonAirshipActive) return;
+    if (crimsonAirshipActive || crimsonEventConsumed) return;
     crimsonAirshipActive = true;
+    crimsonEventConsumed = true;
     sendAirshipsOffscreen();
     if (!hasCrimsonAirship()) {
       var crimsonAirship = createAirshipNode(crimsonAirshipBlueprint);
@@ -1243,11 +1364,14 @@
   function registerFieldPress(now) {
     fieldPressWindow.push(now);
     trimFieldPressWindow(now);
-    if (!crimsonAirshipActive && fieldPressWindow.length >= crimsonPressThreshold) activateCrimsonAirship();
+    if (!crimsonAirshipActive && !crimsonEventConsumed && fieldPressWindow.length >= crimsonPressThreshold) activateCrimsonAirship();
   }
 
   function resetAirships() {
     crimsonAirshipActive = false;
+    crimsonEventConsumed = false;
+    reggieAbducted = false;
+    reggieLiftState = null;
     fieldPressWindow.length = 0;
     clearAirships();
     ensureAirships();
@@ -1264,9 +1388,26 @@
     for (var i = 0; i < airships.length; i++) {
       var airship = airships[i];
       var speed = airship.speed * (airship.departing ? airship.exitSpeedBoost : 1);
-      airship.x += speed * airship.direction * dt * 0.026 * motionScale;
+      if (airship.special && !airship.departing) {
+        var holdX = getCrimsonHoldX(airship);
+        if (airship.direction < 0) {
+          airship.x = Math.max(holdX, airship.x + speed * airship.direction * dt * 0.026 * motionScale);
+        } else {
+          airship.x = Math.min(holdX, airship.x + speed * airship.direction * dt * 0.026 * motionScale);
+        }
+        if (Math.abs(airship.x - holdX) < 0.001) {
+          if (!reggieLiftState && !reggieAbducted && reggieArrived) startCrimsonAbduction(airship);
+          if (reggieLiftState && reggieLiftState.airship === airship) updateCrimsonAbduction(now);
+          positionAirship(airship, airship.x, airship.baseY, 0);
+          continue;
+        }
+        clearCrimsonBeam(airship);
+      } else {
+        airship.x += speed * airship.direction * dt * 0.026 * motionScale;
+      }
       if (airship.direction > 0 && airship.x > sceneViewBox.minX + sceneViewBox.width + airship.width * 0.72) {
         if (airship.departing) {
+          if (airship.special) finishCrimsonPass();
           if (airship.node && airship.node.parentNode) airship.node.parentNode.removeChild(airship.node);
           airships.splice(i, 1);
           i--;
@@ -1275,6 +1416,7 @@
         airship.x = sceneViewBox.minX - airship.width * (0.9 + Math.random() * 0.7);
       } else if (airship.direction < 0 && airship.x < sceneViewBox.minX - airship.width * 0.72) {
         if (airship.departing) {
+          if (airship.special) finishCrimsonPass();
           if (airship.node && airship.node.parentNode) airship.node.parentNode.removeChild(airship.node);
           airships.splice(i, 1);
           i--;
@@ -1477,6 +1619,8 @@
       curiosityTimer = null;
     }
     stopReggieQuotes();
+    reggieAbducted = false;
+    reggieLiftState = null;
     resetCrowdPeople();
     resetAirships();
     var current2 = person2 && person2.getAttribute("transform");
@@ -1485,11 +1629,12 @@
     var current4 = person4 && person4.getAttribute("transform");
     var match4 = current4 && current4.match(/translate\(([\d.]+)/);
     var person4StartX = match4 ? parseFloat(match4[1]) : reggieHomeX;
+    if (person4) person4.setAttribute("opacity", "1");
     var startedAt = performance.now();
     function step(now) {
       var eased = smoothstep(clamp((now - startedAt) / 800, 0, 1));
-      if (person2) person2.setAttribute("transform", "translate(" + (person2StartX + (curiosityHomeX - person2StartX) * eased) + ",332)");
-      if (person4) person4.setAttribute("transform", "translate(" + (person4StartX + (reggieHomeX - person4StartX) * eased) + ",332)");
+      if (person2) person2.setAttribute("transform", "translate(" + (person2StartX + (curiosityHomeX - person2StartX) * eased) + "," + reggieSceneY + ")");
+      if (person4) setPersonPose(person4, person4StartX + (reggieHomeX - person4StartX) * eased, reggieSceneY, 1);
       if (eased < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -1588,7 +1733,7 @@
   }
 
   function showReggieQuoteNow() {
-    if (!person4Quote || !reggieQuotes.length || !isDocked || !reggieArrived) return;
+    if (!person4Quote || !reggieQuotes.length || !isDocked || !reggieArrived || reggieAbducted) return;
     if (reggieQuoteTimer) {
       clearTimeout(reggieQuoteTimer);
       reggieQuoteTimer = null;
@@ -1598,17 +1743,17 @@
   }
 
   function queueReggieQuote(delay) {
-    if (!person4Quote || !reggieQuotes.length) return;
+    if (!person4Quote || !reggieQuotes.length || reggieAbducted) return;
     if (reggieQuoteTimer) clearTimeout(reggieQuoteTimer);
     reggieQuoteTimer = setTimeout(function () {
       reggieQuoteTimer = null;
-      if (!isDocked || !reggieArrived) return;
+      if (!isDocked || !reggieArrived || reggieAbducted) return;
       showReggieQuoteNow();
     }, delay);
   }
 
   function interruptReggieQuote() {
-    if (!isDocked || !reggieArrived) return;
+    if (!isDocked || !reggieArrived || reggieAbducted) return;
     if (reggieQuoteTimer) {
       clearTimeout(reggieQuoteTimer);
       reggieQuoteTimer = null;
@@ -1623,7 +1768,10 @@
     if (person1) person1.setAttribute("transform", "translate(" + ((((walkPhase * 0.8) % 1060) - 50)) + ",332)");
     if (person3) person3.setAttribute("transform", "translate(" + (1010 - ((walkPhase * 0.5) % 1060)) + ",332)");
     if (person2 && !isDocked) person2.setAttribute("transform", "translate(" + curiosityHomeX + ",332)");
-    if (person4 && !isDocked) person4.setAttribute("transform", "translate(" + reggieHomeX + ",332)");
+    if (person4 && !isDocked) {
+      person4.setAttribute("opacity", "1");
+      setPersonPose(person4, reggieHomeX, reggieSceneY, 1);
+    }
     updateCrowdPeople();
     requestAnimationFrame(walkPeople);
   }
