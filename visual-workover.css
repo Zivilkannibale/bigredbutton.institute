@@ -334,7 +334,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
 .scene-airship__beam {
   position: absolute;
   top: 77%;
-  left: 55%;
+  left: 60%;
   width: 19%;
   height: var(--beam-length, 0px);
   opacity: 0;
