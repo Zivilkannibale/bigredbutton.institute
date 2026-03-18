@@ -432,13 +432,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   pointer-events: none;
   position: relative;
   z-index: 1;
-  --poster-color: transparent;
-  --progress-bar-height: 0px;
-  --progress-bar-color: transparent;
-  --interaction-prompt-display: none;
-}
-.scene-airship__model::part(default-progress-bar) {
-  display: none;
+  object-fit: contain;
 }
 .scene-status {
   display: none;
@@ -865,7 +859,7 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   .hero-latour { max-width: 100%; justify-self: stretch; }
   .viz-column { grid-template-columns: 1fr; }
   .mini-viz-row { grid-template-columns: 1fr 1fr; }
-  .scene-wrap { aspect-ratio: 4 / 3; }
+  .scene-wrap { aspect-ratio: 960 / 500; }
   .pedestal-float {
     width: 100px;
     height: 230px;

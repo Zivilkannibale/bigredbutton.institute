@@ -160,6 +160,14 @@
     plum: "Images/Airships/palette-plum.png",
     slate: "Images/Airships/palette-slate.png"
   };
+  var airshipSpritePaths = {
+    classic: "Images/Airships/sprites/classic.png",
+    bigred: "Images/Airships/sprites/bigred.png",
+    sand: "Images/Airships/sprites/sand.png",
+    plum: "Images/Airships/sprites/plum.png",
+    slate: "Images/Airships/sprites/slate.png"
+  };
+  var airshipSpriteAspectRatio = 662 / 276;
   var airships = [];
   var airshipClock = Math.random() * 7000;
   var lastAirshipTickAt = 0;
@@ -391,7 +399,7 @@
 
   function getPedestalFloatSize() {
     var height;
-    if (window.innerWidth <= 650) height = 184;
+    if (window.innerWidth <= 650) height = 168;
     else if (window.innerWidth <= 980) height = 288;
     else height = 320;
     return {
@@ -820,8 +828,8 @@
 
   function updateFloatAnchor() {
     if (window.innerWidth <= 650) {
-      floatState.baseX = 84;
-      floatState.baseY = 84;
+      floatState.baseX = 82;
+      floatState.baseY = 68;
     } else if (window.innerWidth <= 980) {
       floatState.baseX = 84;
       floatState.baseY = 60;
@@ -861,7 +869,7 @@
     var overhangX = size.width * (footprintScaleX - 1) * 0.5;
     var minX = Math.max(8, 8 + overhangX);
     var maxX = Math.max(minX, vw - size.width - overhangX - 8);
-    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.36 : size.height;
+    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.72 : size.height;
     var maxY = Math.max(8, vh - visibleFloatHeight - 8);
     if (reducedMotion) {
       floatState.x = clamp((floatState.baseX / 100) * vw, minX, maxX);
@@ -1242,7 +1250,7 @@
     if (!airshipDomLayer) return null;
     var node = document.createElement("div");
     var beam = null;
-    var model = document.createElement("model-viewer");
+    var model = document.createElement("img");
     node.className = "scene-airship";
     if (config.special) node.classList.add("scene-airship--crimson");
     if (config.special) {
@@ -1254,22 +1262,17 @@
     model.className = "scene-airship__model";
     model.setAttribute("alt", "");
     model.setAttribute("aria-hidden", "true");
-    model.setAttribute("tabindex", "-1");
-    model.setAttribute("camera-orbit", "0deg 90deg 1.9m");
-    model.setAttribute("field-of-view", "18deg");
-    model.setAttribute("interaction-prompt", "none");
-    model.setAttribute("shadow-intensity", "0");
-    model.setAttribute("environment-image", "neutral");
-    model.setAttribute("exposure", config.special ? "0.92" : "1.08");
-    model.setAttribute("orientation", "180deg 180deg 0deg");
-    model.setAttribute("scale", "1.16 1.16 1.16");
+    model.decoding = "async";
+    model.loading = "eager";
     model.style.opacity = "1";
+    var spritePath = airshipSpritePaths[config.palette] || airshipSpritePaths.classic;
+    var spriteWidth = Math.round(config.height * airshipSpriteAspectRatio);
     var airship = {
       node: node,
       model: model,
       x: config.x,
       baseY: config.baseY,
-      width: config.width,
+      width: spriteWidth,
       height: config.height,
       speed: config.speed,
       direction: config.direction || -1,
@@ -1280,15 +1283,11 @@
       beam: beam,
       departing: false,
       exitSpeedBoost: 1,
-      palettePath: airshipPalettePaths[config.palette] || airshipPalettePaths.classic,
-      textureToken: 0
+      spritePath: spritePath
     };
-    model.addEventListener("load", function () {
-      applyAirshipPalette(airship);
-    });
     node.appendChild(model);
     airshipDomLayer.appendChild(node);
-    model.setAttribute("src", airshipSource);
+    model.setAttribute("src", spritePath);
     positionAirship(airship, airship.x, airship.baseY, 0);
     return airship;
   }
