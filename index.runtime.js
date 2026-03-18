@@ -391,7 +391,7 @@
 
   function getPedestalFloatSize() {
     var height;
-    if (window.innerWidth <= 650) height = 184;
+    if (window.innerWidth <= 650) height = 168;
     else if (window.innerWidth <= 980) height = 288;
     else height = 320;
     return {
@@ -820,8 +820,8 @@
 
   function updateFloatAnchor() {
     if (window.innerWidth <= 650) {
-      floatState.baseX = 84;
-      floatState.baseY = 84;
+      floatState.baseX = 82;
+      floatState.baseY = 68;
     } else if (window.innerWidth <= 980) {
       floatState.baseX = 84;
       floatState.baseY = 60;
@@ -861,7 +861,7 @@
     var overhangX = size.width * (footprintScaleX - 1) * 0.5;
     var minX = Math.max(8, 8 + overhangX);
     var maxX = Math.max(minX, vw - size.width - overhangX - 8);
-    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.36 : size.height;
+    var visibleFloatHeight = window.innerWidth <= 650 ? size.height * 0.72 : size.height;
     var maxY = Math.max(8, vh - visibleFloatHeight - 8);
     if (reducedMotion) {
       floatState.x = clamp((floatState.baseX / 100) * vw, minX, maxX);
