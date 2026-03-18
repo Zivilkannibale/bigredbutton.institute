@@ -1255,14 +1255,14 @@
     model.setAttribute("alt", "");
     model.setAttribute("aria-hidden", "true");
     model.setAttribute("tabindex", "-1");
-    model.setAttribute("camera-orbit", "0deg 90deg 1.9m");
-    model.setAttribute("field-of-view", "18deg");
+    model.setAttribute("camera-orbit", "0deg 90deg 2.3m");
+    model.setAttribute("field-of-view", "22deg");
     model.setAttribute("interaction-prompt", "none");
     model.setAttribute("shadow-intensity", "0");
     model.setAttribute("environment-image", "neutral");
     model.setAttribute("exposure", config.special ? "0.92" : "1.08");
     model.setAttribute("orientation", "180deg 180deg 0deg");
-    model.setAttribute("scale", "1.16 1.16 1.16");
+    model.setAttribute("scale", "1 1 1");
     model.style.opacity = "1";
     var airship = {
       node: node,
