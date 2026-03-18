@@ -425,12 +425,14 @@ h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); max-width: 13ch; }
   }
 }
 .scene-airship__model {
-  width: 100%;
+  width: 112%;
   height: 100%;
   display: block;
   background: transparent;
   pointer-events: none;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: -6%;
   z-index: 1;
   --poster-color: transparent;
   --progress-bar-height: 0px;
