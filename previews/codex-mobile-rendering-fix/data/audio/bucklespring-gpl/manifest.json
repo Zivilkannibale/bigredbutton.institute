@@ -1,0 +1,1503 @@
+{
+  "generated_at": "2026-03-15T16:16:16.7333594+01:00",
+  "source": {
+    "repo": "https://github.com/zevv/bucklespring",
+    "commit": "43274ed8bca545fde585d73d89086bf9ae5ed1d0",
+    "tag_or_describe": "v1.5.1-17-g43274ed",
+    "source_tree_path": "wav",
+    "license": {
+      "spdx": "GPL-2.0",
+      "notice_file": "LICENSES/bucklespring-GPL-2.0.txt",
+      "url": "https://github.com/zevv/bucklespring/blob/43274ed8bca545fde585d73d89086bf9ae5ed1d0/LICENSE"
+    },
+    "origin_files": [
+      "ORIGINS/bucklespring-README.md"
+    ]
+  },
+  "sample_collection": {
+    "path": "wav",
+    "count": 209,
+    "total_bytes": 5585064,
+    "counts_by_event_value": {
+      "0": 105,
+      "1": 104
+    },
+    "naming_convention": {
+      "pattern": "<hex-keycode>-<event-value>.wav",
+      "observed_event_values": [
+        0,
+        1
+      ],
+      "inferred_phase_map": {
+        "0": "keyup",
+        "1": "keydown"
+      },
+      "inference_basis": "Upstream rec.c records files using event.code and event.value, and main.c loads the same naming pattern; event.value 2 is ignored as repeat."
+    },
+    "files": [
+      {
+        "file": "wav/01-0.wav",
+        "size_bytes": 29308,
+        "keycode_hex": "01",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/01-1.wav",
+        "size_bytes": 29324,
+        "keycode_hex": "01",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/02-0.wav",
+        "size_bytes": 29064,
+        "keycode_hex": "02",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/02-1.wav",
+        "size_bytes": 27552,
+        "keycode_hex": "02",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/03-0.wav",
+        "size_bytes": 29240,
+        "keycode_hex": "03",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/03-1.wav",
+        "size_bytes": 29012,
+        "keycode_hex": "03",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/04-0.wav",
+        "size_bytes": 29236,
+        "keycode_hex": "04",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/04-1.wav",
+        "size_bytes": 29240,
+        "keycode_hex": "04",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/05-0.wav",
+        "size_bytes": 21860,
+        "keycode_hex": "05",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/05-1.wav",
+        "size_bytes": 29246,
+        "keycode_hex": "05",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/06-0.wav",
+        "size_bytes": 29132,
+        "keycode_hex": "06",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/06-1.wav",
+        "size_bytes": 29248,
+        "keycode_hex": "06",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/07-0.wav",
+        "size_bytes": 29164,
+        "keycode_hex": "07",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/07-1.wav",
+        "size_bytes": 29256,
+        "keycode_hex": "07",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/08-0.wav",
+        "size_bytes": 29210,
+        "keycode_hex": "08",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/08-1.wav",
+        "size_bytes": 29236,
+        "keycode_hex": "08",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/09-0.wav",
+        "size_bytes": 29138,
+        "keycode_hex": "09",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/09-1.wav",
+        "size_bytes": 29358,
+        "keycode_hex": "09",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0a-0.wav",
+        "size_bytes": 29072,
+        "keycode_hex": "0a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0a-1.wav",
+        "size_bytes": 29248,
+        "keycode_hex": "0a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0b-0.wav",
+        "size_bytes": 29160,
+        "keycode_hex": "0b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0b-1.wav",
+        "size_bytes": 29248,
+        "keycode_hex": "0b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0c-0.wav",
+        "size_bytes": 29190,
+        "keycode_hex": "0c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0c-1.wav",
+        "size_bytes": 29318,
+        "keycode_hex": "0c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0d-0.wav",
+        "size_bytes": 29320,
+        "keycode_hex": "0d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0d-1.wav",
+        "size_bytes": 29310,
+        "keycode_hex": "0d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0e-0.wav",
+        "size_bytes": 29068,
+        "keycode_hex": "0e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0e-1.wav",
+        "size_bytes": 29202,
+        "keycode_hex": "0e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/0f-0.wav",
+        "size_bytes": 29288,
+        "keycode_hex": "0f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/0f-1.wav",
+        "size_bytes": 28984,
+        "keycode_hex": "0f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/10-0.wav",
+        "size_bytes": 29154,
+        "keycode_hex": "10",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/10-1.wav",
+        "size_bytes": 29250,
+        "keycode_hex": "10",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/11-0.wav",
+        "size_bytes": 29200,
+        "keycode_hex": "11",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/11-1.wav",
+        "size_bytes": 29282,
+        "keycode_hex": "11",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/12-0.wav",
+        "size_bytes": 29102,
+        "keycode_hex": "12",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/12-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "12",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/13-0.wav",
+        "size_bytes": 29134,
+        "keycode_hex": "13",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/13-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "13",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/14-0.wav",
+        "size_bytes": 29110,
+        "keycode_hex": "14",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/14-1.wav",
+        "size_bytes": 29324,
+        "keycode_hex": "14",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/15-0.wav",
+        "size_bytes": 29108,
+        "keycode_hex": "15",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/15-1.wav",
+        "size_bytes": 29306,
+        "keycode_hex": "15",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/16-0.wav",
+        "size_bytes": 29130,
+        "keycode_hex": "16",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/16-1.wav",
+        "size_bytes": 29306,
+        "keycode_hex": "16",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/17-0.wav",
+        "size_bytes": 29050,
+        "keycode_hex": "17",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/17-1.wav",
+        "size_bytes": 29324,
+        "keycode_hex": "17",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/18-0.wav",
+        "size_bytes": 29264,
+        "keycode_hex": "18",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/18-1.wav",
+        "size_bytes": 29314,
+        "keycode_hex": "18",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/19-0.wav",
+        "size_bytes": 29084,
+        "keycode_hex": "19",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/19-1.wav",
+        "size_bytes": 29282,
+        "keycode_hex": "19",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1a-0.wav",
+        "size_bytes": 29232,
+        "keycode_hex": "1a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1a-1.wav",
+        "size_bytes": 29244,
+        "keycode_hex": "1a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1b-0.wav",
+        "size_bytes": 29068,
+        "keycode_hex": "1b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1b-1.wav",
+        "size_bytes": 29232,
+        "keycode_hex": "1b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1c-0.wav",
+        "size_bytes": 29320,
+        "keycode_hex": "1c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1c-1.wav",
+        "size_bytes": 27436,
+        "keycode_hex": "1c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1d-0.wav",
+        "size_bytes": 29228,
+        "keycode_hex": "1d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1d-1.wav",
+        "size_bytes": 28158,
+        "keycode_hex": "1d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1e-0.wav",
+        "size_bytes": 29216,
+        "keycode_hex": "1e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1e-1.wav",
+        "size_bytes": 29316,
+        "keycode_hex": "1e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/1f-0.wav",
+        "size_bytes": 29286,
+        "keycode_hex": "1f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/1f-1.wav",
+        "size_bytes": 29322,
+        "keycode_hex": "1f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/20-0.wav",
+        "size_bytes": 29200,
+        "keycode_hex": "20",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/20-1.wav",
+        "size_bytes": 29316,
+        "keycode_hex": "20",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/21-0.wav",
+        "size_bytes": 29292,
+        "keycode_hex": "21",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/21-1.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "21",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/22-0.wav",
+        "size_bytes": 28996,
+        "keycode_hex": "22",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/22-1.wav",
+        "size_bytes": 29304,
+        "keycode_hex": "22",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/23-0.wav",
+        "size_bytes": 29170,
+        "keycode_hex": "23",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/23-1.wav",
+        "size_bytes": 29302,
+        "keycode_hex": "23",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/24-0.wav",
+        "size_bytes": 29174,
+        "keycode_hex": "24",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/24-1.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "24",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/25-0.wav",
+        "size_bytes": 29050,
+        "keycode_hex": "25",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/25-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "25",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/26-0.wav",
+        "size_bytes": 29180,
+        "keycode_hex": "26",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/26-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "26",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/27-0.wav",
+        "size_bytes": 28254,
+        "keycode_hex": "27",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/27-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "27",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/28-0.wav",
+        "size_bytes": 29214,
+        "keycode_hex": "28",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/28-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "28",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/29-0.wav",
+        "size_bytes": 29300,
+        "keycode_hex": "29",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/29-1.wav",
+        "size_bytes": 29284,
+        "keycode_hex": "29",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2a-0.wav",
+        "size_bytes": 29248,
+        "keycode_hex": "2a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2a-1.wav",
+        "size_bytes": 29166,
+        "keycode_hex": "2a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2b-0.wav",
+        "size_bytes": 29184,
+        "keycode_hex": "2b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2b-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "2b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2c-0.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "2c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2c-1.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "2c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2d-0.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "2d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2d-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "2d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2e-0.wav",
+        "size_bytes": 29058,
+        "keycode_hex": "2e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2e-1.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "2e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/2f-0.wav",
+        "size_bytes": 29292,
+        "keycode_hex": "2f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/2f-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "2f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/30-0.wav",
+        "size_bytes": 29172,
+        "keycode_hex": "30",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/30-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "30",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/31-0.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "31",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/31-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "31",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/32-0.wav",
+        "size_bytes": 28964,
+        "keycode_hex": "32",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/32-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "32",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/33-0.wav",
+        "size_bytes": 28922,
+        "keycode_hex": "33",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/33-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "33",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/34-0.wav",
+        "size_bytes": 29062,
+        "keycode_hex": "34",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/34-1.wav",
+        "size_bytes": 29318,
+        "keycode_hex": "34",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/35-0.wav",
+        "size_bytes": 29154,
+        "keycode_hex": "35",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/35-1.wav",
+        "size_bytes": 29144,
+        "keycode_hex": "35",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/36-0.wav",
+        "size_bytes": 29278,
+        "keycode_hex": "36",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/36-1.wav",
+        "size_bytes": 29338,
+        "keycode_hex": "36",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/37-0.wav",
+        "size_bytes": 18046,
+        "keycode_hex": "37",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/37-1.wav",
+        "size_bytes": 15088,
+        "keycode_hex": "37",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/38-0.wav",
+        "size_bytes": 29136,
+        "keycode_hex": "38",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/38-1.wav",
+        "size_bytes": 29322,
+        "keycode_hex": "38",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/39-0.wav",
+        "size_bytes": 28968,
+        "keycode_hex": "39",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/39-1.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "39",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3a-0.wav",
+        "size_bytes": 29302,
+        "keycode_hex": "3a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3a-1.wav",
+        "size_bytes": 29306,
+        "keycode_hex": "3a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3b-0.wav",
+        "size_bytes": 29316,
+        "keycode_hex": "3b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3b-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "3b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3c-0.wav",
+        "size_bytes": 29114,
+        "keycode_hex": "3c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3c-1.wav",
+        "size_bytes": 29290,
+        "keycode_hex": "3c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3d-0.wav",
+        "size_bytes": 29302,
+        "keycode_hex": "3d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3d-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "3d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3e-0.wav",
+        "size_bytes": 28650,
+        "keycode_hex": "3e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3e-1.wav",
+        "size_bytes": 29322,
+        "keycode_hex": "3e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/3f-0.wav",
+        "size_bytes": 29074,
+        "keycode_hex": "3f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/3f-1.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "3f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/40-0.wav",
+        "size_bytes": 29330,
+        "keycode_hex": "40",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/40-1.wav",
+        "size_bytes": 26800,
+        "keycode_hex": "40",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/41-0.wav",
+        "size_bytes": 28430,
+        "keycode_hex": "41",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/41-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "41",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/42-0.wav",
+        "size_bytes": 29306,
+        "keycode_hex": "42",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/42-1.wav",
+        "size_bytes": 29304,
+        "keycode_hex": "42",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/43-0.wav",
+        "size_bytes": 29284,
+        "keycode_hex": "43",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/43-1.wav",
+        "size_bytes": 29286,
+        "keycode_hex": "43",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/44-0.wav",
+        "size_bytes": 29316,
+        "keycode_hex": "44",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/44-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "44",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/45-0.wav",
+        "size_bytes": 17030,
+        "keycode_hex": "45",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/45-1.wav",
+        "size_bytes": 13566,
+        "keycode_hex": "45",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/46-0.wav",
+        "size_bytes": 29302,
+        "keycode_hex": "46",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/46-1.wav",
+        "size_bytes": 29306,
+        "keycode_hex": "46",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/47-0.wav",
+        "size_bytes": 15932,
+        "keycode_hex": "47",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/47-1.wav",
+        "size_bytes": 16778,
+        "keycode_hex": "47",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/48-0.wav",
+        "size_bytes": 15594,
+        "keycode_hex": "48",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/48-1.wav",
+        "size_bytes": 14496,
+        "keycode_hex": "48",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/49-0.wav",
+        "size_bytes": 18468,
+        "keycode_hex": "49",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/49-1.wav",
+        "size_bytes": 14496,
+        "keycode_hex": "49",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4a-0.wav",
+        "size_bytes": 14920,
+        "keycode_hex": "4a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4a-1.wav",
+        "size_bytes": 14326,
+        "keycode_hex": "4a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4b-0.wav",
+        "size_bytes": 16864,
+        "keycode_hex": "4b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4b-1.wav",
+        "size_bytes": 21088,
+        "keycode_hex": "4b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4c-0.wav",
+        "size_bytes": 15764,
+        "keycode_hex": "4c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4c-1.wav",
+        "size_bytes": 21764,
+        "keycode_hex": "4c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4d-0.wav",
+        "size_bytes": 14834,
+        "keycode_hex": "4d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4d-1.wav",
+        "size_bytes": 16186,
+        "keycode_hex": "4d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4e-0.wav",
+        "size_bytes": 19568,
+        "keycode_hex": "4e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4e-1.wav",
+        "size_bytes": 19228,
+        "keycode_hex": "4e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/4f-0.wav",
+        "size_bytes": 13058,
+        "keycode_hex": "4f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/4f-1.wav",
+        "size_bytes": 12044,
+        "keycode_hex": "4f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/50-0.wav",
+        "size_bytes": 12468,
+        "keycode_hex": "50",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/50-1.wav",
+        "size_bytes": 14834,
+        "keycode_hex": "50",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/51-0.wav",
+        "size_bytes": 13650,
+        "keycode_hex": "51",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/51-1.wav",
+        "size_bytes": 17876,
+        "keycode_hex": "51",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/52-0.wav",
+        "size_bytes": 15426,
+        "keycode_hex": "52",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/52-1.wav",
+        "size_bytes": 13142,
+        "keycode_hex": "52",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/53-0.wav",
+        "size_bytes": 13904,
+        "keycode_hex": "53",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/53-1.wav",
+        "size_bytes": 12382,
+        "keycode_hex": "53",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/56-0.wav",
+        "size_bytes": 63750,
+        "keycode_hex": "56",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/56-1.wav",
+        "size_bytes": 25698,
+        "keycode_hex": "56",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/57-0.wav",
+        "size_bytes": 29178,
+        "keycode_hex": "57",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/57-1.wav",
+        "size_bytes": 29150,
+        "keycode_hex": "57",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/58-0.wav",
+        "size_bytes": 29318,
+        "keycode_hex": "58",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/58-1.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "58",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/5b-0.wav",
+        "size_bytes": 29286,
+        "keycode_hex": "5b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/5b-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "5b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/60-0.wav",
+        "size_bytes": 14494,
+        "keycode_hex": "60",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/60-1.wav",
+        "size_bytes": 15258,
+        "keycode_hex": "60",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/61-0.wav",
+        "size_bytes": 29284,
+        "keycode_hex": "61",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/61-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "61",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/62-0.wav",
+        "size_bytes": 17454,
+        "keycode_hex": "62",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/62-1.wav",
+        "size_bytes": 13482,
+        "keycode_hex": "62",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/63-0.wav",
+        "size_bytes": 29150,
+        "keycode_hex": "63",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/63-1.wav",
+        "size_bytes": 29324,
+        "keycode_hex": "63",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/64-0.wav",
+        "size_bytes": 29286,
+        "keycode_hex": "64",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/64-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "64",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/66-0.wav",
+        "size_bytes": 16252,
+        "keycode_hex": "66",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/66-1.wav",
+        "size_bytes": 16346,
+        "keycode_hex": "66",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/67-0.wav",
+        "size_bytes": 29148,
+        "keycode_hex": "67",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/67-1.wav",
+        "size_bytes": 29234,
+        "keycode_hex": "67",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/68-0.wav",
+        "size_bytes": 29226,
+        "keycode_hex": "68",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/68-1.wav",
+        "size_bytes": 29268,
+        "keycode_hex": "68",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/69-0.wav",
+        "size_bytes": 29040,
+        "keycode_hex": "69",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/69-1.wav",
+        "size_bytes": 29322,
+        "keycode_hex": "69",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6a-0.wav",
+        "size_bytes": 29226,
+        "keycode_hex": "6a",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6a-1.wav",
+        "size_bytes": 29322,
+        "keycode_hex": "6a",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6b-0.wav",
+        "size_bytes": 29198,
+        "keycode_hex": "6b",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6b-1.wav",
+        "size_bytes": 29278,
+        "keycode_hex": "6b",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6c-0.wav",
+        "size_bytes": 29168,
+        "keycode_hex": "6c",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6c-1.wav",
+        "size_bytes": 29300,
+        "keycode_hex": "6c",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6d-0.wav",
+        "size_bytes": 29326,
+        "keycode_hex": "6d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6d-1.wav",
+        "size_bytes": 29324,
+        "keycode_hex": "6d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6e-0.wav",
+        "size_bytes": 29132,
+        "keycode_hex": "6e",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6e-1.wav",
+        "size_bytes": 29284,
+        "keycode_hex": "6e",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/6f-0.wav",
+        "size_bytes": 29296,
+        "keycode_hex": "6f",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/6f-1.wav",
+        "size_bytes": 29036,
+        "keycode_hex": "6f",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/77-0.wav",
+        "size_bytes": 29332,
+        "keycode_hex": "77",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/7d-0.wav",
+        "size_bytes": 29286,
+        "keycode_hex": "7d",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/7d-1.wav",
+        "size_bytes": 29328,
+        "keycode_hex": "7d",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      },
+      {
+        "file": "wav/ff-0.wav",
+        "size_bytes": 2160,
+        "keycode_hex": "ff",
+        "event_value": 0,
+        "inferred_phase": "keyup"
+      },
+      {
+        "file": "wav/ff-1.wav",
+        "size_bytes": 2314,
+        "keycode_hex": "ff",
+        "event_value": 1,
+        "inferred_phase": "keydown"
+      }
+    ]
+  }
+}

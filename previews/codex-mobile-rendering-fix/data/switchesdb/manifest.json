@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-03-15T13:29:11.276206Z",
+  "scriptVersion": 2,
+  "upstream": {
+    "site": "https://www.switchesdb.com/",
+    "metadataUrl": "https://www.switchesdb.com/data/metadata.edn",
+    "metadataDate": "2025-02-22T12:45:23.969000Z",
+    "metadataSha256": "3c2d4499bff13b3b201a1bc58564091f732404df7d229f05f1a4ee2e813485dc"
+  },
+  "outputs": {
+    "catalogCount": 2228,
+    "profileCount": 2228,
+    "profileMode": "curve-derived",
+    "curveFailureCount": 0
+  },
+  "curveFailures": [],
+  "sources": [
+    {
+      "key": "goat",
+      "label": "ThereminGoat",
+      "author": "ThereminGoat",
+      "url": "https://github.com/ThereminGoat/force-curves",
+      "switchCount": 1753,
+      "report": {
+        "written": 1753,
+        "overwritten": 3,
+        "filecount": 1756
+      }
+    },
+    {
+      "key": "haata",
+      "label": "HaaTa",
+      "author": "HaaTa",
+      "url": "https://plot.ly/~haata",
+      "switchCount": 192,
+      "report": {
+        "written": 192,
+        "filecount": 192
+      }
+    },
+    {
+      "key": "pylon",
+      "label": "bluepylons",
+      "author": "bluepylons",
+      "url": "https://github.com/bluepylons/Open-Switch-Curve-Meter",
+      "switchCount": 283,
+      "report": {
+        "written": 283,
+        "invalid": 24,
+        "unsupported": 7,
+        "filecount": 314
+      }
+    }
+  ],
+  "credits": [
+    {
+      "name": "SwitchesDB",
+      "url": "https://www.switchesdb.com/"
+    },
+    {
+      "name": "ThereminGoat",
+      "url": "https://github.com/ThereminGoat/force-curves"
+    },
+    {
+      "name": "HaaTa",
+      "url": "https://plot.ly/~haata"
+    },
+    {
+      "name": "bluepylons",
+      "url": "https://github.com/bluepylons/Open-Switch-Curve-Meter"
+    }
+  ]
+}

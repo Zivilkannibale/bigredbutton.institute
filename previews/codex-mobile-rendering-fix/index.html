@@ -1,0 +1,1161 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Big Red Button Institute (BRB)</title>
+  <meta name="description" content="The Big Red Button Institute (BRB) studies public button pressing through computational, ethnographic, design, and artistic research.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="visual-workover.css?v=20260316e">
+  <link rel="stylesheet" href="switch-lab.css?v=20260315k">
+  <link rel="stylesheet" href="sound-lab.css?v=20260315a">
+  <link rel="stylesheet" href="button-choice.css?v=20260315a">
+  <script type="module" src="vendor/model-viewer.min.js"></script>
+</head>
+<body class="visual-workover">
+  <canvas id="ambientCanvas"></canvas>
+  <div class="screen-flash" id="screenFlash"></div>
+  <div class="shockwave" id="pedestalShockwave"></div>
+  <div class="pedestal-float" id="pedestalFloat" aria-label="Floating field button">
+    <button class="pedestal-float__button" id="pedestalButton" type="button" aria-label="Press the floating field button">
+      <span class="pedestal-float__stage" aria-hidden="true">
+        <img
+          class="pedestal-float__model"
+          id="pedestalFrame"
+          src="Images/poly-button-press-00.png"
+          alt=""
+          width="420"
+          height="475"
+          decoding="async"
+          fetchpriority="high"
+        >
+      </span>
+    </button>
+  </div>
+
+  <div class="shell">
+    <header class="hero reveal">
+      <div class="hero-top">
+        <div class="hero-intro">
+          <span class="eyebrow">BRB</span>
+          <h1>The Big Red Button Institute</h1>
+          <p class="subhead">Advancing the Frontiers of Pressability Research</p>
+          <div class="hero-mission">
+            <p>The Big Red Button Institute (BRB) is a transdisciplinary research collective dedicated to the empirical study of human-button interaction dynamics. Working in public spaces, we deploy full-scale button installations to generate longitudinal datasets on press intervals, participation patterns, and the social life of collective curiosity.</p>
+          </div>
+        </div>
+        <figure class="hero-latour">
+          <div class="hero-latour__page" role="img" aria-label="Bruno Latour comic panel with a bright red alarm button.">
+            <img class="hero-latour__slice hero-latour__slice--top" src="Images/Latour-top-panel.png" alt="">
+            <img class="hero-latour__slice hero-latour__slice--quote" src="Images/Latour-quote-block.png" alt="">
+            <img class="hero-latour__slice hero-latour__slice--bottom" src="Images/Latour-bottom-panel.png" alt="">
+          </div>
+        </figure>
+      </div>
+    </header>
+
+    <section class="field-section reveal" id="fieldSection">
+      <div class="field-header">
+        <h2>Field Deployment</h2>
+        <p>BRB installs buttons in public spaces to study how collective pressing behavior, crowd movement, and button-adjacent spillover emerge in the wild.</p>
+      </div>
+      <div class="scene-wrap" id="sceneWrap">
+        <svg class="street-svg" viewBox="0 -80 960 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8c4e0"></stop><stop offset="55%" stop-color="#cdd9e8"></stop><stop offset="100%" stop-color="#ddd8cc"></stop></linearGradient>
+            <linearGradient id="bldgA" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#b0a898"></stop><stop offset="50%" stop-color="#c7bfb0"></stop><stop offset="100%" stop-color="#a8a090"></stop></linearGradient>
+            <linearGradient id="bldgB" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8b9aaa"></stop><stop offset="50%" stop-color="#a0b0c0"></stop><stop offset="100%" stop-color="#8090a0"></stop></linearGradient>
+            <linearGradient id="bldgC" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#c4b09a"></stop><stop offset="100%" stop-color="#b0a08a"></stop></linearGradient>
+            <linearGradient id="sidewalkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4cfc2"></stop><stop offset="100%" stop-color="#bfb8a8"></stop></linearGradient>
+            <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6a6a6a"></stop><stop offset="100%" stop-color="#585858"></stop></linearGradient>
+            <radialGradient id="treeG" cx="50%" cy="40%" r="55%"><stop offset="0%" stop-color="#7aab65"></stop><stop offset="70%" stop-color="#5a8a48"></stop><stop offset="100%" stop-color="#4a7a3a"></stop></radialGradient>
+            <linearGradient id="winG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8dcc0"></stop><stop offset="100%" stop-color="#c8bca0"></stop></linearGradient>
+            <linearGradient id="groundSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(60,50,40,.15)"></stop><stop offset="100%" stop-color="rgba(60,50,40,0)"></stop></linearGradient>
+          </defs>
+          <rect x="0" y="-80" width="960" height="500" fill="url(#skyG)"></rect>
+          <ellipse cx="132" cy="-16" rx="76" ry="18" fill="rgba(255,255,255,.44)"></ellipse><ellipse cx="184" cy="-22" rx="44" ry="12" fill="rgba(255,255,255,.55)"></ellipse>
+          <ellipse cx="466" cy="-34" rx="74" ry="17" fill="rgba(255,255,255,.38)"></ellipse><ellipse cx="518" cy="-28" rx="46" ry="12" fill="rgba(255,255,255,.5)"></ellipse>
+          <ellipse cx="792" cy="-28" rx="82" ry="18" fill="rgba(255,255,255,.34)"></ellipse><ellipse cx="842" cy="-20" rx="50" ry="14" fill="rgba(255,255,255,.42)"></ellipse>
+          <ellipse cx="180" cy="60" rx="90" ry="22" fill="rgba(255,255,255,.5)"></ellipse><ellipse cx="220" cy="55" rx="60" ry="18" fill="rgba(255,255,255,.6)"></ellipse>
+          <ellipse cx="432" cy="22" rx="82" ry="20" fill="rgba(255,255,255,.42)"></ellipse><ellipse cx="486" cy="16" rx="54" ry="15" fill="rgba(255,255,255,.54)"></ellipse>
+          <ellipse cx="700" cy="45" rx="70" ry="16" fill="rgba(255,255,255,.4)"></ellipse><ellipse cx="750" cy="40" rx="50" ry="14" fill="rgba(255,255,255,.5)"></ellipse>
+          <ellipse cx="886" cy="82" rx="64" ry="16" fill="rgba(255,255,255,.36)"></ellipse><ellipse cx="926" cy="76" rx="42" ry="12" fill="rgba(255,255,255,.46)"></ellipse>
+          <rect x="30" y="80" width="160" height="260" rx="2" fill="url(#bldgA)"></rect><rect x="32" y="82" width="156" height="4" fill="rgba(160,150,135,.6)"></rect>
+          <g fill="url(#winG)" opacity=".7"><rect x="48" y="105" width="18" height="24" rx="1"></rect><rect x="78" y="105" width="18" height="24" rx="1"></rect><rect x="108" y="105" width="18" height="24" rx="1"></rect><rect x="138" y="105" width="18" height="24" rx="1"></rect><rect x="48" y="145" width="18" height="24" rx="1"></rect><rect x="78" y="145" width="18" height="24" rx="1"></rect><rect x="108" y="145" width="18" height="24" rx="1"></rect><rect x="138" y="145" width="18" height="24" rx="1"></rect><rect x="48" y="185" width="18" height="24" rx="1"></rect><rect x="78" y="185" width="18" height="24" rx="1"></rect><rect x="108" y="185" width="18" height="24" rx="1"></rect><rect x="138" y="185" width="18" height="24" rx="1"></rect><rect x="48" y="225" width="18" height="24" rx="1"></rect><rect x="78" y="225" width="18" height="24" rx="1"></rect><rect x="108" y="225" width="18" height="24" rx="1"></rect><rect x="138" y="225" width="18" height="24" rx="1"></rect><rect x="48" y="265" width="18" height="24" rx="1"></rect><rect x="78" y="265" width="18" height="24" rx="1"></rect><rect x="108" y="265" width="18" height="24" rx="1"></rect><rect x="138" y="265" width="18" height="24" rx="1"></rect></g>
+          <rect x="92" y="306" width="26" height="34" rx="2" fill="#3a2a1a"></rect><rect x="95" y="308" width="20" height="28" rx="1" fill="#5a4a38"></rect><circle cx="112" cy="324" r="1.5" fill="#c0a870"></circle>
+          <path d="M30,310 L190,310 L185,320 L35,320 Z" fill="#8a5a3a" opacity=".6"></path>
+          <rect x="200" y="140" width="130" height="200" rx="2" fill="url(#bldgB)"></rect><rect x="202" y="142" width="126" height="3" fill="rgba(120,140,160,.5)"></rect>
+          <g fill="url(#winG)" opacity=".6"><rect x="216" y="162" width="16" height="22" rx="1"></rect><rect x="244" y="162" width="16" height="22" rx="1"></rect><rect x="272" y="162" width="16" height="22" rx="1"></rect><rect x="300" y="162" width="16" height="22" rx="1"></rect><rect x="216" y="200" width="16" height="22" rx="1"></rect><rect x="244" y="200" width="16" height="22" rx="1"></rect><rect x="272" y="200" width="16" height="22" rx="1"></rect><rect x="300" y="200" width="16" height="22" rx="1"></rect><rect x="216" y="238" width="16" height="22" rx="1"></rect><rect x="244" y="238" width="16" height="22" rx="1"></rect><rect x="272" y="238" width="16" height="22" rx="1"></rect><rect x="300" y="238" width="16" height="22" rx="1"></rect><rect x="216" y="276" width="16" height="22" rx="1"></rect><rect x="244" y="276" width="16" height="22" rx="1"></rect><rect x="272" y="276" width="16" height="22" rx="1"></rect><rect x="300" y="276" width="16" height="22" rx="1"></rect></g>
+          <rect x="248" y="306" width="28" height="34" rx="2" fill="#2a3a4a"></rect><rect x="251" y="308" width="22" height="28" rx="1" fill="#4a5a6a"></rect><circle cx="270" cy="324" r="1.5" fill="#a0b0c0"></circle>
+          <rect x="340" y="170" width="180" height="170" rx="2" fill="url(#bldgC)"></rect>
+          <rect x="370" y="296" width="60" height="42" rx="2" fill="#3a4a5a" opacity=".7"></rect><rect x="374" y="300" width="52" height="32" rx="1" fill="#87a5c0" opacity=".35"></rect>
+          <rect x="355" y="284" width="150" height="14" rx="2" fill="#6a5040"></rect><text x="430" y="295" text-anchor="middle" font-family="'Manrope',sans-serif" font-size="8" fill="#e8dcc0" font-weight="700">CAFE &amp; BOOKS</text>
+          <g fill="url(#winG)" opacity=".65"><rect x="358" y="190" width="20" height="26" rx="1"></rect><rect x="392" y="190" width="20" height="26" rx="1"></rect><rect x="426" y="190" width="20" height="26" rx="1"></rect><rect x="460" y="190" width="20" height="26" rx="1"></rect><rect x="494" y="190" width="16" height="26" rx="1"></rect><rect x="358" y="232" width="20" height="26" rx="1"></rect><rect x="392" y="232" width="20" height="26" rx="1"></rect><rect x="426" y="232" width="20" height="26" rx="1"></rect><rect x="460" y="232" width="20" height="26" rx="1"></rect></g>
+          <rect x="448" y="304" width="30" height="34" rx="2" fill="#4a3a2a"></rect><rect x="451" y="306" width="24" height="28" rx="1" fill="#6a5a48"></rect><circle cx="472" cy="322" r="1.5" fill="#c0a880"></circle>
+          <rect x="530" y="100" width="190" height="240" rx="2" fill="#a09888"></rect><rect x="532" y="102" width="186" height="4" fill="rgba(140,130,118,.5)"></rect>
+          <g fill="url(#winG)" opacity=".6"><rect x="548" y="125" width="20" height="26" rx="1"></rect><rect x="582" y="125" width="20" height="26" rx="1"></rect><rect x="616" y="125" width="20" height="26" rx="1"></rect><rect x="650" y="125" width="20" height="26" rx="1"></rect><rect x="684" y="125" width="20" height="26" rx="1"></rect><rect x="548" y="168" width="20" height="26" rx="1"></rect><rect x="582" y="168" width="20" height="26" rx="1"></rect><rect x="616" y="168" width="20" height="26" rx="1"></rect><rect x="650" y="168" width="20" height="26" rx="1"></rect><rect x="684" y="168" width="20" height="26" rx="1"></rect><rect x="548" y="211" width="20" height="26" rx="1"></rect><rect x="582" y="211" width="20" height="26" rx="1"></rect><rect x="616" y="211" width="20" height="26" rx="1"></rect><rect x="650" y="211" width="20" height="26" rx="1"></rect><rect x="684" y="211" width="20" height="26" rx="1"></rect><rect x="548" y="254" width="20" height="26" rx="1"></rect><rect x="582" y="254" width="20" height="26" rx="1"></rect><rect x="616" y="254" width="20" height="26" rx="1"></rect><rect x="650" y="254" width="20" height="26" rx="1"></rect><rect x="684" y="254" width="20" height="26" rx="1"></rect></g>
+          <rect x="610" y="306" width="28" height="34" rx="2" fill="#3a3028"></rect><rect x="613" y="308" width="22" height="28" rx="1" fill="#5a5040"></rect><circle cx="632" cy="324" r="1.5" fill="#b0a080"></circle>
+          <rect x="730" y="160" width="230" height="180" rx="2" fill="#b4a898"></rect>
+          <g fill="url(#winG)" opacity=".5"><rect x="750" y="180" width="18" height="22" rx="1"></rect><rect x="782" y="180" width="18" height="22" rx="1"></rect><rect x="814" y="180" width="18" height="22" rx="1"></rect><rect x="846" y="180" width="18" height="22" rx="1"></rect><rect x="878" y="180" width="18" height="22" rx="1"></rect><rect x="910" y="180" width="18" height="22" rx="1"></rect><rect x="750" y="218" width="18" height="22" rx="1"></rect><rect x="782" y="218" width="18" height="22" rx="1"></rect><rect x="814" y="218" width="18" height="22" rx="1"></rect><rect x="846" y="218" width="18" height="22" rx="1"></rect><rect x="878" y="218" width="18" height="22" rx="1"></rect><rect x="910" y="218" width="18" height="22" rx="1"></rect><rect x="750" y="256" width="18" height="22" rx="1"></rect><rect x="782" y="256" width="18" height="22" rx="1"></rect><rect x="814" y="256" width="18" height="22" rx="1"></rect><rect x="846" y="256" width="18" height="22" rx="1"></rect></g>
+          <rect x="820" y="306" width="30" height="34" rx="2" fill="#3a3228"></rect><rect x="823" y="308" width="24" height="28" rx="1" fill="#5a5242"></rect><circle cx="844" cy="322" r="1.5" fill="#b0a080"></circle>
+          <rect x="0" y="340" width="960" height="35" fill="url(#sidewalkG)"></rect><rect x="0" y="338" width="960" height="3" fill="#c0b8a5"></rect>
+          <g stroke="rgba(160,150,135,.3)" stroke-width=".8"><line x1="120" y1="342" x2="120" y2="375"></line><line x1="240" y1="342" x2="240" y2="375"></line><line x1="360" y1="342" x2="360" y2="375"></line><line x1="480" y1="342" x2="480" y2="375"></line><line x1="600" y1="342" x2="600" y2="375"></line><line x1="720" y1="342" x2="720" y2="375"></line><line x1="840" y1="342" x2="840" y2="375"></line></g>
+          <rect x="0" y="340" width="960" height="8" fill="url(#groundSh)"></rect>
+          <rect x="0" y="375" width="960" height="45" fill="url(#roadG)"></rect>
+          <g stroke="#d4cc60" stroke-width="1.5" stroke-dasharray="20 15" opacity=".4"><line x1="0" y1="397" x2="960" y2="397"></line></g>
+          <rect x="0" y="373" width="960" height="3" fill="#8a8070"></rect>
+          <rect x="418" y="275" width="4" height="65" rx="1" fill="#5a5a5a"></rect><rect x="414" y="273" width="12" height="5" rx="2" fill="#6a6a6a"></rect>
+          <path d="M420,276 L420,270 Q420,263 428,263 L438,263" fill="none" stroke="#5a5a5a" stroke-width="3" stroke-linecap="round"></path>
+          <rect x="434" y="258" width="12" height="8" rx="2" fill="#707070"></rect><rect x="436" y="265" width="8" height="2" fill="#ffeeaa" opacity=".4"></rect>
+          <rect x="268" y="296" width="6" height="44" rx="2" fill="#6a5a4a"></rect>
+          <circle cx="271" cy="282" r="26" fill="url(#treeG)" opacity=".9"></circle><circle cx="253" cy="291" r="18" fill="#5a8a48" opacity=".8"></circle><circle cx="289" cy="288" r="20" fill="#68964a" opacity=".85"></circle><circle cx="271" cy="268" r="16" fill="#7aab65" opacity=".7"></circle>
+          <g transform="translate(620,348)"><rect x="0" y="0" width="40" height="3" rx="1" fill="#7a6a5a"></rect><rect x="0" y="5" width="40" height="3" rx="1" fill="#7a6a5a"></rect><rect x="2" y="8" width="3" height="10" fill="#6a5a4a"></rect><rect x="35" y="8" width="3" height="10" fill="#6a5a4a"></rect></g>
+          <g transform="translate(155,352)"><path d="M0,12 L0,0 Q0,-4 4,-4 L16,-4 Q20,-4 20,0 L20,12" fill="none" stroke="#808080" stroke-width="2"></path><path d="M24,12 L24,0 Q24,-4 28,-4 L40,-4 Q44,-4 44,0 L44,12" fill="none" stroke="#808080" stroke-width="2"></path></g>
+          <g transform="translate(700,348)"><rect x="0" y="4" width="14" height="16" rx="1" fill="#5a6a5a"></rect><rect x="-1" y="2" width="16" height="4" rx="1.5" fill="#6a7a6a"></rect></g>
+          <ellipse id="landingSpot" cx="500" cy="362" rx="11.2" ry="2.1" fill="rgba(223,44,44,0)" stroke="rgba(223,44,44,0)" stroke-width="1" stroke-dasharray="3 2"></ellipse>
+          <g id="person1"><circle cx="0" cy="-24" r="6" fill="#e0c8a0"></circle><ellipse cx="-1" cy="-25" rx="3" ry="2" fill="#5a4030" opacity=".7"></ellipse><rect x="-5" y="-18" width="10" height="16" rx="2.5" fill="#4a6a8a"></rect><line x1="-3" y1="-2" x2="-5" y2="10" stroke="#3a4a5a" stroke-width="3" stroke-linecap="round"></line><line x1="3" y1="-2" x2="5" y2="10" stroke="#3a4a5a" stroke-width="3" stroke-linecap="round"></line><line x1="-5" y1="-14" x2="-9" y2="-4" stroke="#4a6a8a" stroke-width="2.5" stroke-linecap="round"></line><line x1="5" y1="-14" x2="9" y2="-4" stroke="#4a6a8a" stroke-width="2.5" stroke-linecap="round"></line></g>
+          <g id="person2"><circle cx="0" cy="-26" r="6.5" fill="#d4b090"></circle><ellipse cx="1" cy="-27" rx="4" ry="2.5" fill="#3a2a1a" opacity=".6"></ellipse><rect x="-6" y="-19" width="12" height="17" rx="2.5" fill="#c04040"></rect><line x1="-4" y1="-2" x2="-5" y2="10" stroke="#4a4a6a" stroke-width="3" stroke-linecap="round"></line><line x1="4" y1="-2" x2="5" y2="10" stroke="#4a4a6a" stroke-width="3" stroke-linecap="round"></line><line x1="-6" y1="-14" x2="-10" y2="-5" stroke="#c04040" stroke-width="2.5" stroke-linecap="round"></line><line x1="6" y1="-14" x2="6" y2="-6" stroke="#c04040" stroke-width="2.5" stroke-linecap="round"></line><rect x="4" y="-12" width="5" height="8" rx=".5" fill="#2a2a2a"></rect></g>
+          <g id="person3"><circle cx="0" cy="-24" r="6" fill="#c0a888"></circle><ellipse cx="0" cy="-26" rx="5" ry="3" fill="#2a2a3a" opacity=".5"></ellipse><rect x="-5" y="-18" width="10" height="16" rx="2.5" fill="#5a5a7a"></rect><line x1="-3" y1="-2" x2="-4" y2="10" stroke="#4a4a5a" stroke-width="3" stroke-linecap="round"></line><line x1="3" y1="-2" x2="5" y2="10" stroke="#4a4a5a" stroke-width="3" stroke-linecap="round"></line><line x1="-5" y1="-14" x2="-8" y2="-3" stroke="#5a5a7a" stroke-width="2.5" stroke-linecap="round"></line><line x1="5" y1="-14" x2="8" y2="-3" stroke="#5a5a7a" stroke-width="2.5" stroke-linecap="round"></line></g>
+          <g id="person4">
+            <g id="person4Bubble" display="none" opacity="0">
+              <path d="M34,-40 L46,-24 L58,-40" fill="rgba(255,252,246,.96)" stroke="rgba(26,30,40,.18)" stroke-width="1"></path>
+              <rect x="20" y="-188" width="268" height="158" rx="12" fill="rgba(255,252,246,.96)" stroke="rgba(26,30,40,.18)" stroke-width="1"></rect>
+              <text id="person4Speaker" x="40" y="-165" fill="#df2c2c" font-family="'IBM Plex Mono',monospace" font-size="7.4" font-weight="700">Reggie Watts</text>
+              <text id="person4Quote" x="40" y="-135" fill="#1a1e28" font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="700">
+                <tspan x="40" dy="0">Locate the red probability disc.</tspan>
+              </text>
+              <text id="person4Role" x="40" y="-54" fill="#7a7164" font-family="'IBM Plex Mono',monospace" font-size="6.8" font-weight="600">Scientific Advisory Board</text>
+            </g>
+            <rect x="-6" y="-18" width="12" height="17" rx="2.5" fill="#7a3d33"></rect>
+            <line x1="-4" y1="-2" x2="-6" y2="10" stroke="#47394b" stroke-width="3" stroke-linecap="round"></line>
+            <line x1="4" y1="-2" x2="6" y2="10" stroke="#47394b" stroke-width="3" stroke-linecap="round"></line>
+            <line x1="-6" y1="-14" x2="-10" y2="-5" stroke="#7a3d33" stroke-width="2.5" stroke-linecap="round"></line>
+            <line x1="6" y1="-14" x2="10" y2="-6" stroke="#7a3d33" stroke-width="2.5" stroke-linecap="round"></line>
+            <rect x="-6.5" y="-10" width="13" height="3" rx="1.5" fill="#a13b2f" opacity=".85"></rect>
+            <image href="Images/ReggieWatts/reggiewatts.png" x="-34" y="-60" width="68" height="68" preserveAspectRatio="xMidYMid meet"></image>
+          </g>
+          <g transform="translate(636,344)"><circle cx="0" cy="-14" r="5.5" fill="#d0b898"></circle><rect x="-5" y="-8" width="10" height="12" rx="2" fill="#6a8a5a"></rect><line x1="-4" y1="4" x2="-6" y2="12" stroke="#4a4a5a" stroke-width="2.5" stroke-linecap="round"></line><line x1="4" y1="4" x2="6" y2="12" stroke="#4a4a5a" stroke-width="2.5" stroke-linecap="round"></line></g>
+          <g transform="translate(68,332)"><circle cx="0" cy="-24" r="5.5" fill="#d8c0a0"></circle><rect x="-5" y="-18" width="10" height="15" rx="2" fill="#8a5a6a"></rect><line x1="-3" y1="-3" x2="-4" y2="10" stroke="#5a4a5a" stroke-width="2.5" stroke-linecap="round"></line><line x1="3" y1="-3" x2="4" y2="10" stroke="#5a4a5a" stroke-width="2.5" stroke-linecap="round"></line></g>
+          <g transform="translate(82,332)"><circle cx="0" cy="-24" r="5.5" fill="#c8b090"></circle><rect x="-5" y="-18" width="10" height="15" rx="2" fill="#5a6a8a"></rect><line x1="-3" y1="-3" x2="-4" y2="10" stroke="#3a4a5a" stroke-width="2.5" stroke-linecap="round"></line><line x1="3" y1="-3" x2="4" y2="10" stroke="#3a4a5a" stroke-width="2.5" stroke-linecap="round"></line></g>
+          <g id="crowdLayer"></g>
+          <g id="dollarNetworkLayer"></g>
+          <g id="dollarLayer"></g>
+        </svg>
+        <div class="scene-airships" id="sceneAirships" aria-hidden="true"></div>
+        <div class="scene-dock-halo" id="sceneDockHalo" aria-hidden="true"></div>
+        <div class="scene-status" id="sceneStatus">FIELD UNIT DEPLOYING...</div>
+      </div>
+      <div class="bemi-bar" id="bemiBar">
+        <span>Button Economic Multiplier Index:</span>
+        <span class="bemi-val" id="bemiVal">0.00</span>
+      </div>
+      <p class="field-caption" id="fieldCaption">Scroll this section into view to deploy the field unit and observe crowd spillover.</p>
+    </section>
+
+    <main class="stack">
+      <section class="panel reveal button-choice-panel" id="buttonChoicePanel" aria-labelledby="buttonChoiceTitle">
+        <div class="button-choice-panel__head">
+          <div class="button-choice-panel__copy">
+            <p class="mono button-choice-panel__kicker">Front Page Controls</p>
+            <h2 class="button-choice-panel__title" id="buttonChoiceTitle">Your Button, Your Choice</h2>
+            <p class="button-choice-panel__lede">Keep the live BRB telemetry in view, change the active sound without leaving the front page, and open the full labs only when you need the full catalogs.</p>
+          </div>
+          <div class="button-choice-panel__meta" id="buttonChoiceMeta">Loading front-page controls...</div>
+        </div>
+        <div class="button-choice-root" id="buttonChoiceRoot" data-state="loading">
+          <p class="button-choice-loading">Loading BRB sound controls and live telemetry.</p>
+        </div>
+      </section>
+
+      <div class="lab-deck" id="labDeck" hidden>
+        <section class="panel reveal switch-lab-panel" id="switchLabPanel" aria-labelledby="switchLabTitle">
+          <div class="switch-lab-panel__head">
+            <div class="switch-lab-panel__copy">
+              <p class="mono switch-lab-panel__kicker">SwitchesDB Sync</p>
+              <h2 class="switch-lab-panel__title" id="switchLabTitle">Switch Lab</h2>
+              <p class="switch-lab-panel__lede">Measured switch profiles for the BRB button, drawn from SwitchesDB and applied here without sending anyone off-site.</p>
+            </div>
+            <div class="switch-lab-panel__meta" id="switchLabMeta">Loading switch catalog...</div>
+          </div>
+          <div class="switch-lab-root" id="switchLabRoot" data-state="loading">
+            <p class="switch-lab-loading">Loading switch profiles from the local BRB sync cache.</p>
+          </div>
+        </section>
+
+        <section class="panel reveal sound-lab-panel" id="soundLabPanel" aria-labelledby="soundLabTitle">
+          <div class="sound-lab-panel__head">
+            <div class="sound-lab-panel__copy">
+              <p class="mono sound-lab-panel__kicker">Local Sound Catalog</p>
+              <h2 class="sound-lab-panel__title" id="soundLabTitle">Sound Lab</h2>
+              <p class="sound-lab-panel__lede">Preview and apply BRB-native press sounds from locally vendored MIT and GPL bundles, with source, license, and recommendation state kept visible.</p>
+            </div>
+            <div class="sound-lab-panel__meta" id="soundLabMeta">Loading sound catalog...</div>
+          </div>
+          <div class="sound-lab-root" id="soundLabRoot" data-state="loading">
+            <p class="sound-lab-loading">Loading local sound sources and attribution data.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel reveal study-demo-panel" aria-labelledby="studyDemoTitle">
+        <span class="eyebrow">Study Demo</span>
+        <div class="video-feature">
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/ps7yAMZNh94"
+              title="First Big Red Button VR Study Demo | Button Pressing Behavior in Virtual Reality"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="video-copy">
+            <p class="mono">YouTube upload: March 12, 2026</p>
+            <h2 id="studyDemoTitle">First Big Red Button VR Study Demo</h2>
+            <p>This demonstration presents the inaugural Big Red Button Institute virtual reality study on button-pressing behavior under conditions of maximal autonomy and minimal task demand.</p>
+            <ul class="video-points">
+              <li>Participants are immersed in a controlled virtual environment with a single large red button.</li>
+              <li>A standardized audio track guides the session while preserving open-ended interaction.</li>
+              <li>Pressing and non-pressing are treated as methodologically valid outcomes.</li>
+            </ul>
+            <p>The prototype is used to tune instruction cadence, button visibility, and the general atmosphere of button-adjacency before formal study deployment.</p>
+            <div class="video-actions">
+              <a class="video-link" href="https://www.youtube.com/watch?v=ps7yAMZNh94" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel reveal theory-panel">
+        <h2>Theoretical Framework</h2>
+        <p>Following the Latour comic panel above, BRB treats the red button as both object and provocation: a device that converts collective thought into measurable action.</p>
+        <p>If the world already contains such buttons &mdash; hidden in plain sight, charged with social meaning, and capable of reorganizing collective attention &mdash; then the public question is straightforward: what happens when anyone can press?</p>
+        <p>BRB approaches this as a practical and conceptual problem. What counts as a press? Which design variables alter pressing behavior? How does repeated pressing change the public atmosphere of a place?</p>
+      </section>
+
+      <section class="panel reveal divisions-panel">
+        <h2>Research Divisions</h2>
+        <div class="division-grid">
+          <article class="division">
+            <h3>I. Temporal Complexity Laboratory</h3>
+            <p>Our flagship program models inter-press intervals with tools from information theory and nonlinear dynamics.</p>
+            <ul>
+              <li><strong>Kolmogorov complexity of inter-press intervals:</strong> measuring compressibility versus apparent randomness in collective pressing sequences.</li>
+              <li><strong>Entropy dynamics:</strong> tracking shifts in press-rate distributions across hourly, weekly, and seasonal windows.</li>
+              <li><strong>Recurrence analysis:</strong> identifying phase transitions in public behavior as installations mature in place.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>II. Ethnography of Pressability</h3>
+            <p>Qualitative teams conduct interviews and participant observation on the lived experience of pressing and choosing not to press.</p>
+            <ul>
+              <li>Motivational profiles: curiosity, ritual, improvisation, group contagion.</li>
+              <li>Narrative forms: how people describe the moment before and after contact.</li>
+              <li>Spatial function: whether the button becomes a landmark, meeting point, or local folklore generator.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>III. Button Design Phenomenology</h3>
+            <p>In collaboration with designers and haptic engineers, we study how form and feel alter behavior.</p>
+            <ul>
+              <li><strong>Chromatic affordance:</strong> comparative studies on the semiotic force of red.</li>
+              <li><strong>Protrusion geometry:</strong> how height and curvature affect invitation strength.</li>
+              <li><strong>Resistance curves and click acoustics:</strong> force, sound, and satisfaction as linked variables.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>IV. Socioeconomic Impact Assessment</h3>
+            <p>BRB measures civic and commercial spillover effects around installations in partnership with municipal actors.</p>
+            <ul>
+              <li>Button-adjacent businesses and curiosity traffic patterns.</li>
+              <li>Dwell-time changes in plazas and transit nodes.</li>
+              <li>Development of the Button Economic Multiplier Index (BEMI) for policy planning.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>V. Critical Button Studies</h3>
+            <p>Our humanities unit runs systematic literature reviews across design theory, STS, media archaeology, and philosophy of action.</p>
+            <ul>
+              <li>Genealogies of emergency aesthetics and the cultural authority of redness.</li>
+              <li>Affordance theory revisited: from perceived invitation to enacted compulsion.</li>
+              <li>Comparative studies of pressability across cultural and infrastructural contexts.</li>
+            </ul>
+          </article>
+          <article class="division">
+            <h3>VI. Sonic Residencies Program</h3>
+            <p>We commission composers and musicians to produce one-second sonic signatures for the button press.</p>
+            <ul>
+              <li>Monthly guest works turn each press into a micro-performance.</li>
+              <li>Residents include experimental producers, voice artists, and field recordists.</li>
+              <li>Core question: if a button had a voice, who should compose it?</li>
+            </ul>
+          </article>
+        </div>
+        <section class="methods-wrap" aria-label="Methodological framework">
+          <h3>Methodological Framework</h3>
+          <p>Our analysis pipeline adapts complexity measures from computational neuroscience and consciousness research to button-press time series.</p>
+          <div class="methods-grid">
+            <article class="method">
+              <h4>Entropy and Algorithmic Complexity</h4>
+              <ul>
+                <li><strong>Sample entropy / approximate entropy:</strong> quantifies unpredictability in inter-press intervals.</li>
+                <li><strong>Lempel-Ziv complexity:</strong> tests how compressible collective press sequences are over time.</li>
+                <li><strong>Permutation entropy:</strong> tracks ordinal pattern structure rather than raw magnitude.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Fractal and Scale-Free Dynamics</h4>
+              <ul>
+                <li><strong>DFA (alpha exponent):</strong> estimates long-range temporal correlations and memory effects.</li>
+                <li><strong>Hurst exponent:</strong> distinguishes persistent trends from anti-persistent reversals.</li>
+                <li><strong>Multifractal DFA:</strong> captures heterogeneity in scaling across fluctuation sizes.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Dynamical Systems and State Transitions</h4>
+              <ul>
+                <li><strong>Recurrence quantification analysis:</strong> characterizes determinism, laminarity, and regime shifts.</li>
+                <li><strong>Lyapunov exponents:</strong> tests sensitivity to initial conditions in crowd-level behavior.</li>
+                <li><strong>Correlation dimension:</strong> estimates the effective dimensionality of the generating process.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Criticality Signatures</h4>
+              <ul>
+                <li><strong>Power spectral density slope:</strong> tests for 1/f-like structure in press dynamics.</li>
+                <li><strong>Avalanche analysis:</strong> evaluates burst sizes and durations for scale-invariant behavior.</li>
+                <li><strong>Branching parameter:</strong> estimates whether one press statistically recruits subsequent presses.</li>
+              </ul>
+            </article>
+            <article class="method">
+              <h4>Networked Multi-Button Systems</h4>
+              <ul>
+                <li><strong>Transfer entropy:</strong> measures directed information flow between button locations.</li>
+                <li><strong>Integrated-information proxies:</strong> tests whether distributed button streams act as a coupled whole.</li>
+              </ul>
+            </article>
+          </div>
+          <p>If neural activity at peak complexity often sits near criticality, BRB asks the corresponding civic question: does the crowd?</p>
+        </section>
+        <div class="callout">
+          <strong>Scientific Advisory Board:</strong> Reggie Watts &mdash; musician, comedian, and theorist of nonsense-as-method.
+        </div>
+      </section>
+
+      <section class="panel reveal participate-panel">
+        <h2>Participate</h2>
+        <div class="panel-body">
+          <p>BRB is currently seeking installation sites, partner institutions, resident artists, and dedicated pressers.</p>
+          <p>If you encounter a Big Red Button in your city, your contribution enters the dataset, shifts the model, and helps define the next phase of pressability research.</p>
+          <p><strong>Press, and be counted.</strong></p>
+        </div>
+      </section>
+
+      <section class="panel reveal publications-panel">
+        <h2>Publications</h2>
+        <div class="panel-body">
+          <p><strong>Big Red Button: a pressing issue</strong></p>
+          <p>This is our first publication and framing document for the BRB program.</p>
+          <p>For this publication cycle, we are actively searching for collaborations with researchers, institutions, artists, and civic partners.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer reveal">
+      <p><strong>The Big Red Button Institute</strong><br>A Research Collective for Pressability Studies</p>
+      <p>Contact: <a href="mailto:inquiries@bigredbutton.institute">inquiries@bigredbutton.institute</a></p>
+      <p><em>"The question is not whether to press. The question is what pressing means."</em> &mdash; BRB Founding Charter, Article I</p>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    return;
+    var pressTimestamps = [];
+    var intervals = [];
+    var count = 0;
+    var sessionStart = Date.now();
+    var maxBurst = 0;
+    var particles = [];
+
+    var btn = document.getElementById("pressBtn");
+    var countEl = document.getElementById("pressCount");
+    var labPanel = document.getElementById("labPanel");
+    var pressCol = document.getElementById("pressColumn");
+    var flash = document.getElementById("screenFlash");
+    var ripples = [document.getElementById("ripple1"), document.getElementById("ripple2"), document.getElementById("ripple3")].filter(Boolean);
+    var rippleIdx = 0;
+    var statRate = document.getElementById("statRate");
+    var statEntropy = document.getElementById("statEntropy");
+    var statAvgInterval = document.getElementById("statAvgInterval");
+    var statBurst = document.getElementById("statBurst");
+    var pedestal = document.getElementById("pedestalFloat");
+    var dome = document.getElementById("domeGroup");
+    var pedestalShockwave = document.getElementById("pedestalShockwave");
+    var pedestalScrollHint = document.getElementById("pedestalScrollHint");
+    var visualizations = document.getElementById("visualizations");
+    var pedestalSvg = pedestal ? pedestal.querySelector("svg") : null;
+    var pedestalActive = false;
+    var pedestalDownAt = 0;
+    var pedestalPointerId = null;
+    var pedestalLastTouchStart = 0;
+    var pedestalTouchId = null;
+    var pedestalDragging = false;
+    var pedestalDragStartX = 0;
+    var pedestalDragStartY = 0;
+    var pedestalOriginX = 0;
+    var pedestalOriginY = 0;
+    var pedestalDragThreshold = 18;
+    var pedestalReleaseTimer = null;
+    var pedestalPinned = false;
+    var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var pedestalState = {
+      baseX: 78,
+      baseY: 32,
+      x: 0,
+      y: 0,
+      rotation: 0,
+      driftPhase1: Math.random() * Math.PI * 2,
+      driftPhase2: Math.random() * Math.PI * 2,
+      driftPhase3: Math.random() * Math.PI * 2,
+      driftPhase4: Math.random() * Math.PI * 2,
+      shiftTimer: 0,
+      shiftTargetX: 0,
+      shiftTargetY: 0,
+      shiftCurrentX: 0,
+      shiftCurrentY: 0,
+      nextShift: 4000 + Math.random() * 7000
+    };
+
+    // AMBIENT
+    var ambientC = document.getElementById("ambientCanvas");
+    var ambientCtx = ambientC.getContext("2d");
+    var floaters = [];
+    function resizeAmbient() { ambientC.width = window.innerWidth; ambientC.height = window.innerHeight; }
+    resizeAmbient();
+    window.addEventListener("resize", resizeAmbient);
+    for (var i = 0; i < 35; i++) {
+      floaters.push({ x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, r: Math.random()*2.5+0.5, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, alpha: Math.random()*0.12+0.03 });
+    }
+    function drawAmbient() {
+      ambientCtx.clearRect(0,0,ambientC.width,ambientC.height);
+      for (var i=0;i<floaters.length;i++) {
+        var f=floaters[i]; f.x+=f.vx; f.y+=f.vy;
+        if(f.x<-10)f.x=ambientC.width+10; if(f.x>ambientC.width+10)f.x=-10;
+        if(f.y<-10)f.y=ambientC.height+10; if(f.y>ambientC.height+10)f.y=-10;
+        ambientCtx.beginPath(); ambientCtx.arc(f.x,f.y,f.r,0,Math.PI*2);
+        ambientCtx.fillStyle="rgba(223,44,44,"+f.alpha+")"; ambientCtx.fill();
+      }
+      for (var j=particles.length-1;j>=0;j--) {
+        var p=particles[j]; p.x+=p.vx; p.y+=p.vy; p.vy+=0.04; p.life-=0.015;
+        if(p.life<=0){particles.splice(j,1);continue;}
+        ambientCtx.beginPath(); ambientCtx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);
+        ambientCtx.fillStyle="rgba("+p.color+","+(p.life*0.6)+")"; ambientCtx.fill();
+      }
+      requestAnimationFrame(drawAmbient);
+    }
+    drawAmbient();
+    function spawnParticles(x,y,n) {
+      for(var i=0;i<n;i++){
+        var angle=Math.random()*Math.PI*2,speed=Math.random()*4+1.5;
+        var colors=["223,44,44","255,100,70","255,160,80","200,30,30"];
+        particles.push({x:x,y:y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-2,r:Math.random()*4+1.5,life:1,color:colors[Math.floor(Math.random()*colors.length)]});
+      }
+    }
+
+    // VIZ
+    var waveC=document.getElementById("waveCanvas"), waveCtx=waveC.getContext("2d");
+    var intervalC=document.getElementById("intervalCanvas"), intervalCtx=intervalC.getContext("2d");
+    var entropyC=document.getElementById("entropyCanvas"), entropyCtx=entropyC.getContext("2d");
+    var burstC=document.getElementById("burstCanvas"), burstCtx=burstC.getContext("2d");
+
+    function setupCanvas(c) {
+      var r=c.getBoundingClientRect(), d=window.devicePixelRatio||1;
+      c.width=r.width*d; c.height=r.height*d;
+      c.getContext("2d").scale(d,d);
+      c.style.width=r.width+"px"; c.style.height=r.height+"px";
+    }
+    var vizReady=false;
+    function initCanvases() {
+      if(vizReady)return; vizReady=true;
+      setupCanvas(waveC);setupCanvas(intervalC);setupCanvas(entropyC);setupCanvas(burstC);
+      drawAllViz();
+    }
+    setTimeout(initCanvases,300);
+    window.addEventListener("resize",function(){
+      vizReady=false;
+      setTimeout(initCanvases,100);
+      updatePedestalAnchor(false);
+      if (reducedMotion) animatePedestal();
+    });
+
+    var waveData=[], wavePhase=0;
+    function drawWave() {
+      var w=waveC.getBoundingClientRect().width, h=waveC.getBoundingClientRect().height;
+      waveCtx.clearRect(0,0,w,h);
+      waveCtx.strokeStyle="rgba(255,255,255,0.04)"; waveCtx.lineWidth=1;
+      for(var gy=20;gy<h;gy+=20){waveCtx.beginPath();waveCtx.moveTo(0,gy);waveCtx.lineTo(w,gy);waveCtx.stroke();}
+      waveCtx.strokeStyle="rgba(255,255,255,0.08)";
+      waveCtx.beginPath();waveCtx.moveTo(0,h/2);waveCtx.lineTo(w,h/2);waveCtx.stroke();
+      if(waveData.length<2){
+        waveCtx.beginPath();waveCtx.strokeStyle="rgba(223,44,44,0.2)";waveCtx.lineWidth=1.5;
+        for(var x=0;x<w;x++){var y=h/2+Math.sin(x*0.03+wavePhase)*6;x===0?waveCtx.moveTo(x,y):waveCtx.lineTo(x,y);}
+        waveCtx.stroke();wavePhase+=0.02;
+      } else {
+        waveCtx.beginPath();
+        var grad=waveCtx.createLinearGradient(0,0,w,0);
+        grad.addColorStop(0,"rgba(223,44,44,0.15)");grad.addColorStop(1,"rgba(223,44,44,0.9)");
+        waveCtx.strokeStyle=grad;waveCtx.lineWidth=2;
+        var maxPts=80,pts=waveData.slice(-maxPts);
+        for(var i=0;i<pts.length;i++){var px=(i/(maxPts-1))*w,py=h/2-pts[i]*(h*0.4);i===0?waveCtx.moveTo(px,py):waveCtx.lineTo(px,py);}
+        waveCtx.stroke();
+        waveCtx.lineTo(w,h/2);waveCtx.lineTo(0,h/2);waveCtx.closePath();
+        var gf=waveCtx.createLinearGradient(0,0,0,h);
+        gf.addColorStop(0,"rgba(223,44,44,0.1)");gf.addColorStop(0.5,"rgba(223,44,44,0)");gf.addColorStop(1,"rgba(223,44,44,0.06)");
+        waveCtx.fillStyle=gf;waveCtx.fill();
+      }
+    }
+
+    function drawIntervals() {
+      var w=intervalC.getBoundingClientRect().width, h=intervalC.getBoundingClientRect().height;
+      intervalCtx.clearRect(0,0,w,h);
+      intervalCtx.strokeStyle="rgba(255,255,255,0.04)";
+      for(var gy=20;gy<h;gy+=20){intervalCtx.beginPath();intervalCtx.moveTo(0,gy);intervalCtx.lineTo(w,gy);intervalCtx.stroke();}
+      if(intervals.length===0){
+        intervalCtx.fillStyle="rgba(255,255,255,0.07)";intervalCtx.font="11px 'IBM Plex Mono',monospace";
+        intervalCtx.textAlign="center";intervalCtx.fillText("Awaiting data\u2026",w/2,h/2);return;
+      }
+      var maxBars=25,data=intervals.slice(-maxBars),maxVal=Math.max.apply(null,data)||1;
+      var barW=(w-8)/maxBars,gap=2;
+      for(var i=0;i<data.length;i++){
+        var barH=(data[i]/maxVal)*(h-16),x=4+i*barW,y=h-8-barH;
+        var t=1-(data[i]/maxVal);
+        intervalCtx.fillStyle="rgba("+(223+Math.round(t*32))+","+(44+Math.round(t*56))+","+(44+Math.round(t*36))+",0.8)";
+        intervalCtx.beginPath();intervalCtx.roundRect(x+gap/2,y,barW-gap,barH,2);intervalCtx.fill();
+      }
+    }
+
+    var entropyParticles=[], entropyVal=0;
+    function initEP(w,h){entropyParticles=[];for(var i=0;i<50;i++)entropyParticles.push({x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,r:Math.random()*2+0.8});}
+    function drawEntropy() {
+      var w=entropyC.getBoundingClientRect().width,h=entropyC.getBoundingClientRect().height;
+      entropyCtx.clearRect(0,0,w,h);
+      if(entropyParticles.length===0)initEP(w,h);
+      var chaos=Math.min(entropyVal/3,1);
+      for(var i=0;i<entropyParticles.length;i++){
+        var p=entropyParticles[i];
+        p.vx+=(Math.random()-0.5)*chaos*1.5;p.vy+=(Math.random()-0.5)*chaos*1.5;
+        p.vx*=0.92;p.vy*=0.92;p.vx+=(w/2-p.x)*0.001;p.vy+=(h/2-p.y)*0.001;
+        p.x+=p.vx;p.y+=p.vy;
+        for(var j=i+1;j<entropyParticles.length;j++){
+          var q=entropyParticles[j],dx=q.x-p.x,dy=q.y-p.y,dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<45+chaos*25){
+            entropyCtx.strokeStyle="rgba(223,44,44,"+((1-dist/(45+chaos*25))*0.2)+")";
+            entropyCtx.lineWidth=0.5;entropyCtx.beginPath();entropyCtx.moveTo(p.x,p.y);entropyCtx.lineTo(q.x,q.y);entropyCtx.stroke();
+          }
+        }
+        entropyCtx.beginPath();entropyCtx.arc(p.x,p.y,p.r+chaos*1.5,0,Math.PI*2);
+        entropyCtx.fillStyle="rgba(223,80,60,"+(0.3+chaos*0.5)+")";entropyCtx.fill();
+      }
+    }
+
+    var burstBins=new Array(40).fill(0);
+    var burstWindowSec=30;
+    function drawBurst() {
+      var w=burstC.getBoundingClientRect().width,h=burstC.getBoundingClientRect().height;
+      burstCtx.clearRect(0,0,w,h);
+      var binW=w/burstBins.length,maxB=Math.max.apply(null,burstBins)||1;
+      for(var i=0;i<burstBins.length;i++){
+        var t=burstBins[i]/maxB;
+        burstCtx.fillStyle="rgb("+(30+Math.round(t*200))+","+(18+Math.round(t*30))+","+(24+Math.round(t*20))+")";
+        burstCtx.fillRect(i*binW,0,binW,h);
+        if(t>0.3){burstCtx.fillStyle="rgba(255,68,68,"+(t*0.4)+")";burstCtx.fillRect(i*binW,0,binW,h);}
+      }
+      var scanX=(((Date.now()/1000)%burstWindowSec)/burstWindowSec)*w;
+      burstCtx.fillStyle="rgba(255,255,255,0.1)";burstCtx.fillRect(scanX-1,0,2,h);
+      for(var k=0;k<burstBins.length;k++)burstBins[k]*=0.9985;
+    }
+
+    function drawAllViz(){if(!vizReady)return;drawWave();drawIntervals();drawEntropy();drawBurst();requestAnimationFrame(drawAllViz);}
+
+    function updatePedestalAnchor(force) {
+      if (pedestalPinned && !force) return;
+      if (window.innerWidth <= 650) {
+        pedestalState.baseX = 76;
+        pedestalState.baseY = 72;
+      } else if (window.innerWidth <= 980) {
+        pedestalState.baseX = 80;
+        pedestalState.baseY = 56;
+      } else {
+        pedestalState.baseX = 78;
+        pedestalState.baseY = 32;
+      }
+    }
+
+    function loadPedestalAnchor() {
+      try {
+        var raw = window.localStorage.getItem("brb_pedestal_anchor");
+        if (!raw) return;
+        var parsed = JSON.parse(raw);
+        var bx = Number(parsed.baseX);
+        var by = Number(parsed.baseY);
+        if (!Number.isFinite(bx) || !Number.isFinite(by)) return;
+        pedestalState.baseX = Math.max(2, Math.min(98, bx));
+        pedestalState.baseY = Math.max(2, Math.min(98, by));
+        pedestalPinned = true;
+      } catch (_) {}
+    }
+
+    function savePedestalAnchor() {
+      try {
+        window.localStorage.setItem("brb_pedestal_anchor", JSON.stringify({
+          baseX: pedestalState.baseX,
+          baseY: pedestalState.baseY
+        }));
+      } catch (_) {}
+    }
+
+    function placePedestal(px, py, rot) {
+      if (!pedestal) return;
+      pedestal.style.transform = "translate(" + px + "px, " + py + "px) rotate(" + rot + "deg)";
+      pedestalState.x = px;
+      pedestalState.y = py;
+      pedestalState.rotation = rot;
+    }
+
+    function animatePedestal() {
+      if (!pedestal) return;
+      updatePedestalAnchor(false);
+      if (pedestalDragging) {
+        requestAnimationFrame(animatePedestal);
+        return;
+      }
+      var s = pedestalState;
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+
+      if (reducedMotion) {
+        var baseX = (s.baseX / 100) * vw;
+        var baseY = (s.baseY / 100) * vh;
+        var minX = 8;
+        var minY = 8;
+        var maxX = Math.max(minX, vw - pw - 8);
+        var maxY = Math.max(minY, vh - ph - 8);
+        placePedestal(Math.max(minX, Math.min(maxX, baseX)), Math.max(minY, Math.min(maxY, baseY)), 0);
+        return;
+      }
+
+      s.driftPhase1 += 0.008;
+      s.driftPhase2 += 0.011;
+      s.driftPhase3 += 0.006;
+      s.driftPhase4 += 0.0035;
+
+      var driftX = pedestalPinned
+        ? Math.sin(s.driftPhase1) * 4 + Math.sin(s.driftPhase2 * 0.7) * 2
+        : Math.sin(s.driftPhase1) * 18 + Math.sin(s.driftPhase2 * 0.7) * 10;
+      var driftY = pedestalPinned
+        ? Math.cos(s.driftPhase3) * 3 + Math.sin(s.driftPhase4 * 1.3) * 2
+        : Math.cos(s.driftPhase3) * 14 + Math.sin(s.driftPhase4 * 1.3) * 8;
+      var rot = pedestalPinned
+        ? Math.sin(s.driftPhase1 * 0.6) * 1.2 + Math.sin(s.driftPhase2 * 0.4) * 0.8
+        : Math.sin(s.driftPhase1 * 0.6) * 4 + Math.sin(s.driftPhase2 * 0.4) * 2.5;
+
+      s.shiftTimer += 16;
+      if (!pedestalPinned && s.shiftTimer > s.nextShift) {
+        s.shiftTimer = 0;
+        s.nextShift = 4000 + Math.random() * 7000;
+        s.shiftTargetX = (Math.random() - 0.5) * 120;
+        s.shiftTargetY = (Math.random() - 0.5) * 80;
+      }
+
+      s.shiftCurrentX += (s.shiftTargetX - s.shiftCurrentX) * 0.008;
+      s.shiftCurrentY += (s.shiftTargetY - s.shiftCurrentY) * 0.008;
+
+      var px = (s.baseX / 100) * vw + driftX + s.shiftCurrentX;
+      var py = (s.baseY / 100) * vh + driftY + s.shiftCurrentY;
+
+      var minX2 = 8;
+      var minY2 = 8;
+      var maxX2 = Math.max(minX2, vw - pw - 8);
+      var maxY2 = Math.max(minY2, vh - ph - 8);
+      px = Math.max(minX2, Math.min(maxX2, px));
+      py = Math.max(minY2, Math.min(maxY2, py));
+
+      placePedestal(px, py, rot);
+      requestAnimationFrame(animatePedestal);
+    }
+
+    function spawnPedestalSparkles(cx, cy, count) {
+      for (var si = 0; si < count; si++) {
+        var sp = document.createElement("div");
+        sp.className = "sparkle";
+        var angle = (Math.PI * 2 / count) * si + (Math.random() - 0.5) * 0.5;
+        var dist = 40 + Math.random() * 60;
+        sp.style.left = cx + "px";
+        sp.style.top = cy + "px";
+        sp.style.setProperty("--sx", Math.cos(angle) * dist + "px");
+        sp.style.setProperty("--sy", Math.sin(angle) * dist - 20 + "px");
+        sp.style.width = (3 + Math.random() * 5) + "px";
+        sp.style.height = sp.style.width;
+        sp.style.background = ["#ff4444", "#ff7744", "#ffaa44", "#df2c2c"][Math.floor(Math.random() * 4)];
+        document.body.appendChild(sp);
+        void sp.offsetWidth;
+        sp.classList.add("go");
+        (function (node) {
+          setTimeout(function () { node.remove(); }, 800);
+        })(sp);
+      }
+    }
+
+    function scrollToVisualizations() {
+      if (!visualizations) return;
+      visualizations.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    function runPedestalEffects() {
+      if (!pedestal) return;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+      var domeWorldX = pedestalState.x + pw * 0.5;
+      var domeWorldY = pedestalState.y + ph * 0.2125;
+
+      pedestal.classList.add("pressed-glow");
+      setTimeout(function () { pedestal.classList.remove("pressed-glow"); }, 420);
+
+      if (pedestalShockwave) {
+        pedestalShockwave.style.left = domeWorldX + "px";
+        pedestalShockwave.style.top = domeWorldY + "px";
+        pedestalShockwave.classList.remove("go");
+        void pedestalShockwave.offsetWidth;
+        pedestalShockwave.classList.add("go");
+      }
+
+      spawnPedestalSparkles(domeWorldX, domeWorldY, 14);
+      spawnParticles(domeWorldX, domeWorldY, 10);
+
+      setTimeout(scrollToVisualizations, 160);
+    }
+
+    function beginPedestalPress() {
+      if (!pedestal || !dome) return;
+      // If a prior quick tap is waiting on the visibility timer, finalize it now
+      // so rapid successive taps still register consistently.
+      if (pedestalActive && pedestalReleaseTimer !== null) {
+        finalizePedestalPress(false);
+      } else if (pedestalActive) {
+        return;
+      }
+      if (pedestalReleaseTimer !== null) {
+        clearTimeout(pedestalReleaseTimer);
+        pedestalReleaseTimer = null;
+      }
+      pedestalActive = true;
+      pedestalDownAt = Date.now();
+      dome.style.transform = "";
+      dome.classList.remove("rebound");
+      dome.classList.remove("pushed");
+      void dome.offsetWidth;
+      dome.classList.add("pushed");
+    }
+
+    function beginPedestalGesture(clientX, clientY) {
+      pedestalDragStartX = clientX;
+      pedestalDragStartY = clientY;
+      pedestalOriginX = pedestalState.x;
+      pedestalOriginY = pedestalState.y;
+      pedestalDragging = false;
+      beginPedestalPress();
+    }
+
+    function movePedestalGesture(clientX, clientY) {
+      if (!pedestalActive) return;
+      var dx = clientX - pedestalDragStartX;
+      var dy = clientY - pedestalDragStartY;
+      if (!pedestalDragging && (Math.abs(dx) > pedestalDragThreshold || Math.abs(dy) > pedestalDragThreshold)) {
+        pedestalDragging = true;
+        if (dome) dome.classList.remove("pushed");
+        if (dome) dome.classList.remove("rebound");
+        if (pedestal) pedestal.classList.add("dragging");
+      }
+      if (!pedestalDragging || !pedestal) return;
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+      var minX = 8;
+      var minY = 8;
+      var maxX = Math.max(minX, vw - pw - 8);
+      var maxY = Math.max(minY, vh - ph - 8);
+      var px = Math.max(minX, Math.min(maxX, pedestalOriginX + dx));
+      var py = Math.max(minY, Math.min(maxY, pedestalOriginY + dy));
+      placePedestal(px, py, 0);
+    }
+
+    function dropPedestalAnchor() {
+      if (!pedestal) return;
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var pw = pedestal.offsetWidth || 140;
+      var ph = pedestal.offsetHeight || 320;
+      var maxX = Math.max(1, vw - pw);
+      var maxY = Math.max(1, vh - ph);
+      pedestalState.baseX = Math.max(2, Math.min(98, (pedestalState.x / maxX) * 100));
+      pedestalState.baseY = Math.max(2, Math.min(98, (pedestalState.y / maxY) * 100));
+      pedestalState.shiftCurrentX = 0;
+      pedestalState.shiftCurrentY = 0;
+      pedestalState.shiftTargetX = 0;
+      pedestalState.shiftTargetY = 0;
+      pedestalPinned = true;
+      savePedestalAnchor();
+    }
+
+    function finalizePedestalPress(cancelled) {
+      if (!pedestalActive) return;
+      if (pedestalReleaseTimer !== null) {
+        clearTimeout(pedestalReleaseTimer);
+        pedestalReleaseTimer = null;
+      }
+      pedestalActive = false;
+      if (dome) {
+        dome.classList.remove("pushed");
+        dome.style.transform = "";
+      }
+      if (dome && !cancelled) {
+        dome.classList.remove("rebound");
+        void dome.offsetWidth;
+        dome.classList.add("rebound");
+      }
+      if (dome && cancelled) dome.classList.remove("rebound");
+      if (cancelled) return;
+      var holdMs = Math.max(40, Math.min(Date.now() - pedestalDownAt, 1600));
+      runPedestalEffects();
+      if (window.BRB && typeof window.BRB.triggerPress === "function") {
+        window.BRB.triggerPress(holdMs);
+      } else {
+        triggerExternalPress(holdMs);
+      }
+    }
+
+    function endPedestalPress(cancelled) {
+      if (!pedestalActive) return;
+      if (cancelled) {
+        finalizePedestalPress(true);
+        return;
+      }
+      var minPressVisibleMs = 48;
+      var elapsedMs = Date.now() - pedestalDownAt;
+      if (elapsedMs >= minPressVisibleMs) {
+        finalizePedestalPress(false);
+        return;
+      }
+      if (pedestalReleaseTimer !== null) return;
+      pedestalReleaseTimer = setTimeout(function () {
+        pedestalReleaseTimer = null;
+        finalizePedestalPress(false);
+      }, minPressVisibleMs - elapsedMs);
+    }
+
+    function endPedestalGesture(cancelled) {
+      if (!pedestalActive) return;
+      if (pedestalDragging) {
+        if (pedestal) pedestal.classList.remove("dragging");
+        endPedestalPress(true);
+        if (!cancelled) dropPedestalAnchor();
+        pedestalDragging = false;
+        return;
+      }
+      endPedestalPress(cancelled);
+    }
+
+    function computeEntropy(arr){
+      if(arr.length<3)return 0;var bins={},recent=arr.slice(-20);
+      for(var i=0;i<recent.length;i++){var b=Math.round(recent[i]/200)*200;bins[b]=(bins[b]||0)+1;}
+      var total=recent.length,ent=0,keys=Object.keys(bins);
+      for(var j=0;j<keys.length;j++){var p=bins[keys[j]]/total;if(p>0)ent-=p*Math.log2(p);}
+      return ent;
+    }
+    function computeBurst(){
+      if(pressTimestamps.length<2)return 0;var b=1,best=1;
+      for(var i=1;i<pressTimestamps.length;i++){if(pressTimestamps[i]-pressTimestamps[i-1]<600){b++;if(b>best)best=b;}else b=1;}
+      return best;
+    }
+    function updateStats(){
+      var now=Date.now();
+      statRate.textContent=pressTimestamps.filter(function(t){return now-t<60000;}).length.toFixed(1);
+      var ent=computeEntropy(intervals);entropyVal=ent;
+      statEntropy.textContent=ent>0?ent.toFixed(2):"\u2014";
+      if(intervals.length>0){var s=0,r=intervals.slice(-10);for(var i=0;i<r.length;i++)s+=r[i];statAvgInterval.textContent=Math.round(s/r.length);}
+      var b=computeBurst();if(b>maxBurst)maxBurst=b;statBurst.textContent=maxBurst;
+    }
+
+    // PRESS
+    function injectWaveFromHold(holdMs){
+      var clamped=Math.max(40,Math.min(holdMs,1600));
+      var holdNorm=(clamped-40)/1560;
+      var peak=0.85+holdNorm*1.15;
+      var tailCount=5+Math.round(holdNorm*7);
+      var freq=1.05+holdNorm*0.5;
+      var decayBase=0.34-holdNorm*0.08;
+      waveData.push(peak);
+      setTimeout(function(){
+        for(var i=0;i<tailCount;i++){
+          var step=i+1;
+          var decay=Math.exp(-step*decayBase);
+          waveData.push(Math.sin(step*freq)*decay*peak*0.72);
+        }
+      },30);
+    }
+
+    function handlePress(holdMs){
+      var now=Date.now();count++;pressTimestamps.push(now);
+      if(pressTimestamps.length>1)intervals.push(now-pressTimestamps[pressTimestamps.length-2]);
+      countEl.textContent=count;
+      countEl.classList.add("bump");setTimeout(function(){countEl.classList.remove("bump");},200);
+      if(ripples.length){
+        var ring=ripples[rippleIdx%ripples.length];
+        ring.classList.remove("animate");
+        void ring.offsetWidth;
+        ring.classList.add("animate");
+        rippleIdx++;
+      }
+      pressCol.classList.add("glow");setTimeout(function(){pressCol.classList.remove("glow");},400);
+      labPanel.classList.add("pulse");setTimeout(function(){labPanel.classList.remove("pulse");},500);
+      flash.classList.add("flash");setTimeout(function(){flash.classList.remove("flash");},120);
+      if(btn){
+        var rect=btn.getBoundingClientRect();
+        spawnParticles(rect.left+rect.width/2,rect.top+rect.height/2,14);
+      } else {
+        spawnParticles(window.innerWidth/2, Math.max(70, window.innerHeight*0.25), 14);
+      }
+      injectWaveFromHold(holdMs);
+      var elapsed=(now-sessionStart)/1000;
+      var burstPos=(elapsed%burstWindowSec)/burstWindowSec;
+      var binIdx=Math.floor(burstPos*burstBins.length);
+      binIdx=Math.max(0,Math.min(binIdx,burstBins.length-1));
+      burstBins[binIdx]+=1;
+      for(var i=0;i<entropyParticles.length;i++){entropyParticles[i].vx+=(Math.random()-0.5)*6;entropyParticles[i].vy+=(Math.random()-0.5)*6;}
+      updateStats();
+    }
+
+    var pressActive=false;
+    var pressStartTs=0;
+    var activePointerId=null;
+    var lastTouchStart=0;
+
+    function beginPress(){
+      if(pressActive)return;
+      pressActive=true;
+      pressStartTs=Date.now();
+      if(btn)btn.classList.add("is-pressed");
+    }
+
+    function endPress(){
+      if(!pressActive)return;
+      pressActive=false;
+      if(btn)btn.classList.remove("is-pressed");
+      var holdMs=Math.max(40,Date.now()-pressStartTs);
+      handlePress(holdMs);
+    }
+
+    function triggerExternalPress(holdMs){
+      if(pressActive)return;
+      var ms=Number(holdMs);
+      if(!Number.isFinite(ms))ms=120;
+      ms=Math.max(40,Math.min(ms,1600));
+      if(btn){
+        btn.classList.add("is-pressed");
+        setTimeout(function(){btn.classList.remove("is-pressed");},140);
+      }
+      handlePress(ms);
+    }
+
+    window.BRB = window.BRB || {};
+    window.BRB.triggerPress = triggerExternalPress;
+
+    loadPedestalAnchor();
+    updatePedestalAnchor(false);
+    animatePedestal();
+
+    if (pedestalSvg) {
+      if ("PointerEvent" in window) {
+        pedestalSvg.addEventListener("pointerdown", function (e) {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          e.preventDefault();
+          pedestalPointerId = e.pointerId;
+          if (pedestalSvg.setPointerCapture) {
+            try { pedestalSvg.setPointerCapture(e.pointerId); } catch (_) {}
+          }
+          beginPedestalGesture(e.clientX, e.clientY);
+        });
+        pedestalSvg.addEventListener("pointermove", function (e) {
+          if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
+          if (!pedestalActive) return;
+          e.preventDefault();
+          movePedestalGesture(e.clientX, e.clientY);
+        });
+        pedestalSvg.addEventListener("pointerup", function (e) {
+          if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
+          endPedestalGesture(false);
+          pedestalPointerId = null;
+        });
+        pedestalSvg.addEventListener("pointercancel", function (e) {
+          if (pedestalPointerId !== null && e.pointerId !== pedestalPointerId) return;
+          endPedestalGesture(true);
+          pedestalPointerId = null;
+        });
+        pedestalSvg.addEventListener("lostpointercapture", function () {
+          pedestalPointerId = null;
+          endPedestalGesture(true);
+        });
+      } else {
+        pedestalSvg.addEventListener("touchstart", function (e) {
+          pedestalLastTouchStart = Date.now();
+          e.preventDefault();
+          if (!e.changedTouches || e.changedTouches.length === 0) return;
+          var touch = e.changedTouches[0];
+          pedestalTouchId = touch.identifier;
+          beginPedestalGesture(touch.clientX, touch.clientY);
+        }, { passive: false });
+        pedestalSvg.addEventListener("touchmove", function (e) {
+          if (!pedestalActive || !e.touches || e.touches.length === 0) return;
+          e.preventDefault();
+          var activeTouch = null;
+          for (var ti = 0; ti < e.touches.length; ti++) {
+            if (pedestalTouchId === null || e.touches[ti].identifier === pedestalTouchId) {
+              activeTouch = e.touches[ti];
+              break;
+            }
+          }
+          if (!activeTouch) return;
+          movePedestalGesture(activeTouch.clientX, activeTouch.clientY);
+        }, { passive: false });
+        pedestalSvg.addEventListener("touchend", function (e) {
+          e.preventDefault();
+          endPedestalGesture(false);
+          pedestalTouchId = null;
+        }, { passive: false });
+        pedestalSvg.addEventListener("touchcancel", function () {
+          endPedestalGesture(true);
+          pedestalTouchId = null;
+        });
+        pedestalSvg.addEventListener("click", function () {
+          if (Date.now() - pedestalLastTouchStart < 700) return;
+          beginPedestalGesture(0, 0);
+          endPedestalGesture(false);
+        });
+      }
+
+      pedestalSvg.addEventListener("keydown", function (e) {
+        if (e.repeat) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          beginPedestalPress();
+        }
+      });
+      pedestalSvg.addEventListener("keyup", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          endPedestalGesture(false);
+        }
+      });
+      pedestalSvg.addEventListener("blur", function () {
+        endPedestalGesture(true);
+      });
+
+      if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        pedestalSvg.addEventListener("mouseenter", function () {
+          if (!dome || dome.classList.contains("pushed")) return;
+          dome.style.transition = "transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1)";
+          dome.style.transform = "scale(1.04)";
+        });
+        pedestalSvg.addEventListener("mouseleave", function () {
+          if (!dome || dome.classList.contains("pushed")) return;
+          dome.style.transform = "";
+        });
+      }
+    }
+
+    if(btn){
+      if("PointerEvent" in window){
+        btn.addEventListener("pointerdown",function(e){
+          if(e.pointerType==="mouse" && e.button!==0)return;
+          e.preventDefault();
+          activePointerId=e.pointerId;
+          if(btn.setPointerCapture){
+            try{btn.setPointerCapture(e.pointerId);}catch(_){}
+          }
+          beginPress();
+        });
+        btn.addEventListener("pointerup",function(e){
+          if(activePointerId!==null && e.pointerId!==activePointerId)return;
+          endPress();
+          activePointerId=null;
+        });
+        btn.addEventListener("pointercancel",function(e){
+          if(activePointerId!==null && e.pointerId!==activePointerId)return;
+          endPress();
+          activePointerId=null;
+        });
+        btn.addEventListener("lostpointercapture",function(){
+          activePointerId=null;
+          endPress();
+        });
+      } else {
+        btn.addEventListener("touchstart",function(e){
+          lastTouchStart=Date.now();
+          e.preventDefault();
+          beginPress();
+        },{passive:false});
+        btn.addEventListener("touchend",function(e){
+          e.preventDefault();
+          endPress();
+        },{passive:false});
+        btn.addEventListener("touchcancel",function(){
+          endPress();
+        });
+        btn.addEventListener("click",function(){
+          if(Date.now()-lastTouchStart<700)return;
+          beginPress();
+          endPress();
+        });
+      }
+
+      btn.addEventListener("keydown",function(e){
+        if(e.repeat)return;
+        if(e.key==="Enter" || e.key===" "){
+          e.preventDefault();
+          beginPress();
+        }
+      });
+      btn.addEventListener("keyup",function(e){
+        if(e.key==="Enter" || e.key===" "){
+          e.preventDefault();
+          endPress();
+        }
+      });
+    }
+
+    setInterval(function(){
+      if(waveData.length>0){waveData.push(waveData[waveData.length-1]*0.85);
+      if(waveData.length>120)waveData.splice(0,waveData.length-120);
+      if(Math.abs(waveData[waveData.length-1])<0.01)waveData.push(0);}
+    },60);
+    setInterval(updateStats,1000);
+  })();
+  </script>
+  <script src="index.runtime.js?v=20260316f"></script>
+  <script src="switch-lab.runtime.js?v=20260315j"></script>
+  <script src="sound-lab.runtime.js?v=20260315a"></script>
+  <script src="button-choice.runtime.js?v=20260315a"></script>
+</body>
+</html>
+
