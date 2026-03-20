@@ -39,7 +39,10 @@
       verifiedPresses: 0,
       ratePerMinute: 0,
       avgIntervalMs: null,
+      avgHoldMs: null,
       maxBurst: 0,
+      complexityEstimate: null,
+      compressionRatio: null,
       entropy: null,
       waveform: []
     };
@@ -98,7 +101,15 @@
     return value == null ? "\u2014" : Math.round(Number(value)).toString();
   }
 
+  function formatHold(value) {
+    return value == null ? "\u2014" : Math.round(Number(value)).toString();
+  }
+
   function formatEntropy(value) {
+    return value == null ? "\u2014" : Number(value).toFixed(2);
+  }
+
+  function formatCompression(value) {
     return value == null ? "\u2014" : Number(value).toFixed(2);
   }
 
@@ -133,7 +144,12 @@
       verifiedPresses: Math.max(0, Number(payload.verifiedPresses) || 0),
       ratePerMinute: Number(payload.ratePerMinute) || 0,
       avgIntervalMs: payload.avgIntervalMs == null ? null : Number(payload.avgIntervalMs) || null,
+      avgHoldMs: payload.avgHoldMs == null ? null : Number(payload.avgHoldMs) || null,
       maxBurst: Math.max(0, Number(payload.maxBurst) || 0),
+      complexityEstimate: payload.complexityEstimate == null
+        ? (payload.entropy == null ? null : Number(payload.entropy) || null)
+        : Number(payload.complexityEstimate) || null,
+      compressionRatio: payload.compressionRatio == null ? null : Number(payload.compressionRatio) || null,
       entropy: payload.entropy == null ? null : Number(payload.entropy) || null,
       waveform: waveform.map(function (value) { return Number(value) || 0; }).slice(-96)
     };
@@ -322,27 +338,17 @@
           '<p class="switch-lab-card__meta">Live BRB session</p>' +
         "</div>" +
         '<div class="switch-lab-telemetry__body">' +
-          '<div class="switch-lab-telemetry__main">' +
-            '<div class="switch-lab-telemetry__summary">' +
-              '<div class="switch-lab-telemetry__stats">' +
-                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryRate">' + escapeHtml(formatRate(telemetry.ratePerMinute)) + '</span><span class="switch-lab-telemetry__stat-label">Press/min</span></div>' +
-                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryAvg">' + escapeHtml(formatAvgInterval(telemetry.avgIntervalMs)) + '</span><span class="switch-lab-telemetry__stat-label">Avg ms</span></div>' +
-                '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryBurst">' + escapeHtml(String(telemetry.maxBurst || 0)) + '</span><span class="switch-lab-telemetry__stat-label">Max burst</span></div>' +
-              "</div>" +
-            "</div>" +
-            '<div class="switch-lab-telemetry__wave">' +
-              '<div class="switch-lab-card__label">Temporal waveform</div>' +
-              '<canvas id="switchLabTelemetryWave" aria-label="BRB temporal waveform"></canvas>' +
-            "</div>" +
+          '<div class="switch-lab-telemetry__stats">' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryRate">' + escapeHtml(formatRate(telemetry.ratePerMinute)) + '</span><span class="switch-lab-telemetry__stat-label">Press/min</span></div>' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryAvg">' + escapeHtml(formatAvgInterval(telemetry.avgIntervalMs)) + '</span><span class="switch-lab-telemetry__stat-label">Avg interval</span></div>' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryHold">' + escapeHtml(formatHold(telemetry.avgHoldMs)) + '</span><span class="switch-lab-telemetry__stat-label">Avg hold</span></div>' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryBurst">' + escapeHtml(String(telemetry.maxBurst || 0)) + '</span><span class="switch-lab-telemetry__stat-label">Max burst</span></div>' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryComplexity">' + escapeHtml(formatEntropy(telemetry.complexityEstimate)) + '</span><span class="switch-lab-telemetry__stat-label">KC estimate</span></div>' +
+            '<div class="switch-lab-telemetry__stat"><span class="switch-lab-telemetry__stat-value" id="switchLabTelemetryCompression">' + escapeHtml(formatCompression(telemetry.compressionRatio)) + '</span><span class="switch-lab-telemetry__stat-label">Compression</span></div>' +
           "</div>" +
-          '<div class="switch-lab-telemetry__entropy">' +
-            '<div class="switch-lab-telemetry__stat switch-lab-telemetry__entropy-stat">' +
-              '<span class="switch-lab-telemetry__stat-value switch-lab-telemetry__entropy-value" id="switchLabTelemetryEntropy">' + escapeHtml(formatEntropy(telemetry.entropy)) + "</span>" +
-              '<span class="switch-lab-telemetry__stat-label">Entropy</span>' +
-            "</div>" +
-            '<div class="switch-lab-telemetry__entropy-field">' +
-              '<canvas id="switchLabTelemetryEntropyField" aria-label="BRB entropy field"></canvas>' +
-            "</div>" +
+          '<div class="switch-lab-telemetry__actions">' +
+            '<a class="switch-lab-link" href="#telemetryLabPanel">Open Telemetry Lab</a>' +
+            '<p class="switch-lab-telemetry__note">The dedicated telemetry panel below the city animation now carries the full cadence, hold, density, and token views.</p>' +
           "</div>" +
         "</div>" +
       "</section>"
@@ -748,13 +754,17 @@
     var countEl = document.getElementById("switchLabTelemetryCount");
     var rateEl = document.getElementById("switchLabTelemetryRate");
     var avgEl = document.getElementById("switchLabTelemetryAvg");
+    var holdEl = document.getElementById("switchLabTelemetryHold");
     var burstEl = document.getElementById("switchLabTelemetryBurst");
-    var entropyEl = document.getElementById("switchLabTelemetryEntropy");
+    var complexityEl = document.getElementById("switchLabTelemetryComplexity");
+    var compressionEl = document.getElementById("switchLabTelemetryCompression");
     if (countEl) countEl.textContent = formatCount(state.telemetry.verifiedPresses);
     if (rateEl) rateEl.textContent = formatRate(state.telemetry.ratePerMinute);
     if (avgEl) avgEl.textContent = formatAvgInterval(state.telemetry.avgIntervalMs);
+    if (holdEl) holdEl.textContent = formatHold(state.telemetry.avgHoldMs);
     if (burstEl) burstEl.textContent = String(state.telemetry.maxBurst || 0);
-    if (entropyEl) entropyEl.textContent = formatEntropy(state.telemetry.entropy);
+    if (complexityEl) complexityEl.textContent = formatEntropy(state.telemetry.complexityEstimate);
+    if (compressionEl) compressionEl.textContent = formatCompression(state.telemetry.compressionRatio);
   }
 
   function syncCurvePanel() {
@@ -871,7 +881,6 @@
     root.innerHTML = renderApp();
     updateMeta();
     bindEvents();
-    ensureTelemetryVisualLoop();
     window.requestAnimationFrame(syncSupplementalPanels);
     broadcastSelectionChange(false);
   }
@@ -989,7 +998,6 @@
   window.addEventListener("load", function () {
     syncPanelHeight();
     syncSupplementalPanels();
-    ensureTelemetryVisualLoop();
   });
 
   window.BRB = window.BRB || {};
@@ -997,7 +1005,6 @@
   window.BRB.switchLabSelection = getSwitchLabSelectionPayload();
 
   state.telemetry = readTelemetrySnapshot();
-  ensureTelemetryVisualLoop();
   render();
   loadInitialState();
 })();

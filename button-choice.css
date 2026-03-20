@@ -183,14 +183,14 @@ body.visual-workover .button-choice-toggle:focus-visible {
 
 body.visual-workover .button-choice-telemetry {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
   gap: 0.52rem;
   padding: 0.86rem 0.86rem 0.74rem;
 }
 
 body.visual-workover .button-choice-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.42rem;
 }
 
@@ -218,21 +218,33 @@ body.visual-workover .button-choice-stat__label {
   color: rgba(26, 30, 40, 0.58);
 }
 
-body.visual-workover .button-choice-wave {
+body.visual-workover .button-choice-telemetry__actions {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  align-content: stretch;
-  gap: 0.24rem;
-  min-height: 0;
+  grid-template-columns: auto 1fr;
+  gap: 0.72rem;
+  align-items: start;
 }
 
-body.visual-workover .button-choice-wave canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 112px;
-  border: 1px solid rgba(26, 30, 40, 0.18);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 243, 235, 0.82));
+body.visual-workover .button-choice-telemetry__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.62rem 0.92rem;
+  border: 2px solid var(--ink);
+  background: #fffdf8;
+  color: var(--ink);
+  text-decoration: none;
+  font: 700 0.82rem/1 "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.visual-workover .button-choice-telemetry__link:hover,
+body.visual-workover .button-choice-telemetry__link:focus-visible {
+  background: #f4efe6;
+  outline: 2px solid rgba(223, 44, 44, 0.24);
+  outline-offset: 2px;
 }
 
 body.visual-workover .lab-deck {
@@ -262,16 +274,12 @@ body.visual-workover .lab-deck[hidden] {
 @media (max-width: 720px) {
   body.visual-workover .button-choice-panel__head,
   body.visual-workover .button-choice-actions,
-  body.visual-workover .button-choice-summary__grid {
+  body.visual-workover .button-choice-summary__grid,
+  body.visual-workover .button-choice-telemetry__actions {
     grid-template-columns: 1fr;
   }
 
   body.visual-workover .button-choice-panel__meta {
     text-align: left;
-  }
-
-  body.visual-workover .button-choice-wave canvas {
-    height: auto;
-    min-height: 96px;
   }
 }

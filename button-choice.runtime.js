@@ -51,7 +51,11 @@
       verifiedPresses: Math.max(0, Number(payload.verifiedPresses) || 0),
       ratePerMinute: Number(payload.ratePerMinute) || 0,
       avgIntervalMs: payload.avgIntervalMs == null ? null : Number(payload.avgIntervalMs) || null,
-      entropy: payload.entropy == null ? null : Number(payload.entropy) || null,
+      avgHoldMs: payload.avgHoldMs == null ? null : Number(payload.avgHoldMs) || null,
+      complexityEstimate: payload.complexityEstimate == null
+        ? (payload.entropy == null ? null : Number(payload.entropy) || null)
+        : Number(payload.complexityEstimate) || null,
+      compressionRatio: payload.compressionRatio == null ? null : Number(payload.compressionRatio) || null,
       waveform: waveform.map(function (value) { return Number(value) || 0; }).slice(-96)
     };
   }
@@ -75,7 +79,17 @@
     return Math.round(Number(value) || 0).toLocaleString("en-US");
   }
 
-  function formatEntropy(value) {
+  function formatHold(value) {
+    if (value == null) return "--";
+    return Math.round(Number(value) || 0).toLocaleString("en-US");
+  }
+
+  function formatComplexity(value) {
+    if (value == null) return "--";
+    return Number(value).toFixed(2);
+  }
+
+  function formatCompression(value) {
     if (value == null) return "--";
     return Number(value).toFixed(2);
   }
@@ -296,17 +310,19 @@
         '<section class="button-choice-card button-choice-telemetry" aria-labelledby="buttonChoiceTelemetryTitle">' +
           '<div>' +
             '<h3 class="button-choice-card__title" id="buttonChoiceTelemetryTitle">Front-page telemetry</h3>' +
-            '<p class="button-choice-card__lede">The BRB session stays visible here without opening Switch Lab.</p>' +
+            '<p class="button-choice-card__lede">The live BRB session stays visible here while the dedicated Telemetry Lab below the city scene carries the full analytics view.</p>' +
           "</div>" +
           '<div class="button-choice-stats">' +
             '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryCount">0</div><div class="button-choice-stat__label">Verified presses</div></div>' +
             '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryRate">0.0</div><div class="button-choice-stat__label">Press/min</div></div>' +
-            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryAvg">--</div><div class="button-choice-stat__label">Avg ms</div></div>' +
-            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryEntropy">--</div><div class="button-choice-stat__label">Entropy</div></div>' +
+            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryAvg">--</div><div class="button-choice-stat__label">Avg interval</div></div>' +
+            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryHold">--</div><div class="button-choice-stat__label">Avg hold</div></div>' +
+            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryComplexity">--</div><div class="button-choice-stat__label">KC estimate</div></div>' +
+            '<div class="button-choice-stat"><div class="button-choice-stat__value" id="buttonChoiceTelemetryCompression">--</div><div class="button-choice-stat__label">Compression</div></div>' +
           "</div>" +
-          '<div class="button-choice-wave">' +
-            '<div class="button-choice-label">Temporal waveform</div>' +
-            '<canvas id="buttonChoiceWave" aria-label="Live BRB telemetry waveform"></canvas>' +
+          '<div class="button-choice-telemetry__actions">' +
+            '<a class="button-choice-telemetry__link" href="#telemetryLabPanel">Open Telemetry Lab</a>' +
+            '<p class="button-choice-card__note">Cadence, hold profile, press density, and the quantized complexity tape now live in the dedicated telemetry section.</p>' +
           "</div>" +
         "</section>" +
       "</div>"
@@ -352,11 +368,15 @@
     var countEl = document.getElementById("buttonChoiceTelemetryCount");
     var rateEl = document.getElementById("buttonChoiceTelemetryRate");
     var avgEl = document.getElementById("buttonChoiceTelemetryAvg");
-    var entropyEl = document.getElementById("buttonChoiceTelemetryEntropy");
+    var holdEl = document.getElementById("buttonChoiceTelemetryHold");
+    var complexityEl = document.getElementById("buttonChoiceTelemetryComplexity");
+    var compressionEl = document.getElementById("buttonChoiceTelemetryCompression");
     if (countEl) countEl.textContent = formatCount(state.telemetry.verifiedPresses);
     if (rateEl) rateEl.textContent = formatRate(state.telemetry.ratePerMinute);
     if (avgEl) avgEl.textContent = formatAvgInterval(state.telemetry.avgIntervalMs);
-    if (entropyEl) entropyEl.textContent = formatEntropy(state.telemetry.entropy);
+    if (holdEl) holdEl.textContent = formatHold(state.telemetry.avgHoldMs);
+    if (complexityEl) complexityEl.textContent = formatComplexity(state.telemetry.complexityEstimate);
+    if (compressionEl) compressionEl.textContent = formatCompression(state.telemetry.compressionRatio);
   }
 
   function setupCanvas(canvas) {
@@ -531,8 +551,6 @@
     bindEvents();
     syncSummaryDom();
     syncTelemetryDom();
-    drawWaveform();
-    ensureTelemetryVisualLoop();
     updateMeta();
   }
 
@@ -576,10 +594,6 @@
 
   window.addEventListener("hashchange", function () {
     if (shouldStartOpen()) openDeck(false);
-  });
-
-  window.addEventListener("resize", function () {
-    drawWaveform();
   });
 
   refreshRuntimeState();

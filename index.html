@@ -9,10 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="visual-workover.css?v=20260316e">
-  <link rel="stylesheet" href="switch-lab.css?v=20260315k">
+  <link rel="stylesheet" href="visual-workover.css?v=20260319a">
+  <link rel="stylesheet" href="switch-lab.css?v=20260319a">
   <link rel="stylesheet" href="sound-lab.css?v=20260315a">
-  <link rel="stylesheet" href="button-choice.css?v=20260315a">
+  <link rel="stylesheet" href="button-choice.css?v=20260319a">
   <script type="module" src="vendor/model-viewer.min.js"></script>
 </head>
 <body class="visual-workover">
@@ -156,6 +156,78 @@
     </section>
 
     <main class="stack">
+      <section class="panel reveal telemetry-lab-panel" id="telemetryLabPanel" aria-labelledby="telemetryLabTitle">
+        <div class="telemetry-lab-panel__head">
+          <div class="telemetry-lab-panel__copy">
+            <p class="mono telemetry-lab-panel__kicker">Live Telemetry Lab</p>
+            <h2 id="telemetryLabTitle">Button Press Analytics</h2>
+            <p class="telemetry-lab-panel__lede">Measured from the live BRB session only: inter-press intervals, effective hold durations, burst structure, and an honest Kolmogorov-complexity estimate.</p>
+          </div>
+          <p class="telemetry-lab-panel__status" id="telemetryLabStatus">Awaiting the first verified press.</p>
+        </div>
+        <div class="telemetry-lab-summary" aria-label="Telemetry summary">
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabCount">0</div>
+            <div class="telemetry-lab-summary__label">Verified presses</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabRate">0.0</div>
+            <div class="telemetry-lab-summary__label">Press/min</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabAvgInterval">--</div>
+            <div class="telemetry-lab-summary__label">Avg interval</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabAvgHold">--</div>
+            <div class="telemetry-lab-summary__label">Avg hold</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabBurst">0</div>
+            <div class="telemetry-lab-summary__label">Max burst</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabComplexity">--</div>
+            <div class="telemetry-lab-summary__label">KC estimate</div>
+          </div>
+          <div class="telemetry-lab-summary__item">
+            <div class="telemetry-lab-summary__value" id="telemetryLabCompression">--</div>
+            <div class="telemetry-lab-summary__label">Compression</div>
+          </div>
+        </div>
+        <div class="telemetry-lab-grid">
+          <article class="telemetry-lab-card" aria-labelledby="telemetryLabCadenceTitle">
+            <div class="telemetry-lab-card__head">
+              <h3 id="telemetryLabCadenceTitle">Cadence Timeline</h3>
+              <p>Last 48 inter-press intervals</p>
+            </div>
+            <canvas id="telemetryLabCadence" aria-label="Inter-press interval timeline"></canvas>
+          </article>
+          <article class="telemetry-lab-card" aria-labelledby="telemetryLabHoldTitle">
+            <div class="telemetry-lab-card__head">
+              <h3 id="telemetryLabHoldTitle">Hold Profile</h3>
+              <p>Last 48 effective hold durations</p>
+            </div>
+            <canvas id="telemetryLabHold" aria-label="Press hold duration profile"></canvas>
+          </article>
+          <article class="telemetry-lab-card" aria-labelledby="telemetryLabDensityTitle">
+            <div class="telemetry-lab-card__head">
+              <h3 id="telemetryLabDensityTitle">Press Density Strip</h3>
+              <p>Per-second counts across the trailing minute</p>
+            </div>
+            <canvas id="telemetryLabDensity" aria-label="Per-second press density across the trailing minute"></canvas>
+          </article>
+          <article class="telemetry-lab-card" aria-labelledby="telemetryLabTapeTitle">
+            <div class="telemetry-lab-card__head">
+              <h3 id="telemetryLabTapeTitle">Complexity Tape</h3>
+              <p>Quantized interval and hold tokens used for the KC estimate</p>
+            </div>
+            <canvas id="telemetryLabTape" aria-label="Quantized interval and hold token tape"></canvas>
+          </article>
+        </div>
+        <p class="telemetry-lab-panel__note">KC estimate is a normalized Lempel-Ziv proxy over the latest interval-plus-hold token window. Compression reports compressed versus raw token length on that same window.</p>
+      </section>
+
       <section class="panel reveal button-choice-panel" id="buttonChoicePanel" aria-labelledby="buttonChoiceTitle">
         <div class="button-choice-panel__head">
           <div class="button-choice-panel__copy">
@@ -1152,10 +1224,10 @@
     setInterval(updateStats,1000);
   })();
   </script>
-  <script src="index.runtime.js?v=20260316f"></script>
-  <script src="switch-lab.runtime.js?v=20260315j"></script>
+  <script src="index.runtime.js?v=20260319a"></script>
+  <script src="switch-lab.runtime.js?v=20260319a"></script>
   <script src="sound-lab.runtime.js?v=20260315a"></script>
-  <script src="button-choice.runtime.js?v=20260315a"></script>
+  <script src="button-choice.runtime.js?v=20260319a"></script>
 </body>
 </html>
 
