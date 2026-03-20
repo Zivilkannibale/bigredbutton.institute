@@ -1,12 +1,19 @@
 (function () {
   var pressTimestamps = [];
   var intervals = [];
+  var pressEvents = [];
   var particles = [];
   var waveData = [];
   var burstBins = new Array(40).fill(0);
   var entropyParticlesMain = [];
   var entropyParticlesMini = [];
   var timers = Object.create(null);
+  var TELEMETRY_RECENT_POINTS = 48;
+  var TELEMETRY_COMPLEXITY_WINDOW = 64;
+  var TELEMETRY_COMPLEXITY_MIN_POINTS = 12;
+  var TELEMETRY_INTERVAL_BUCKETS = 8;
+  var TELEMETRY_HOLD_BUCKETS = 8;
+  var TELEMETRY_TOKEN_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
 
   var count = 0;
   var sessionStart = Date.now();
@@ -16,7 +23,16 @@
   var entropyVal = 0;
   var telemetryRatePerMinute = 0;
   var telemetryAvgIntervalMs = null;
+  var telemetryAvgHoldMs = null;
   var telemetryEntropy = null;
+  var telemetryComplexityEstimate = null;
+  var telemetryCompressionRatio = null;
+  var telemetryRecentIntervalsMs = [];
+  var telemetryRecentHoldsMs = [];
+  var telemetryPerSecondCounts = new Array(60).fill(0);
+  var telemetryComplexityTokens = [];
+  var telemetryStatusText = "Awaiting the first verified press.";
+  var telemetryLabDrawScheduled = false;
   var burstWindowSec = 30;
   var vizReady = false;
   var currentDockProgress = 0;
@@ -46,6 +62,14 @@
   var mdEntropy = document.getElementById("mdEntropy");
   var mdAvg = document.getElementById("mdAvg");
   var mdBurst = document.getElementById("mdBurst");
+  var telemetryLabStatus = document.getElementById("telemetryLabStatus");
+  var telemetryLabCount = document.getElementById("telemetryLabCount");
+  var telemetryLabRate = document.getElementById("telemetryLabRate");
+  var telemetryLabAvgInterval = document.getElementById("telemetryLabAvgInterval");
+  var telemetryLabAvgHold = document.getElementById("telemetryLabAvgHold");
+  var telemetryLabBurst = document.getElementById("telemetryLabBurst");
+  var telemetryLabComplexity = document.getElementById("telemetryLabComplexity");
+  var telemetryLabCompression = document.getElementById("telemetryLabCompression");
 
   var waveC = document.getElementById("waveCanvas");
   var intervalC = document.getElementById("intervalCanvas");
@@ -63,6 +87,14 @@
   var mIntervalCtx = mIntervalC && mIntervalC.getContext("2d");
   var mEntropyCtx = mEntropyC && mEntropyC.getContext("2d");
   var mBurstCtx = mBurstC && mBurstC.getContext("2d");
+  var telemetryLabCadenceC = document.getElementById("telemetryLabCadence");
+  var telemetryLabHoldC = document.getElementById("telemetryLabHold");
+  var telemetryLabDensityC = document.getElementById("telemetryLabDensity");
+  var telemetryLabTapeC = document.getElementById("telemetryLabTape");
+  var telemetryLabCadenceCtx = telemetryLabCadenceC && telemetryLabCadenceC.getContext("2d");
+  var telemetryLabHoldCtx = telemetryLabHoldC && telemetryLabHoldC.getContext("2d");
+  var telemetryLabDensityCtx = telemetryLabDensityC && telemetryLabDensityC.getContext("2d");
+  var telemetryLabTapeCtx = telemetryLabTapeC && telemetryLabTapeC.getContext("2d");
 
   var pedestal = document.getElementById("pedestalFloat");
   var pedestalControl = document.getElementById("pedestalButton");
@@ -476,6 +508,7 @@
   function trimData() {
     if (pressTimestamps.length > 2048) pressTimestamps.splice(0, pressTimestamps.length - 2048);
     if (intervals.length > 1024) intervals.splice(0, intervals.length - 1024);
+    if (pressEvents.length > 2048) pressEvents.splice(0, pressEvents.length - 2048);
     if (waveData.length > 160) waveData.splice(0, waveData.length - 160);
   }
 
@@ -738,22 +771,359 @@
     requestAnimationFrame(drawAllViz);
   }
 
-  function computeEntropy(values) {
-    if (values.length < 3) return 0;
-    var bins = {};
-    var recent = values.slice(-20);
-    for (var i = 0; i < recent.length; i++) {
-      var bucket = Math.round(recent[i] / 200) * 200;
-      bins[bucket] = (bins[bucket] || 0) + 1;
+  function requestTelemetryLabDraw() {
+    if (telemetryLabDrawScheduled) return;
+    telemetryLabDrawScheduled = true;
+    requestAnimationFrame(function () {
+      telemetryLabDrawScheduled = false;
+      drawTelemetryLabCadence();
+      drawTelemetryLabHold();
+      drawTelemetryLabDensity();
+      drawTelemetryLabTape();
+    });
+  }
+
+  function drawTelemetryLabPlaceholder(ctx, width, height, message) {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "rgba(26, 30, 40, 0.6)";
+    ctx.font = "12px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(message, width / 2, height / 2);
+  }
+
+  function drawTelemetryGrid(ctx, chart, rows) {
+    ctx.strokeStyle = "rgba(26, 30, 40, 0.1)";
+    ctx.lineWidth = 1;
+    for (var i = 0; i <= rows; i++) {
+      var y = chart.top + (chart.height / rows) * i;
+      ctx.beginPath();
+      ctx.moveTo(chart.left, y);
+      ctx.lineTo(chart.left + chart.width, y);
+      ctx.stroke();
     }
-    var entropy = 0;
-    var total = recent.length;
-    var keys = Object.keys(bins);
-    for (var j = 0; j < keys.length; j++) {
-      var p = bins[keys[j]] / total;
-      if (p > 0) entropy -= p * Math.log2(p);
+  }
+
+  function computeLzPhraseBoundaries(tokens) {
+    var sequence = tokens.join("");
+    var seen = Object.create(null);
+    var boundaries = [0];
+    var index = 0;
+    while (index < sequence.length) {
+      var length = 1;
+      var phrase = sequence.charAt(index);
+      while (index + length <= sequence.length && Object.prototype.hasOwnProperty.call(seen, phrase)) {
+        length += 1;
+        phrase = sequence.slice(index, Math.min(sequence.length, index + length));
+      }
+      seen[phrase] = true;
+      index += phrase.length;
+      if (index < sequence.length) boundaries.push(index);
     }
-    return entropy;
+    return boundaries;
+  }
+
+  function drawTelemetryLabCadence() {
+    if (!telemetryLabCadenceCtx || !telemetryLabCadenceC) return;
+    setupCanvas(telemetryLabCadenceC);
+    var metrics = getMetrics(telemetryLabCadenceC);
+    var width = metrics.width;
+    var height = metrics.height;
+    if (!width || !height) return;
+    var data = telemetryRecentIntervalsMs.slice(-TELEMETRY_RECENT_POINTS);
+    if (!data.length) {
+      drawTelemetryLabPlaceholder(telemetryLabCadenceCtx, width, height, "Awaiting interval data...");
+      return;
+    }
+    var chart = {
+      left: 44,
+      top: 16,
+      width: Math.max(48, width - 58),
+      height: Math.max(40, height - 36)
+    };
+    var maxValue = Math.max.apply(null, data) || 1;
+    var meanValue = averageTrailing(data, data.length) || 0;
+    telemetryLabCadenceCtx.clearRect(0, 0, width, height);
+    drawTelemetryGrid(telemetryLabCadenceCtx, chart, 4);
+    telemetryLabCadenceCtx.strokeStyle = "rgba(26, 30, 40, 0.14)";
+    telemetryLabCadenceCtx.setLineDash([4, 4]);
+    telemetryLabCadenceCtx.beginPath();
+    var meanY = chart.top + chart.height - (meanValue / maxValue) * chart.height;
+    telemetryLabCadenceCtx.moveTo(chart.left, meanY);
+    telemetryLabCadenceCtx.lineTo(chart.left + chart.width, meanY);
+    telemetryLabCadenceCtx.stroke();
+    telemetryLabCadenceCtx.setLineDash([]);
+    telemetryLabCadenceCtx.beginPath();
+    for (var i = 0; i < data.length; i++) {
+      var x = chart.left + (i / Math.max(1, data.length - 1)) * chart.width;
+      var y = chart.top + chart.height - (data[i] / maxValue) * chart.height;
+      if (i === 0) telemetryLabCadenceCtx.moveTo(x, y);
+      else telemetryLabCadenceCtx.lineTo(x, y);
+    }
+    telemetryLabCadenceCtx.strokeStyle = "#cf3d32";
+    telemetryLabCadenceCtx.lineWidth = 2;
+    telemetryLabCadenceCtx.lineJoin = "round";
+    telemetryLabCadenceCtx.lineCap = "round";
+    telemetryLabCadenceCtx.stroke();
+    telemetryLabCadenceCtx.fillStyle = "rgba(26, 30, 40, 0.62)";
+    telemetryLabCadenceCtx.font = "11px 'IBM Plex Mono', monospace";
+    telemetryLabCadenceCtx.textAlign = "left";
+    telemetryLabCadenceCtx.textBaseline = "top";
+    telemetryLabCadenceCtx.fillText(Math.round(maxValue).toLocaleString("en-US") + " ms", 6, chart.top - 2);
+    telemetryLabCadenceCtx.textBaseline = "alphabetic";
+    telemetryLabCadenceCtx.fillText("0", 18, height - 8);
+  }
+
+  function drawTelemetryLabHold() {
+    if (!telemetryLabHoldCtx || !telemetryLabHoldC) return;
+    setupCanvas(telemetryLabHoldC);
+    var metrics = getMetrics(telemetryLabHoldC);
+    var width = metrics.width;
+    var height = metrics.height;
+    if (!width || !height) return;
+    var data = telemetryRecentHoldsMs.slice(-TELEMETRY_RECENT_POINTS);
+    if (!data.length) {
+      drawTelemetryLabPlaceholder(telemetryLabHoldCtx, width, height, "Awaiting hold data...");
+      return;
+    }
+    var chart = {
+      left: 44,
+      top: 16,
+      width: Math.max(48, width - 58),
+      height: Math.max(40, height - 36)
+    };
+    var maxValue = Math.max.apply(null, data) || 1;
+    var barWidth = chart.width / Math.max(1, data.length);
+    telemetryLabHoldCtx.clearRect(0, 0, width, height);
+    drawTelemetryGrid(telemetryLabHoldCtx, chart, 4);
+    for (var i = 0; i < data.length; i++) {
+      var normalized = data[i] / maxValue;
+      var barHeight = Math.max(2, normalized * chart.height);
+      var x = chart.left + i * barWidth;
+      var y = chart.top + chart.height - barHeight;
+      telemetryLabHoldCtx.fillStyle = "rgba(61, 64, 75," + (0.28 + normalized * 0.54) + ")";
+      fillRoundedRect(telemetryLabHoldCtx, x + 1, y, Math.max(1, barWidth - 2), barHeight, 2);
+    }
+    telemetryLabHoldCtx.fillStyle = "rgba(26, 30, 40, 0.62)";
+    telemetryLabHoldCtx.font = "11px 'IBM Plex Mono', monospace";
+    telemetryLabHoldCtx.textAlign = "left";
+    telemetryLabHoldCtx.textBaseline = "top";
+    telemetryLabHoldCtx.fillText(Math.round(maxValue).toLocaleString("en-US") + " ms", 6, chart.top - 2);
+    telemetryLabHoldCtx.textBaseline = "alphabetic";
+    telemetryLabHoldCtx.fillText("0", 18, height - 8);
+  }
+
+  function drawTelemetryLabDensity() {
+    if (!telemetryLabDensityCtx || !telemetryLabDensityC) return;
+    setupCanvas(telemetryLabDensityC);
+    var metrics = getMetrics(telemetryLabDensityC);
+    var width = metrics.width;
+    var height = metrics.height;
+    if (!width || !height) return;
+    var data = telemetryPerSecondCounts.slice();
+    var maxValue = Math.max.apply(null, data) || 0;
+    if (!maxValue) {
+      drawTelemetryLabPlaceholder(telemetryLabDensityCtx, width, height, "Awaiting density data...");
+      return;
+    }
+    var chart = {
+      left: 16,
+      top: 18,
+      width: Math.max(40, width - 32),
+      height: Math.max(28, height - 38)
+    };
+    var cellWidth = chart.width / Math.max(1, data.length);
+    telemetryLabDensityCtx.clearRect(0, 0, width, height);
+    for (var i = 0; i < data.length; i++) {
+      var intensity = data[i] / maxValue;
+      telemetryLabDensityCtx.fillStyle = data[i]
+        ? "rgba(207, 61, 50," + (0.14 + intensity * 0.72) + ")"
+        : "rgba(26, 30, 40, 0.06)";
+      telemetryLabDensityCtx.fillRect(chart.left + i * cellWidth, chart.top, Math.ceil(cellWidth), chart.height);
+    }
+    telemetryLabDensityCtx.fillStyle = "rgba(26, 30, 40, 0.62)";
+    telemetryLabDensityCtx.font = "11px 'IBM Plex Mono', monospace";
+    telemetryLabDensityCtx.textAlign = "left";
+    telemetryLabDensityCtx.textBaseline = "alphabetic";
+    telemetryLabDensityCtx.fillText("60s", chart.left, height - 8);
+    telemetryLabDensityCtx.textAlign = "right";
+    telemetryLabDensityCtx.fillText("now", chart.left + chart.width, height - 8);
+  }
+
+  function drawTelemetryLabTape() {
+    if (!telemetryLabTapeCtx || !telemetryLabTapeC) return;
+    setupCanvas(telemetryLabTapeC);
+    var metrics = getMetrics(telemetryLabTapeC);
+    var width = metrics.width;
+    var height = metrics.height;
+    if (!width || !height) return;
+    var tokens = telemetryComplexityTokens.slice(-TELEMETRY_COMPLEXITY_WINDOW);
+    if (!tokens.length) {
+      drawTelemetryLabPlaceholder(telemetryLabTapeCtx, width, height, "Awaiting interval-plus-hold tokens...");
+      return;
+    }
+    var chart = {
+      left: 36,
+      top: 18,
+      width: Math.max(48, width - 48),
+      height: Math.max(34, height - 30)
+    };
+    var rowGap = 6;
+    var rowHeight = Math.max(12, (chart.height - rowGap) / 2);
+    var cellWidth = chart.width / Math.max(1, tokens.length);
+    var boundaries = computeLzPhraseBoundaries(tokens);
+    telemetryLabTapeCtx.clearRect(0, 0, width, height);
+    for (var i = 0; i < tokens.length; i++) {
+      var meta = decodeTelemetryToken(tokens[i]);
+      if (!meta) continue;
+      var x = chart.left + i * cellWidth;
+      var intervalTone = meta.intervalBucket / Math.max(1, TELEMETRY_INTERVAL_BUCKETS - 1);
+      var holdTone = meta.holdBucket / Math.max(1, TELEMETRY_HOLD_BUCKETS - 1);
+      telemetryLabTapeCtx.fillStyle = "rgba(207, 61, 50," + (0.16 + intervalTone * 0.72) + ")";
+      telemetryLabTapeCtx.fillRect(x, chart.top, Math.ceil(cellWidth), rowHeight);
+      telemetryLabTapeCtx.fillStyle = "rgba(61, 64, 75," + (0.16 + holdTone * 0.72) + ")";
+      telemetryLabTapeCtx.fillRect(x, chart.top + rowHeight + rowGap, Math.ceil(cellWidth), rowHeight);
+    }
+    telemetryLabTapeCtx.strokeStyle = "rgba(26, 30, 40, 0.16)";
+    telemetryLabTapeCtx.lineWidth = 1;
+    for (var j = 0; j < boundaries.length; j++) {
+      var boundaryX = chart.left + boundaries[j] * cellWidth;
+      telemetryLabTapeCtx.beginPath();
+      telemetryLabTapeCtx.moveTo(boundaryX, chart.top - 2);
+      telemetryLabTapeCtx.lineTo(boundaryX, chart.top + chart.height + 2);
+      telemetryLabTapeCtx.stroke();
+    }
+    telemetryLabTapeCtx.fillStyle = "rgba(26, 30, 40, 0.62)";
+    telemetryLabTapeCtx.font = "11px 'IBM Plex Mono', monospace";
+    telemetryLabTapeCtx.textAlign = "left";
+    telemetryLabTapeCtx.textBaseline = "middle";
+    telemetryLabTapeCtx.fillText("Int", 6, chart.top + rowHeight / 2);
+    telemetryLabTapeCtx.fillText("Hold", 2, chart.top + rowHeight + rowGap + rowHeight / 2);
+  }
+
+  function averageTrailing(values, sampleSize) {
+    if (!values.length) return null;
+    var sample = values.slice(-sampleSize);
+    var sum = 0;
+    for (var i = 0; i < sample.length; i++) sum += sample[i];
+    return Math.round(sum / sample.length);
+  }
+
+  function buildPerSecondCounts(now) {
+    var counts = new Array(60).fill(0);
+    for (var i = pressEvents.length - 1; i >= 0; i--) {
+      var age = now - pressEvents[i].timestamp;
+      if (age >= 60000) break;
+      var index = 59 - Math.floor(age / 1000);
+      if (index >= 0 && index < counts.length) counts[index] += 1;
+    }
+    return counts;
+  }
+
+  function quantizeLogBucket(value, minimum, maximum, bucketCount) {
+    if (!isFinite(value)) return null;
+    var clamped = clamp(value, minimum, maximum);
+    var minLog = Math.log(minimum);
+    var maxLog = Math.log(maximum);
+    var normalized = maxLog === minLog ? 0 : (Math.log(clamped) - minLog) / (maxLog - minLog);
+    return clamp(Math.floor(normalized * bucketCount), 0, bucketCount - 1);
+  }
+
+  function quantizeLinearBucket(value, minimum, maximum, bucketCount) {
+    if (!isFinite(value)) return null;
+    var clamped = clamp(value, minimum, maximum);
+    var span = Math.max(1, maximum - minimum);
+    var normalized = (clamped - minimum) / span;
+    return clamp(Math.floor(normalized * bucketCount), 0, bucketCount - 1);
+  }
+
+  function buildTelemetryToken(event) {
+    if (!event || !isFinite(event.intervalMs) || !isFinite(event.holdMs)) return null;
+    var intervalBucket = quantizeLogBucket(event.intervalMs, 40, 8000, TELEMETRY_INTERVAL_BUCKETS);
+    var holdBucket = quantizeLinearBucket(event.holdMs, 40, 1600, TELEMETRY_HOLD_BUCKETS);
+    return TELEMETRY_TOKEN_ALPHABET.charAt(intervalBucket * TELEMETRY_HOLD_BUCKETS + holdBucket);
+  }
+
+  function decodeTelemetryToken(token) {
+    var index = TELEMETRY_TOKEN_ALPHABET.indexOf(token);
+    if (index < 0) return null;
+    return {
+      intervalBucket: Math.floor(index / TELEMETRY_HOLD_BUCKETS),
+      holdBucket: index % TELEMETRY_HOLD_BUCKETS
+    };
+  }
+
+  function collectComplexityTokens() {
+    var tokens = [];
+    for (var i = 0; i < pressEvents.length; i++) {
+      var token = buildTelemetryToken(pressEvents[i]);
+      if (token) tokens.push(token);
+    }
+    if (tokens.length > TELEMETRY_COMPLEXITY_WINDOW) {
+      return tokens.slice(tokens.length - TELEMETRY_COMPLEXITY_WINDOW);
+    }
+    return tokens;
+  }
+
+  function computeLzwCodeCount(sequence) {
+    if (!sequence) return 0;
+    var dictionary = Object.create(null);
+    for (var i = 0; i < TELEMETRY_TOKEN_ALPHABET.length; i++) {
+      dictionary[TELEMETRY_TOKEN_ALPHABET.charAt(i)] = i;
+    }
+    var dictSize = TELEMETRY_TOKEN_ALPHABET.length;
+    var phrase = "";
+    var codes = 0;
+    for (var j = 0; j < sequence.length; j++) {
+      var char = sequence.charAt(j);
+      var next = phrase + char;
+      if (Object.prototype.hasOwnProperty.call(dictionary, next)) {
+        phrase = next;
+      } else {
+        if (phrase) codes++;
+        dictionary[next] = dictSize++;
+        phrase = char;
+      }
+    }
+    if (phrase) codes++;
+    return codes;
+  }
+
+  function estimateKolmogorovComplexity(tokens) {
+    if (!tokens || tokens.length < TELEMETRY_COMPLEXITY_MIN_POINTS) return null;
+    var sequence = tokens.join("");
+    var seen = Object.create(null);
+    var phrases = 0;
+    var index = 0;
+    while (index < sequence.length) {
+      var length = 1;
+      var phrase = sequence.charAt(index);
+      while (index + length <= sequence.length && Object.prototype.hasOwnProperty.call(seen, phrase)) {
+        length += 1;
+        phrase = sequence.slice(index, Math.min(sequence.length, index + length));
+      }
+      seen[phrase] = true;
+      phrases++;
+      index += phrase.length;
+    }
+    var normalization = Math.log(sequence.length) / Math.log(TELEMETRY_TOKEN_ALPHABET.length);
+    return clamp((phrases * normalization) / sequence.length, 0, 1);
+  }
+
+  function estimateCompressionRatio(tokens) {
+    if (!tokens || tokens.length < TELEMETRY_COMPLEXITY_MIN_POINTS) return null;
+    var sequence = tokens.join("");
+    if (!sequence.length) return null;
+    return computeLzwCodeCount(sequence) / sequence.length;
+  }
+
+  function getTelemetryStatusText(tokenCount) {
+    if (!count) return "Awaiting the first verified press.";
+    if (count < 3) return "Collecting enough presses to stabilize interval and hold metrics.";
+    if (tokenCount < TELEMETRY_COMPLEXITY_MIN_POINTS) {
+      return "Complexity window warming up: " + tokenCount + "/" + TELEMETRY_COMPLEXITY_MIN_POINTS + " interval-plus-hold tokens.";
+    }
+    return "KC estimate and compression ratio reflect the latest " + Math.min(tokenCount, TELEMETRY_COMPLEXITY_WINDOW) + " quantized interval-plus-hold tokens.";
   }
 
   function computeBurst() {
@@ -776,8 +1146,15 @@
       verifiedPresses: count,
       ratePerMinute: telemetryRatePerMinute,
       avgIntervalMs: telemetryAvgIntervalMs,
+      avgHoldMs: telemetryAvgHoldMs,
       maxBurst: maxBurst,
+      complexityEstimate: telemetryComplexityEstimate,
+      compressionRatio: telemetryCompressionRatio,
       entropy: telemetryEntropy,
+      recentIntervalsMs: telemetryRecentIntervalsMs.slice(),
+      recentHoldsMs: telemetryRecentHoldsMs.slice(),
+      perSecondCounts: telemetryPerSecondCounts.slice(),
+      complexityTokens: telemetryComplexityTokens.slice(),
       waveform: waveData.slice(-96)
     };
   }
@@ -800,29 +1177,44 @@
       if (now - pressTimestamps[i] > 60000) break;
       recent++;
     }
-    entropyVal = computeEntropy(intervals);
-    var avg = "\u2014";
-    if (intervals.length) {
-      var sample = intervals.slice(-10);
-      var sum = 0;
-      for (var j = 0; j < sample.length; j++) sum += sample[j];
-      avg = Math.round(sum / sample.length);
-    }
+    telemetryRecentIntervalsMs = intervals.slice(-TELEMETRY_RECENT_POINTS);
+    telemetryRecentHoldsMs = pressEvents.slice(-TELEMETRY_RECENT_POINTS).map(function (event) {
+      return event.holdMs;
+    });
+    telemetryPerSecondCounts = buildPerSecondCounts(now);
+    telemetryComplexityTokens = collectComplexityTokens();
+    var avgInterval = averageTrailing(intervals, 10);
+    var avgHold = averageTrailing(telemetryRecentHoldsMs, 10);
     var burst = computeBurst();
     if (burst > maxBurst) maxBurst = burst;
     var rateValue = recent.toFixed(1);
-    var entropyValue = entropyVal > 0 ? entropyVal.toFixed(2) : "\u2014";
+    telemetryComplexityEstimate = estimateKolmogorovComplexity(telemetryComplexityTokens);
+    telemetryCompressionRatio = estimateCompressionRatio(telemetryComplexityTokens);
+    entropyVal = telemetryComplexityEstimate == null ? 0 : telemetryComplexityEstimate * 3;
+    telemetryStatusText = getTelemetryStatusText(telemetryComplexityTokens.length);
+    var complexityValue = telemetryComplexityEstimate == null ? "\u2014" : telemetryComplexityEstimate.toFixed(2);
+    var avgIntervalValue = avgInterval == null ? "\u2014" : String(avgInterval);
     telemetryRatePerMinute = Number(rateValue);
-    telemetryAvgIntervalMs = avg === "\u2014" ? null : Number(avg);
-    telemetryEntropy = entropyValue === "\u2014" ? null : Number(entropyValue);
+    telemetryAvgIntervalMs = avgInterval;
+    telemetryAvgHoldMs = avgHold;
+    telemetryEntropy = telemetryComplexityEstimate;
     if (statRate) statRate.textContent = rateValue;
-    if (statEntropy) statEntropy.textContent = entropyValue;
-    if (statAvg) statAvg.textContent = avg;
+    if (statEntropy) statEntropy.textContent = complexityValue;
+    if (statAvg) statAvg.textContent = avgIntervalValue;
     if (statBurst) statBurst.textContent = maxBurst;
     if (mdRate) mdRate.textContent = rateValue;
-    if (mdEntropy) mdEntropy.textContent = entropyValue;
-    if (mdAvg) mdAvg.textContent = avg;
+    if (mdEntropy) mdEntropy.textContent = complexityValue;
+    if (mdAvg) mdAvg.textContent = avgIntervalValue;
     if (mdBurst) mdBurst.textContent = maxBurst;
+    if (telemetryLabStatus) telemetryLabStatus.textContent = telemetryStatusText;
+    if (telemetryLabCount) telemetryLabCount.textContent = count.toLocaleString("en-US");
+    if (telemetryLabRate) telemetryLabRate.textContent = rateValue;
+    if (telemetryLabAvgInterval) telemetryLabAvgInterval.textContent = avgInterval == null ? "\u2014" : avgInterval.toLocaleString("en-US") + " ms";
+    if (telemetryLabAvgHold) telemetryLabAvgHold.textContent = avgHold == null ? "\u2014" : avgHold.toLocaleString("en-US") + " ms";
+    if (telemetryLabBurst) telemetryLabBurst.textContent = String(maxBurst);
+    if (telemetryLabComplexity) telemetryLabComplexity.textContent = complexityValue;
+    if (telemetryLabCompression) telemetryLabCompression.textContent = telemetryCompressionRatio == null ? "\u2014" : telemetryCompressionRatio.toFixed(2);
+    requestTelemetryLabDraw();
     publishTelemetrySnapshot();
   }
 
@@ -1969,9 +2361,19 @@
   function handlePress(holdMs, source) {
     var now = Date.now();
     var effectiveHoldMs = getEffectiveHoldMs(holdMs);
+    var intervalMs = null;
     count++;
     pressTimestamps.push(now);
-    if (pressTimestamps.length > 1) intervals.push(now - pressTimestamps[pressTimestamps.length - 2]);
+    if (pressTimestamps.length > 1) {
+      intervalMs = now - pressTimestamps[pressTimestamps.length - 2];
+      intervals.push(intervalMs);
+    }
+    pressEvents.push({
+      timestamp: now,
+      intervalMs: intervalMs,
+      holdMs: effectiveHoldMs,
+      source: source || "unknown"
+    });
     trimData();
     if (countEl) {
       countEl.textContent = count;
@@ -2558,6 +2960,7 @@
     updateReggieBubbleLayout();
     resizeAmbient();
     resizeCanvases();
+    requestTelemetryLabDraw();
     scrollAssist.lastTargetTop = null;
     if (isDocked && pedestal) {
       var absolute = getDockAbsolutePos();
